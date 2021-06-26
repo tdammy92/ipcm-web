@@ -34,25 +34,30 @@ function DesktopFooter() {
                
                 <div className="socials">
                     
-                        <Link to='/' className="SocialItem">
+                        <a  className="SocialItem" href='https://www.facebook.com' target="_blank"
+                        rel="noreferrer">
                            
-                            <FacebookIcon fontSize='large' color='secondary'/>
+                            <FacebookIcon color='secondary'/>
                             <h5>FaceBook</h5>
-                        </Link>
+                        </a>
                         
-                        <Link to='' className="SocialItem">
+                        <a href='https://www.instagram.com' className="SocialItem"
+                        target="_blank"
+                        rel="noreferrer">
                           
 
-                            <InstagramIcon fontSize='large' color='secondary'/>
+                            <InstagramIcon color='secondary'/>
                             <h5>Instgram</h5>
-                        </Link>
+                        </a>
                     
-                        <Link to='/' className="SocialItem">
+                        <a href='https://www.twitter.com' className="SocialItem"
+                        target="_blank"
+                        rel="noreferrer">
                            
 
-                            <TwitterIcon fontSize='large' color='secondary'/>
+                            <TwitterIcon color='secondary'/>
                             <h5>Twitter</h5>
-                        </Link>
+                        </a>
                  
                 </div>
 

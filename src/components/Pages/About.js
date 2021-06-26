@@ -5,9 +5,9 @@ import Footer from '../partials/Footer/Footer'
 function About() {
     return (
 
-        <>
+        <div className='base__page'>
         <div  className='About__container'>
-            <h3 className='about__title'>ABOUT IGPCM</h3>
+            <h3 className='page__title'>ABOUT IGPCM</h3>
 
         <div className="about__body">
         <Container>
@@ -31,7 +31,7 @@ function About() {
             
         </div>
         <Footer/>
-    </>
+    </div>
     )
 }
 

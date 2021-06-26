@@ -4,12 +4,16 @@ import {
   Route
 } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
-import { makeStyles,ThemeProvider } from "@material-ui/styles";
+import { ThemeProvider } from "@material-ui/styles";
 import NavBar from './components/partials/NavBar/NavBar';
 // import Footer from './components/partials/Footer/Footer'
 import Home from './components/Home'
 import About from "./components/Pages/About";
 import Contact from "./components/Pages/Contact";
+import Member from "./components/Pages/Member";
+import Examination from "./components/Pages/Examination";
+import Certification from "./components/Pages/Certification";
+import Register from "./components/Pages/Register";
 
 
 
@@ -50,6 +54,26 @@ function App() {
                     <Route exact path='/contact'>
 
                         <Contact/>
+
+                    </Route>
+                    <Route exact path='/member'>
+
+                        <Member/>
+
+                    </Route>
+                    <Route exact path='/examination'>
+
+                        <Examination/>
+
+                    </Route>
+                    <Route exact path='/certification'>
+
+                        <Certification/>
+
+                    </Route>
+                    <Route exact path='/register'>
+
+                        <Register/>
 
                     </Route>
 

@@ -5,9 +5,24 @@ font-family: 'Lato', sans-serif;
 font-family: 'Montserrat', sans-serif;
 font-family: 'Roboto', sans-serif; */
 
+
+/* * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+} */
+
 body {
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
+}
+
+.index {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    /* max-width: 100vw; */
 }
 
 
@@ -45,8 +60,7 @@ body {
 
 .LogoText {
     font-size: 24px;
-    margin: 0;
-    margin-left: 4px;
+    margin: 0 0 0 4px;
     font-weight: '500';
     color: #01996D;
     font-family: 'Montserrat', sans-serif;
@@ -54,7 +68,7 @@ body {
 
 .navListContainer {
     display: flex;
-    flex: 2;
+    flex: 1;
     height: 100%;
     align-items: center;
     justify-content: center;
@@ -128,8 +142,7 @@ body {
 }
 
 .MobileNavListWrapper {
-    margin: 0;
-    margin-bottom: 10px;
+    margin: 0 0 10px;
     height: 30%;
     display: flex;
     background-color: #01996D;
@@ -177,6 +190,23 @@ body {
 /* End of Nav styling here */
 
 
+/* General Page styling begins here*/
+
+.base__page {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.page__title {
+    font-family: 'Montserrat', sans-serif;
+    padding-left: 15px;
+    font-size: 1.1rem;
+    color: #01996D;
+}
+
+
 /* Start Home styling here */
 
 .Home__container {
@@ -202,7 +232,7 @@ body {
     font-family: 'Roboto', sans-serif;
     background-color: white;
     opacity: 0.7;
-    box-shadow: 0px 0px 10px 10px #afacac;
+    box-shadow: 0 0 10px 10px #afacac;
     border: none;
     width: 300px;
     padding: 10px;
@@ -215,16 +245,178 @@ body {
 }
 
 
+/* Home section two styling  */
+
+.Section2 {
+    display: flex;
+    flex-direction: column;
+}
+
+.sub__Section2 {}
+
+.top__heading {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.section__titile {
+    font-family: 'Roboto', sans-serif;
+    font-weight: '600';
+    color: #01996D;
+    /* flex: 1; */
+    text-align: center;
+    opacity: 0.9;
+}
+
+.section__conetent {
+    /* flex: 1; */
+    text-align: justify;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.3rem;
+}
+
+.seperator {
+    height: 2px;
+    background-color: #01996D;
+}
+
+.section3 {
+    width: 100%;
+    background-color: #245852;
+    height: 500px;
+    margin-bottom: 30px;
+    padding: 20px;
+}
+
+.cta2 {
+    display: flex;
+    flex-wrap: wrap;
+    height: 100%;
+    box-sizing: border-box;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.cta2__item {
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.cta2__item>h2 {
+    color: white;
+    font-size: 26px;
+    text-align: center;
+    font-family: 'Lato';
+}
+
+.btnCTA {
+    color: #01996D;
+    padding: 7px;
+    border: none;
+    width: 140px;
+    border-radius: 15px;
+    font-size: 16px;
+    font-weight: 600;
+    transition: all 300ms ease-in-out;
+}
+
+.btnCTA:hover {
+    color: white;
+    background-color: transparent;
+    border: 1px solid white;
+    cursor: pointer;
+}
+
+.cta2__image {
+    display: flex;
+    height: 80%;
+    width: 400px;
+    justify-content: center;
+    align-items: center;
+}
+
+.cta2__image>img {
+    border-radius: 20px;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.section4 {
+    height: 400px;
+    margin-top: 60px;
+    /* display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center; */
+    /* margin-bottom: 40px; */
+    padding-bottom: 40px;
+}
+
+.student__testimony {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.testimony__item {
+    width: 500px;
+}
+
+.studentImage {
+    display: flex;
+    margin-left: 20%;
+}
+
+.studentImage>img {
+    height: 250px;
+    width: 250px;
+    border-radius: 10px;
+}
+
+.studentStory {
+    border-left: 2px solid #01996D;
+    padding-left: 20px;
+}
+
+.studentStory>h2 {
+    color: #01996D;
+    font-weight: 600;
+    font-family: 'Lato';
+}
+
+.studentStory>p {
+    font-family: 'Lato';
+    font-size: 16px;
+}
+
+.memberBtn {
+    font-size: 18px;
+    color: white;
+    padding: 8px;
+    background-color: #01996D;
+    border: none;
+    border-radius: 15px;
+    width: 150px;
+}
+
+.memberBtn:hover {
+    cursor: pointer;
+    color: #01996D;
+    background-color: transparent;
+    border: 1px solid #01996D;
+}
+
+
 /* Styling for about page */
 
 .About__container {
-    padding: 0 50px;
-}
-
-.about__title {
-    font-family: 'Montserrat', sans-serif;
-    font-size: 1.1rem;
-    color: #01996D;
+    padding: 0 30px;
 }
 
 .about__body {
@@ -246,6 +438,14 @@ body {
     justify-content: space-evenly;
 }
 
+.MobileContact__List {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    /* width: 350px; */
+}
+
 .contact__item {
     display: flex;
     align-items: center;
@@ -263,6 +463,254 @@ body {
     color: #01996D;
 }
 
+.address__heading {
+    display: flex;
+    align-items: center;
+}
+
+.address__heading>h4 {
+    color: #01996D;
+}
+
+.address__body {
+    width: 300px;
+    font-family: 'Lato';
+    text-align: left;
+}
+
+
+/* Start of membership styling */
+
+.Member__Container {
+    width: 100%;
+}
+
+.Member__items {
+    margin: 0 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.Member__items>h4 {
+    color: #01996D;
+    font-family: 'Lato';
+    margin-left: 30px;
+}
+
+.member__item__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    /* border: 1px solid blue; */
+    margin-left: 20px;
+    margin-right: 20px;
+    flex-wrap: wrap;
+}
+
+.information__list__left {
+    flex: 1;
+    min-width: 400px;
+    max-width: 600px;
+    padding: 20px;
+    /* border: 1px solid red; */
+    position: relative;
+}
+
+.information__list__right {
+    flex: 1;
+    min-width: 400px;
+    max-width: 600px;
+    padding: 20px;
+    /* border: 1px solid yellow; */
+    position: relative;
+}
+
+.information__list__left>p {
+    font-family: 'Lato';
+    text-align: justify;
+    font-size: 16px;
+}
+
+.information__list__right>p {
+    font-family: 'Lato';
+    text-align: justify;
+    font-size: 16px;
+}
+
+.information__list__left>h5 {
+    font-family: 'Lato';
+    font-size: 18px;
+    text-align: left;
+    color: #01996D;
+    text-decoration: underline;
+}
+
+.information__list__right>h5 {
+    font-family: 'Lato';
+    font-size: 18px;
+    text-align: right;
+    color: #01996D;
+    text-decoration: underline;
+}
+
+.student__list__number__left {
+    color: white;
+    background-color: #01996D;
+    border-radius: 100%;
+    border: none;
+    box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.6);
+    font-size: 28px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    right: 5px;
+}
+
+.student__list__number__right {
+    color: white;
+    background-color: #01996D;
+    border-radius: 100%;
+    border: none;
+    box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.6);
+    font-size: 28px;
+    height: 40px;
+    width: 40px;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 5px;
+}
+
+.eligibility__list {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.eligibility__list>li {
+    width: 300px;
+    margin: 10px;
+    font-size: 16px;
+    font-family: 'Lato';
+}
+
+.eligibilty__paragraph {
+    font-family: 'Lato';
+    font-size: 16px;
+}
+
+.membership__route__head {
+    color: #01996D;
+    font-family: 'Lato';
+    margin-bottom: 10px;
+}
+
+.membership__route__body {
+    margin: 10px;
+}
+
+.membership__route__body>h4 {
+    font-family: 'Lato';
+}
+
+.membership__route__body>p {
+    font-family: 'Lato';
+    text-align: justify;
+    padding: 10px;
+}
+
+.member__benefit__list {
+    margin-bottom: 20px;
+}
+
+.member__benefit__list>li {
+    margin: 10px;
+    font-size: 16px;
+    font-family: 'Lato';
+}
+
+.nested__list {
+    margin: 10px;
+    font-size: 16px;
+    font-family: 'Lato';
+}
+
+
+/* Start of registration form  */
+
+.form__container {
+    display: flex;
+    margin-top: 40px;
+    margin-left: 30px;
+    width: 100%;
+    justify-content: center;
+}
+
+.form__list {
+    /* width: 100%; */
+    display: flex;
+    /* flex-direction: column; */
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.regForm {
+    display: flex;
+    flex-direction: column;
+    /* flex-wrap: wrap; */
+    max-width: 700px;
+    align-items: center;
+    justify-content: center;
+}
+
+.form__Btn {
+    width: 200px;
+    display: flex;
+    flex-direction: column;
+    align-self: center;
+    justify-self: center;
+    margin: 10px;
+}
+
+
+/* Start of Certification page styling here */
+
+.verify__form {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+.Fees__section {
+    margin-top: 40px;
+    width: 100%;
+    /* border: 1px solid red; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Section__title {
+    /* border: 1px solid blue; */
+}
+
+.Section__title>h4 {
+    color: #01996D;
+    font-family: 'Lato';
+}
+
+.Fees__container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    flex-wrap: wrap;
+    max-width: 800px;
+}
+
 
 /* Start of Footer styling here */
 
@@ -273,6 +721,7 @@ body {
     width: 100%;
     height: 200px;
     display: flex;
+    margin-top: 50px;
     background-color: #245852;
     /* position: fixed; */
     bottom: 0;

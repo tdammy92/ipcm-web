@@ -34,20 +34,24 @@ function MobileFooter() {
 
             <div className="Mobile__socials">
                 
-                    <Link to='/' className="Mobile__SocialItem">
+                    <a  href='https://www.facebook.com' target="_blank" className="Mobile__SocialItem"
+                    rel="noreferrer"
+                    >
                     <FacebookIcon  color='secondary'/>
                         <h5>FaceBook</h5>
-                    </Link>
+                    </a>
                     
-                    <Link to='' className="Mobile__SocialItem">
+                    <a href='https://www.instagram.com' target="_blank" 
+                    rel="noreferrer"className="Mobile__SocialItem">
                     <InstagramIcon  color='secondary'/>
                         <h5>Instgram</h5>
-                    </Link>
+                    </a>
                 
-                    <Link to='/' className="Mobile__SocialItem">
+                    <a href='https://www.twitter.com' target="_blank" 
+                    rel="noreferrer"className="Mobile__SocialItem">
                     <TwitterIcon color='secondary'/>
                         <h5>Twitter</h5>
-                    </Link>
+                    </a>
             
             </div>
 

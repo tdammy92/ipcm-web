@@ -1,5 +1,5 @@
 import React from 'react'
-import {Link} from "react-router-dom";
+import {Link,useHistory} from "react-router-dom";
 import data from './HeaderData'
 
 
@@ -19,6 +19,9 @@ const {name,path} = item
 
 function DesktopNavBar() {
 
+
+    const history = useHistory()
+
   
 
     return (
@@ -37,16 +40,19 @@ function DesktopNavBar() {
 
                     })}
 
-                </div>
 
-          
-                <div className='RegisterContainer'>
+                    <div className='RegisterContainer'>
                         
-                        <button  className='registerBtn' >
+                        <button  className='registerBtn' onClick={()=>{history.push('/register')}}>
                             Register
                         </button>
 
                 </div>
+
+                </div>
+
+          
+              
    
       
 
