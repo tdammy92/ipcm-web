@@ -34,8 +34,8 @@ const [isOpen,setIsopen] = useState(false)
 
                         {data?.map((item)=>{
                         
-                            return (<div  className='MobileNavListItem'>
-                                        <Links key={item.id} item={item} setIsopen={setIsopen}/>
+                            return (<div key={item.id} className='MobileNavListItem'>
+                                        <Links  item={item} setIsopen={setIsopen}/>
                                         
                                     </div>
                                 

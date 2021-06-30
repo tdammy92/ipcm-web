@@ -16,11 +16,16 @@ const data = [
     },
     {
         id:4,
+        name:'Nysc Scheme',
+        path:'/nysc'
+    },
+    {
+        id:5,
         name:'Examination',
         path:'/examination'
     },
     {
-        id:5,
+        id:6,
         name:'Certification',
         path:'/certification'
     },

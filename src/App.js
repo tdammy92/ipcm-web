@@ -11,6 +11,7 @@ import Home from './components/Home'
 import About from "./components/Pages/About";
 import Contact from "./components/Pages/Contact";
 import Member from "./components/Pages/Member";
+import Nysc from "./components/Pages/Nysc";
 import Examination from "./components/Pages/Examination";
 import Certification from "./components/Pages/Certification";
 import Register from "./components/Pages/Register";
@@ -59,6 +60,11 @@ function App() {
                     <Route exact path='/member'>
 
                         <Member/>
+
+                    </Route>
+                    <Route exact path='/nysc'>
+
+                        <Nysc/>
 
                     </Route>
                     <Route exact path='/examination'>

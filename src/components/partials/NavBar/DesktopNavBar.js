@@ -31,8 +31,8 @@ function DesktopNavBar() {
 
                     {data?.map((item)=>{
                        
-                        return (<div className='navListItem'>
-                                    <Links key={item.id} item={item}/>
+                        return (<div  key={item.id} className='navListItem'>
+                                    <Links item={item}/>
                                     
                                 </div>
                             

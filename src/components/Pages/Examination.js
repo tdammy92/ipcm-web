@@ -1,7 +1,6 @@
 import React from 'react'
 import Footer from '../partials/Footer/Footer'
-// import { Paper } from '@material-ui/core'
-// import { Typography } from '@material-ui/core'
+
 import { Container } from '@material-ui/core'
 
 function Examination() {

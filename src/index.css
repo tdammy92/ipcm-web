@@ -85,9 +85,10 @@ body {
 
 .navListContainer {
     display: flex;
-    flex: 1;
+    flex: 2;
     height: 100%;
     align-items: center;
+    margin-right: 20px;
     justify-content: center;
 }
 
@@ -734,6 +735,39 @@ body {
     margin: 10px;
     font-size: 16px;
     font-family: 'Lato';
+}
+
+
+/* Start Nysc sheme page styling here */
+
+.nysc__container {
+    display: flex;
+    margin: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+}
+
+.nysc__image {
+    /* flex: 1; */
+    width: 500px;
+    margin: 10px;
+}
+
+.nysc__image>img {
+    width: 100%;
+    border-radius: 20px;
+}
+
+.nysc__content {
+    /* flex: 1; */
+    width: 500px;
+    margin: 10px;
+}
+
+.nysc__content>p {
+    font-size: 18px;
+    text-align: justify;
 }
 
 
