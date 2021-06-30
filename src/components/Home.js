@@ -10,12 +10,146 @@ import {useMediaQuery} from 'react-responsive'
 
 import Grid from '@material-ui/core/Grid';
 import Footer from './partials/Footer/Footer'
+
+
+import Image1 from '../assets/images/Image1.jpg'
+import Image2 from '../assets/images/Image2.jpeg'
+import Image3 from '../assets/images/Image3.jpeg'
+import Image4 from '../assets/images/Image4.jpeg'
+import Image5 from '../assets/images/Image5.jpg'
+import Image6 from '../assets/images/Image6.jpg'
+import Image7 from '../assets/images/Image7.jpg'
+import Image8 from '../assets/images/Image8.jpg'
+import Image9 from '../assets/images/Image9.jpg'
+
+
 import BannerImage from '../assets/images/Banner1.jpg'
 import BannerImage2 from '../assets/images/banner2.jpg'
-import BannerImage4 from '../assets/images/banner4.jpeg'
+// import BannerImage4 from '../assets/images/banner4.jpg'
 
 
-// const transition = { duration: 0.33 };
+
+import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
+import { Carousel } from 'react-responsive-carousel';
+
+
+
+function MobilSlider(){
+
+
+
+    return(
+          
+
+        <div className='Mobile__slider__content'>
+        <Carousel infiniteLoop={true} autoPlay={true} showIndicators={false} showThumbs={false} width='100%'>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image1} className='Mobile__slideImage' alt='slide'/>
+                    <p >Analysing Youth Restiveness, Electoral violence and security challenges</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image2} className='Mobile__slideImage' alt='slide'/>
+                    <p>Shaping the mindset and developing the atitudes tolerance in the next generation</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image3} className='Mobile__slideImage' alt='slide'/>
+                    <p >Advancing woman and youth in peace building</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image4} className='Mobile__slideImage' alt='slide'/>
+                    <p >Promoting and strengthening Comunity Peace</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image5} className='Mobile__slideImage' alt='slide'/>
+                    <p >Training and reaising Peace Builders</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image6} className='Mobile__slideImage' alt='slide'/>
+                    <p >Promoting Ethno-Religious Dialogue and inclusion</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image7} className='Mobile__slideImage' alt='slide'/>
+                    <p >Mediation, Negotiation,Dialogue and Reconcilliation</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image8} className='Mobile__slideImage' alt='slide'/>
+                    <p >Intervention and Resolving Economic Resources Conflict</p>
+                </div>
+                <div className='Mobile__slideImage__item'>
+                    <img src={Image9} className='Mobile__slideImage' alt='slide'/>
+                    <p >Corporate and Workplace Conflict Prevention</p>
+                </div>
+</Carousel>
+</div>
+
+
+
+
+    )
+}
+function DesktopSlider(){
+
+
+
+    return(
+          
+
+        <div className='slider__content'>
+        <Carousel infiniteLoop={true} autoPlay={true} showIndicators={false} showThumbs={false} width='100%'>
+                <div className='slideImage__item'>
+                    <img src={Image1} className='slideImage' alt='slide'/>
+                    <p >Analysing Youth Restiveness, Electoral violence and security challenges</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image2} className='slideImage' alt='slide'/>
+                    <p>Shaping the mindset and developing the atitudes tolerance in the next generation</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image3} className='slideImage' alt='slide'/>
+                    <p >Advancing woman and youth in peace building</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image4} className='slideImage' alt='slide'/>
+                    <p >Promoting and strengthening Comunity Peace</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image5} className='slideImage' alt='slide'/>
+                    <p >Training and reaising Peace Builders</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image6} className='slideImage' alt='slide'/>
+                    <p >Promoting Ethno-Religious Dialogue and inclusion</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image7} className='slideImage' alt='slide'/>
+                    <p >Mediation, Negotiation,Dialogue and Reconcilliation</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image8} className='slideImage' alt='slide'/>
+                    <p >Intervention and Resolving Economic Resources Conflict</p>
+                </div>
+                <div className='slideImage__item'>
+                    <img src={Image9} className='slideImage' alt='slide'/>
+                    <p >Corporate and Workplace Conflict Prevention</p>
+                </div>
+</Carousel>
+</div>
+
+
+
+
+    )
+}
+
+
+
+
+
+
+
+
+
+
 
 function Home() {
 
@@ -143,6 +277,27 @@ function Home() {
                                     </section>
 
                             </Container>
+                            <Container>
+                                            <h3 className='value__title'>CORE VALUES (T-A-L-E-N-T)   </h3>
+                                            <ul className='values__list'>
+                                                        <li><b>TOLERANCE:</b> We believe people should be given the opportunity to express their feelings and such expressions, viewpoints and opinions be tolerated no matter how provocative they seem.</li>
+                                                        
+                                                        <li><b>AMICABILITY:</b> We know that settling people’s differences in a friendly, objective and committed manner ensues peace.</li>
+                                                        
+                                                        <li><b>LEADERSHIP:</b> We demonstrates strategic, leading and superior decisions and arguments that influence people to agree with certain courses of action.</li>
+                                                       
+                                                        <li><b>EQUALITY/EQUITY:</b> We believe that all people have certain desires and values and should be treated fairly and justly, irrespective of their social, cultural, political, religious and economic differences.</li>
+                                                       
+                                                        <li><b>NEUTRALITY:</b> We take and maintain a posture of non-alignment while participating in conflict resolution.</li>
+                                                        
+                                                        <li><b>TRANQUILITY:</b> We believe in peace, we pursue peace and we achieve peace for development to thrive.</li>
+
+                                            </ul>
+
+
+
+
+                            </Container>
 
                     </section>
                     <section className='section3'>
@@ -176,8 +331,8 @@ function Home() {
 
                     </section>
 
-                    <section className='section4'>
-                        {/* <Container> */}
+                    {/* <section className='section4'>
+                       
                              <div  className='student__testimony'>
                                        
                                         <div  className='testimony__item'>
@@ -212,7 +367,16 @@ function Home() {
 
                                         </div>
                              </div>
-                        {/* </Container> */}
+                      
+
+                    </section> */}
+                    <section  className='slider__section'>
+                           
+
+                            {isMobile && <MobilSlider/>}
+                            {!isMobile && <DesktopSlider/>}
+
+
 
                     </section>
                         

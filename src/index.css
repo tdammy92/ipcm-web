@@ -10,12 +10,20 @@ font-family: 'Roboto', sans-serif; */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    width: 100%;
 } */
+
+html {
+    /* width: 100%; */
+}
 
 body {
     margin: 0;
     padding: 0;
+    width: 100%;
     box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    /* overflow: auto; */
 }
 
 .index {
@@ -23,6 +31,15 @@ body {
     padding: 0;
     box-sizing: border-box;
     /* max-width: 100vw; */
+}
+
+.Hr__style {
+    width: 100%;
+    height: 3px;
+    background-color: #01996D;
+    border: none;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }
 
 
@@ -86,7 +103,7 @@ body {
     height: 100%;
     padding: 0 1.1em;
     color: #01996D;
-    font-weight: '500';
+    font-weight: '700';
     font-size: 16px;
     align-items: center;
     justify-content: center;
@@ -374,8 +391,8 @@ body {
 }
 
 .studentImage>img {
-    height: 250px;
-    width: 250px;
+    height: 300px;
+    width: 400px;
     border-radius: 10px;
 }
 
@@ -412,6 +429,75 @@ body {
     border: 1px solid #01996D;
 }
 
+.value__title {
+    color: #01996D;
+}
+
+.values__list {
+    display: flex;
+    flex-wrap: wrap;
+    list-style-type: none;
+    border-left: 3px solid #01996D;
+    margin-bottom: 20px;
+}
+
+.values__list>li {
+    margin: 5px;
+    font-size: 18px;
+    font-family: 'Lato';
+    text-align: justify;
+}
+
+.slider__section {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.Mobile__slider__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 95%;
+    overflow: hidden;
+}
+
+.slider__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    max-width: 70%;
+}
+
+.Mobile__slideImage__item {
+    /* max-width: 80%; */
+}
+
+.Mobile__slideImage__item>p {
+    /* max-width: 80%; */
+    font-size: 9px;
+}
+
+.slideImage__item {
+    /* max-width: 80%; */
+}
+
+.Mobile__slideImage {
+    height: 280px;
+    width: 100%;
+    object-fit: contain;
+}
+
+.slideImage {
+    height: 450px;
+    width: 100%;
+    /* object-fit: contain; */
+}
+
 
 /* Styling for about page */
 
@@ -425,8 +511,17 @@ body {
 
 .about__body>p {
     text-align: justify;
-    /* padding: 0 10px; */
     font-family: 'Lato';
+}
+
+.Need__wrapper {}
+
+.Need__wrapper>h3 {
+    color: #01996D;
+}
+
+.Need__wrapper>ul>li {
+    padding: 5px;
 }
 
 
@@ -476,6 +571,10 @@ body {
     width: 300px;
     font-family: 'Lato';
     text-align: left;
+}
+
+.contact__table__container {
+    /* width: 80%; */
 }
 
 
@@ -674,6 +773,16 @@ body {
     margin: 10px;
 }
 
+.offline__reg__list>li {
+    margin: 5px;
+    font-size: 18px;
+}
+
+.offline__reg__list>li>ul {
+    /* list-style-type: none; */
+    margin: 2px;
+}
+
 
 /* Start of Certification page styling here */
 
@@ -709,6 +818,18 @@ body {
     align-items: center;
     flex-wrap: wrap;
     max-width: 800px;
+}
+
+
+/* Exam page desin starts here */
+
+.shedule__item>h5 {
+    text-decoration: underline;
+    color: #01996D;
+}
+
+.shedule__item>ol>li {
+    margin: 4px;
 }
 
 

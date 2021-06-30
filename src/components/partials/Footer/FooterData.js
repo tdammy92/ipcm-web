@@ -7,27 +7,27 @@ const data = [
     {
         id:2,
         name:'Admission',
-        path:'/admission'
+        path:'/register'
     },
     {
         id:3,
         name:'Media Center',
-        path:'/media'
+        path:'/'
     },
     {
         id:4,
         name:'Career',
-        path:'/career'
+        path:'/member'
     },
     {
         id:5,
         name:'Projects',
-        path:'/projects'
+        path:'/member'
     },
     {
         id:6,
         name:'Global Peace News',
-        path:'/blog'
+        path:'/'
     },
 
 ]

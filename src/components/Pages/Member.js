@@ -69,6 +69,48 @@ function Member() {
 
 
                         </div>
+                        <div className="member__item__list">
+                            <div className="information__list__left">
+                               
+                                <h3 className='student__list__number__left'>5</h3>
+                                <h5 className='student__list__title'>SENIOR:</h5>
+
+                                <p>This direct membership category is open to Holders of HND, B.SC, B.A, LLB, MBBS, B.ENG, B.TECH, PGD, MSC, MBA, M.Ed, MPA, MPHIL, PHD or a membership of other recognized professional bodies subject to confirmation with 10-15 years of work experience from all areas of endeavor. No examination is required. Admission is based on work experience because he/she must have in the course of their duties come across different conflicts and might have settled them in their own wisdom. This way of resolving conflict maybe unprofessional but it is highly recognized and appreciated, hence their admission to be grounded professionally for more development and career opportunities.</p>
+                            </div>
+
+
+                            <div className="information__list__right">
+                                
+                                <h3 className='student__list__number__right'>6</h3>
+                                <h5 className='student__list__title'>:FELLOW</h5>
+
+                                <p>This direct membership category is open to Holders of HND, B.SC, B.A, LLB, MBBS, B.ENG, B.TECH, PGD, MSC, MBA, M.Ed, MPA, MPHIL, PHD or a membership of other recognized professional bodies subject to confirmation with 16 and above years of work experience from all areas of endeavor. Admission is based on work experience because he/she must have in the course of their duties come across different conflicts and might have settled them in their own wisdom. This way of resolving conflict maybe unprofessional but is highly recognized and appreciated, hence their admission to be grounded professionally for more development and career opportunities.  </p>
+
+                            </div>
+
+
+                        </div>
+                        <div className="member__item__list">
+                            <div className="information__list__left">
+                               
+                                <h3 className='student__list__number__left'>7</h3>
+                                <h5 className='student__list__title'>CORPORATE:</h5>
+
+                                <p>This is open to non-governmental organizations, CSOs, CBOs, schools and private businesses that want a discounted platform to enhance the profile of their businesses and collaborates to improve their employees’ skills in workplace conflict management, in order to advance a peaceful workplace environment and achieve the organizational goals.</p>
+                            </div>
+
+{/* 
+                            <div className="information__list__right">
+                                
+                                <h3 className='student__list__number__right'>6</h3>
+                                <h5 className='student__list__title'>:FELLOW</h5>
+
+                                <p>This direct membership category is open to Holders of HND, B.SC, B.A, LLB, MBBS, B.ENG, B.TECH, PGD, MSC, MBA, M.Ed, MPA, MPHIL, PHD or a membership of other recognized professional bodies subject to confirmation with 16 and above years of work experience from all areas of endeavor. Admission is based on work experience because he/she must have in the course of their duties come across different conflicts and might have settled them in their own wisdom. This way of resolving conflict maybe unprofessional but is highly recognized and appreciated, hence their admission to be grounded professionally for more development and career opportunities.  </p>
+
+                            </div> */}
+
+
+                        </div>
                     </div>
                     <section className='section3'>
 

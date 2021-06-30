@@ -27,6 +27,72 @@ function About() {
 
             <p>We believe that, peace-building and conflict resolution skills are learnable and coachable. IGPCM as a global membership driven professional body therefore, trains, certifies and retains her members for continuous professional development, for maximum career fulfilment.</p>
             </Container>
+
+            <hr className='Hr__style'/>
+
+            <Container>
+                    <div  className='Need__wrapper'>
+                    <h3>THE NEED</h3>
+                    <p>Dr. Pst. Paul Enenche said, <b>“Peace is the universal craving of all humans”</b>. This statement is truer now than ever. It is in the nature of humans that where people lives, works and co-exists, there could be differences in opinions, interests, views and perceptions. In a situation like this, conflict is inevitable. Conflict if not early identify and properly manage, can degenerate into crisis and escalate into full wars. </p>
+
+                    <p>
+                    In Nigeria, we have witnessed and are still witnessing different destructive dimensions of conflicts, ranging from religious to political conflicts, communal to ethnic conflicts, herders-farmers conflict, conflicts over economic and resource control, social conflicts, employers-employees conflicts among others.
+
+                    </p>
+                    <p>
+                    In our history as a people, peace building efforts have been impacted negatively by the footprints of geopolitics, marginalization, secessionist drives, economic exclusions, identity-based discrimination such as religion, race, caste, ethnicity and tribalism, gender, sexual orientation and language differences. 
+
+
+                    </p>
+
+
+                    <p>
+                    We are all aware of high level injustices, inequalities, nepotism, sectionalism and tribal hatred in our political, educational, economic and social institutions both public and private, breeding serious structural and other forms of conflict.
+                    </p>
+
+                    <p>
+                    At global stage, dangerous and devastating conflicts are ongoing in almost all the continents of the world, thereby, endangering the global ecosystem. At organizational levels, many corporations have been sold-out or shut down largely to conflicting interest and leadership crisis.
+
+                    </p>
+                    <p>
+                    With these continually on the rise, without appropriate preventive measures and skills to curtail conflicts and conflicting situations, peace cannot be achieved for sustainable development. No meaningful development can ever be achieved without reasonable peace. The need to create a sustainable peaceful environment, for people to live together, work and co-exist to achieve their goals, becomes paramount. 
+
+                    </p>
+
+                    <p>
+                    The need to raise and develop a great number of peace builders around the globe to attend to matters of peace building, developmental initiatives and conflict prevention and management to achieve total transformation, requires deliberate and conscious efforts.
+                    </p>
+
+                    <p>
+                    Going by the above, the INSTITUTE OF GLOBAL PEACE AND CONFLICT MANAGEMENT is incorporated, as a global partner in the pursuit of peace and as a think-tank to promote research, enhance human capacity building, intervenes and mediates, advance policy advocacy, encourage public participation in peace building and conflict prevention efforts, sensitize and purge out of the public and private institutions issues that create conflicts and instill in the next generation, the attitudes of peace and tolerance, to create a just and fair society for all.    
+                    </p>
+
+                    </div>
+            </Container>
+            <hr className='Hr__style'/>
+
+            <Container>
+                    <div  className='Need__wrapper'>
+                    <h3>WHAT WE DO</h3>
+                        <ul>
+                            <li>We holistically conduct independent research on the root causes of all forms of conflict, with the aim to create data availability, proffer solutions, make policy suggestions and influence relevant bodies for intervention and settlement.</li>
+                            <li>We promotes grass-root conflict prevention measures, peace building, democratic values and conflict resolution processes.</li>
+                            <li>We raises peace builders, prepares and equips managers and administrators with the skills to identify and respond to matters of conflict in their organizations.</li>
+                            <li>We partners electoral bodies and political institutions to engage and educate political players to promote sound democratic values.</li>
+                            <li>We makes tangible and professional contributions to the discourse of peace and conflict at national, regional and global levels.</li>
+                            <li>We provides skills training and empowerment to youth and women as part of conflict prevention, peace sustenance and recovery from conflict situation.</li>
+                            <li>We serves as an independent mediator between conflicting parties or between government and her citizenry to broker dialogue and reach agreement. </li>
+                            <li>We intervenes and follows up on every peace initiatives and intervention of the government or international organization to ensure full compliance and implementation.</li>
+                            <li>We collaborates with government and non-governmental agencies to influence and participate in promoting national cohesion, global peace and environmental sustainability.   </li>
+                        
+
+
+
+
+                        </ul>
+                   
+                    </div>
+            </Container>
             </div>
             
         </div>

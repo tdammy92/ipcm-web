@@ -1,6 +1,6 @@
 import React from 'react'
 import Footer from '../partials/Footer/Footer'
-import { Container } from '@material-ui/core'
+import { Container , Paper} from '@material-ui/core'
 
 import Grid from '@material-ui/core/Grid';
 
@@ -12,6 +12,15 @@ import PublicIcon from '@material-ui/icons/Public';
 import PhoneForwardedIcon from '@material-ui/icons/PhoneForwarded';
 import HomeIcon from '@material-ui/icons/Home';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
+import CallIcon from '@material-ui/icons/Call';
+
+
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableContainer from '@material-ui/core/TableContainer';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
 
 
@@ -47,6 +56,139 @@ const MobileContact = ()=>{
         
     </div>)
     
+}
+
+
+const MobileTable =()=>{
+        return(
+
+                <div className='contact__table__container'>
+                <div className="contact__item">
+                  
+                  <CallIcon fontSize="large" color='primary'/>
+                  <h4 >STATE COORDINATORS CONTACT:</h4>
+
+               </div>
+               <TableContainer component={Paper}  style={{width:'100%', margin:'2px',padding:'2px'}}>
+                        {/* <span style={{color:'#01996D'}}>  
+
+                        STUDENT MEMBERSHIP
+                        </span>  */}
+                        <Table >
+                            <TableHead>
+                            <TableRow  style={{backgroundColor:'#01996D', borderRadius:'10px'}}>
+                                <TableCell align='center'  component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>STATE</TableCell>
+                                <TableCell align="center" component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>NAME</TableCell>
+                                <TableCell align="center" component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>CONTACT</TableCell>
+                            </TableRow>
+                            </TableHead> 
+                            <TableBody>
+                            
+                                <TableRow>
+                                
+                                        <TableCell align="center">Abuja 	</TableCell>
+                                        <TableCell align="center">Ms. Asanga Ifreke Precious</TableCell>
+                                        <TableCell align="center">08092693020</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Bauchi State	</TableCell>
+                                        <TableCell align="center">Mr. Ohaju Stanley Ugochukwu</TableCell>
+                                        <TableCell align="center">08166467814, 08134995959</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Bayelsa State	</TableCell>
+                                        <TableCell align="center">Ms. Micheal Precious Onyenyechi</TableCell>
+                                        <TableCell align="center">08145770061, 08184439402</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Benue State	</TableCell>
+                                        <TableCell align="center">Ms. Ene Divine Inalegwu</TableCell>
+                                        <TableCell align="center">08110196680, 09076283060</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Edo State	</TableCell>
+                                        <TableCell align="center">Mr. Godswill Osagie E.</TableCell>
+                                        <TableCell align="center">08075020854</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Gombe	</TableCell>
+                                        <TableCell align="center">Mr. Nathaniel Richard Bono</TableCell>
+                                        <TableCell align="center">08149370633</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Kano State	</TableCell>
+                                        <TableCell align="center">Ms. Adebayo Christiana Tolulope</TableCell>
+                                        <TableCell align="center">08163234027</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Kaduna State	</TableCell>
+                                        <TableCell align="center">Ms. Ezenwe Chinaza Chinelo</TableCell>
+                                        <TableCell align="center">08162656220, 08136161592</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Nasarawa State	</TableCell>
+                                        <TableCell align="center">Mr. Victor Kingsley Umbugadu</TableCell>
+                                        <TableCell align="center">08098312681</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Niger State	</TableCell>
+                                        <TableCell align="center">Ms. Michael Janet Ihotu</TableCell>
+                                        <TableCell align="center">08141569400</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Ogun State	</TableCell>
+                                        <TableCell align="center">Mr. Animasaun Lukmon Abiola</TableCell>
+                                        <TableCell align="center">07038877922</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Plateau Sate	</TableCell>
+                                        <TableCell align="center">Mr Puttu Lot Musa</TableCell>
+                                        <TableCell align="center">08056796881, 09020638912</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Taraba State</TableCell>
+                                        <TableCell align="center">Mr. Emmanuel Shawulu</TableCell>
+                                        <TableCell align="center">09037566599, 08071463057</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center">Sokoto State</TableCell>
+                                        <TableCell align="center">Mr. Ajijila Gideon Victor</TableCell>
+                                        <TableCell align="center">08130301659</TableCell>
+                                </TableRow>
+                                <TableRow>
+                                
+                                        <TableCell align="center"> Rivers State	</TableCell>
+                                        <TableCell align="center">XXXXXXXXX</TableCell>
+                                        <TableCell align="center">0900XXXXX</TableCell>
+                                </TableRow>
+                               
+                            </TableBody>
+                        </Table>
+                </TableContainer>
+
+
+                
+
+
+
+
+
+
+                </div>
+        )
 }
 
 
@@ -102,7 +244,7 @@ function Contact() {
                     </div>
                     }
 
-                    <hr className='seperator'/>
+                    <hr className='Hr__style'/>
 
                     <div className="address__container">
                         
@@ -153,6 +295,140 @@ function Contact() {
 
                         </Grid>
 
+                        <hr  className='Hr__style'/>
+
+              
+                        {!isMobile && 
+                        
+                                <div className='contact__table__container'>
+                        <div className="contact__item">
+                          
+                          <CallIcon fontSize="large" color='primary'/>
+                          <h4 >STATE COORDINATORS CONTACT:</h4>
+
+                       </div>
+                       <TableContainer component={Paper}  style={{width:'100%', margin:'5px',padding:'5px'}}>
+                                {/* <span style={{color:'#01996D'}}>  
+
+                                STUDENT MEMBERSHIP
+                                </span>  */}
+                                <Table >
+                                    <TableHead>
+                                    <TableRow  style={{backgroundColor:'#01996D', borderRadius:'10px'}}>
+                                        <TableCell align='center'  component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>STATE</TableCell>
+                                        <TableCell align="center" component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>NAME</TableCell>
+                                        <TableCell align="center" component='th' style={{fontFamily:'Lato',color:'white',fontWeight:'600'}}>CONTACT</TableCell>
+                                    </TableRow>
+                                    </TableHead> 
+                                    <TableBody>
+                                    
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Abuja 	</TableCell>
+                                                <TableCell align="center">Ms. Asanga Ifreke Precious</TableCell>
+                                                <TableCell align="center">08092693020</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Bauchi State	</TableCell>
+                                                <TableCell align="center">Mr. Ohaju Stanley Ugochukwu</TableCell>
+                                                <TableCell align="center">08166467814, 08134995959</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Bayelsa State	</TableCell>
+                                                <TableCell align="center">Ms. Micheal Precious Onyenyechi</TableCell>
+                                                <TableCell align="center">08145770061, 08184439402</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Benue State	</TableCell>
+                                                <TableCell align="center">Ms. Ene Divine Inalegwu</TableCell>
+                                                <TableCell align="center">08110196680, 09076283060</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Edo State	</TableCell>
+                                                <TableCell align="center">Mr. Godswill Osagie E.</TableCell>
+                                                <TableCell align="center">08075020854</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Gombe	</TableCell>
+                                                <TableCell align="center">Mr. Nathaniel Richard Bono</TableCell>
+                                                <TableCell align="center">08149370633</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Kano State	</TableCell>
+                                                <TableCell align="center">Ms. Adebayo Christiana Tolulope</TableCell>
+                                                <TableCell align="center">08163234027</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Kaduna State	</TableCell>
+                                                <TableCell align="center">Ms. Ezenwe Chinaza Chinelo</TableCell>
+                                                <TableCell align="center">08162656220, 08136161592</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Nasarawa State	</TableCell>
+                                                <TableCell align="center">Mr. Victor Kingsley Umbugadu</TableCell>
+                                                <TableCell align="center">08098312681</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Niger State	</TableCell>
+                                                <TableCell align="center">Ms. Michael Janet Ihotu</TableCell>
+                                                <TableCell align="center">08141569400</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Ogun State	</TableCell>
+                                                <TableCell align="center">Mr. Animasaun Lukmon Abiola</TableCell>
+                                                <TableCell align="center">07038877922</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Plateau Sate	</TableCell>
+                                                <TableCell align="center">Mr Puttu Lot Musa</TableCell>
+                                                <TableCell align="center">08056796881, 09020638912</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Taraba State</TableCell>
+                                                <TableCell align="center">Mr. Emmanuel Shawulu</TableCell>
+                                                <TableCell align="center">09037566599, 08071463057</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center">Sokoto State</TableCell>
+                                                <TableCell align="center">Mr. Ajijila Gideon Victor</TableCell>
+                                                <TableCell align="center">08130301659</TableCell>
+                                        </TableRow>
+                                        <TableRow>
+                                        
+                                                <TableCell align="center"> Rivers State	</TableCell>
+                                                <TableCell align="center">XXXXXXXXX</TableCell>
+                                                <TableCell align="center">0900XXXXX</TableCell>
+                                        </TableRow>
+                                       
+                                    </TableBody>
+                                </Table>
+                        </TableContainer>
+
+
+                        
+
+
+
+
+
+
+                        </div>
+                        
+                        
+                        }
 
 
                          
@@ -167,6 +443,9 @@ function Contact() {
 
                         
                     </Container>
+
+
+                    {isMobile && <MobileTable/>}
             
 
            

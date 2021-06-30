@@ -1,10 +1,11 @@
 import React,{useState, forwardRef} from 'react'
 
-import { Button } from '@material-ui/core';
+import { Button, Paper ,Container} from '@material-ui/core';
 import ArrowForwardIosIcon from '@material-ui/icons/ArrowForwardIos';
 import TextField from '@material-ui/core/TextField';
 import Footer from '../partials/Footer/Footer'
 import InputLabel from '@material-ui/core/InputLabel';
+import EditLocationIcon from '@material-ui/icons/EditLocation';
 
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -74,6 +75,11 @@ function Register() {
              <div className="about__body">
 
             <div className="form__container">
+
+
+
+
+                <Paper>
 
                     <form action=""  className='regForm'>
 
@@ -196,6 +202,7 @@ function Register() {
                     </div>
 
                     </form>
+                    </Paper>
             </div>
 
 
@@ -226,6 +233,43 @@ function Register() {
                 </Button>
             </DialogActions>
       </Dialog>
+
+             <hr className='Hr__style'/>
+
+             <Container>
+
+                    <div className="contact__item">
+                          
+                          <EditLocationIcon fontSize="large" color='primary'/>
+                          <h3 >Steps to register offline</h3>
+
+                       </div>
+
+                       <ol  className='offline__reg__list'>
+
+                       <li> Obtain a FORM from our State Coordinator in your state of service during orientation camp, during CDS meetings, visit the office or call the contact of the coordinator for this purpose.</li>
+                       <li>Pay your registration fee directly to our Coordinator in your state of service</li>
+                       <li> Attend Training and sit for your professional examination</li>
+                       <li>Pay your induction fee directly to the INSTITUTE ACCOUNT detail below after obtaining pass mark: 
+                       
+                       <ul>
+
+                            <li><b>Acct Name:</b>Institute of Global Peace and Conflict Management</li>
+                            <li><b>Acct Number:</b>0645754697</li>
+                            <li><b>Bank:</b>Guaranty Trust Bank Plc</li>
+
+                       </ul></li>
+                       <li>Get inducted as an Associate Member of the Institute during induction ceremony.</li>
+                    
+
+
+
+
+
+                       </ol>
+
+
+             </Container>
 
        
             </div>
