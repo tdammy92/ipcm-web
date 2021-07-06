@@ -1,17 +1,10 @@
-import React,{useState,forwardRef} from 'react'
+import React from 'react'
 import Footer from '../partials/Footer/Footer'
 import { Container, Paper } from '@material-ui/core'
-import { Button, TextField} from '@material-ui/core'
-import CheckBoxIcon from '@material-ui/icons/CheckBox';
-// import {DatePicker,InlineDatePicker} from '@material-ui/pickers'
 
 
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import Slide from '@material-ui/core/Slide';
+
+
 
 
 
@@ -23,37 +16,13 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 
 
-const Transition = forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />;
-  });
+
 
 
 function Certification() {
 
 
-    const [RegNo, setRegNo] = useState('')
 
-    const [open, setOpen] = useState(false);
-
-  
-
-    const handleClickOpen = () => {
-        setOpen(true);
-      };
-    
-      const handleClose = () => {
-        setOpen(false);
-
-
-      };
-
-      const handleSubmit = (e)=>{
-            e.preventDefault();
-           
-           
-            handleClickOpen()
-            
-      }
 
    
    
@@ -61,97 +30,170 @@ function Certification() {
 
         <div className='base__page'>
         <div  className='About__container'>
-            <h3 className='page__title'>Certification</h3>
+            <h3 className='page__title'>CERTIFICATE TRAINING AND DIPLOMA COURSES</h3>
 
                 <div className="about__body">
 
-                <section>
-                    <div>
-                        <h4>Membership Verification</h4>
+             
 
+                <section className='Diploma__section'>
                         <Container>
+                                <div className="Diploma__wrapper">
+                                        <h3>(1) Certificate Courses:</h3>
+                                       
+                                        <div className="Diploma__list">
 
-                            <Paper elevation={3} style={{padding:'20px'}}>
-
-                                <h4>Kindly Input REG Number to verify</h4>
-
-                                <form onSubmit={(e)=>handleSubmit(e)} className='verify__form'>
-
-
-                                <TextField
-                                id="outlined-text-input"
-                                label="Reg No:"
-                                type="text"
-                                style={{width:'200px', margin:'10px'}}
-                                value={RegNo}
-                                onChange={(e)=>{setRegNo(e.target.value)}}
-                                variant="outlined"
-                                placeholder='123GFGXX-IGPCM'
-                        />
-
-                  
-                       
+                                        <h4>(a) Foundation Course in Peace and Conflict Management
+                                        List of Courses to be covered in (a) above:</h4>
+                                                <ol className='Diploma__list__items'>
+                                                        <li>Understanding Conflict Management processes</li>
+                                                        <li>The Basics of Peace Education</li>
+                                                </ol>
 
 
 
-                              <TextField
-                                id="outlined-helperText"
-                                label="Select Year"
-                                type="date"
-                                views={["year"]}
-                                style={{width:'200px', margin:'10px'}}
-                                value=""
-                                variant="outlined"
+                                        </div>
+
+                                        <div className="Diploma__list">
+
+                                        <h4>(b) Intermediate Course in Peace and Conflict Management
+List of courses to be covered:</h4>
+                                                <ol className='Diploma__list__items'>
+                                                        <li>The Practice of Workplace conflict Management</li>
+                                                        <li>International Peace-building and Humanitarianism</li>
+                                                        <li>The Basics of Peace Education</li>
+                                                        <li>Essentials of Conflict Transformation</li>
+                                                </ol>
+
+
+
+                                        </div>
+
+                                        <div className="Diploma__list">
+
+                                        <h4>(C) Professional Course in Peace and Conflict Management 
+List of courses to be covered:</h4>
+                                                <ol className='Diploma__list__items'>
+                                                        <li>Understanding conflict Management Processes</li>
+                                                        
+                                                        <li>Essentials of Conflict Transformation</li>
+                                                       
+                                                        <li>Fundamentals of Global Peace Studies</li>
+                                                        <li>The Basics of Peace Education</li>
+
+                                                        <li>Sustainable Environmental Development and Peace</li>
+
+                                                        <li>Global Concepts and Practices of Peace-building</li>
+                                                        <li>International Peace-building and Humanitarianism</li>
+                                                        <li>The Practice of Workplace conflict Management</li>
+                                                </ol>
+
+
+
+                                        </div>
+
+                                      
+
+                                </div>
+                                <div className="Diploma__wrapper">
+                                        <h3>(2) DIPLOMA COURSES:</h3>
+                                       
+                                       
+
+                                      
+
+                                        <div className="Diploma__list">
+
+                                     
+                                                <ol className='Diploma__Course__list'>
+                                                <li>Diploma in Peace and Conflict Management</li>
+                                                <li>Diploma in Peace and Sustainable Development</li>
+                                                <li>Diploma in Peace, Security and Strategic Leadership</li>
+                                                <li> Diploma in Prevention, Arbitration and Conflict Management</li>
+                                                <li> Diploma in Alternative Dispute Resolution</li>
+                                                <li>Diploma in Peacekeeping Mission and Diplomacy</li>
+                                                <li>Diploma in Corporate and Workplace Conflict Management</li>
+                                                <li>Diploma in Gender, Human Right and Peace building</li>
+                                                <li>Diploma in Peace and Environmental Sustainability</li>
+                                                <li>Diploma in Ethno-Religious Conflict and Peace Building</li>
+                                                <li>Diploma in Justice, Security and Rule of Law.</li>
+                                                <li>Diploma in Gender Inclusivity and Diversity Management</li>
+                                                <li>Diploma in Security, Youth Restiveness and Violent Extremism</li>
+                                                       
+                                                </ol>
+
+
+
+                                        </div>
+
+                                      
+
+                                </div>
+                                <div className="Diploma__wrapper">
+                                        <h3>(3) Postgraduate Diploma Courses:</h3>
+                                       
+                                       
+
+                                      
+
+                                        <div className="Diploma__list">
+
+                                     
+                                                <ol className='Diploma__Course__list'>
+                                              <li>Postgraduate Diploma in Peace and Conflict Management</li>
+                                              <li>Postgraduate Diploma in Peace Building and Sustainable Development</li>
+                                              <li>Postgraduate Diploma in Peace, Security and Strategic Leadership.</li>
+                                              <li> Postgraduate Diploma in Prevention, Arbitration and Conflict Management.</li>
+                                              <li>Postgraduate Diploma in Alternative Dispute Resolution</li>
+                                              <li>Postgraduate Diploma in Peace-Keeping Mission and Diplomacy</li>
+                                                       
+                                                </ol>
+
+
+
+                                        </div>
+
+                                      
+
+                                </div>
+
+                                <hr className='Hr__style'/>
+
+
+                                <div className="Requirement">
+                                <h4>ADMISSION REQUIREMENTS FOR THE DIPLOMA AND PGD PROGRAMMES:</h4>
+
+                                <p><strong className='strong__style'>Qualification:</strong>The application for the Diploma and Postgraduate Diploma programmes is open to holders of NECO/WASSCE with five credits in 2 sittings for admission in Diploma courses and HND/Degrees from courses and discipline other than peace and conflict management for Postgraduate Diploma programs. This means that, graduate from Art, Social science, Medical Science, Law, Management science, Education, Pure Science, Environmental Science and Engineering can apply. </p>
+                                <p><strong className='strong__style'>Course Duration: </strong>Minimum of 40 weeks and Maximum of 52 weeks. </p>
                                
-                        /> 
-
-{/* 
-                         <DatePicker
-                            views={["year"]}
-                            label="Year only"
-                            value=''
-                            onChange={()=>{}}
-                            animateYearScrolling
-                            />  */}
-
-
-                            {/* <>
-                            <div className="picker">
-                                <DatePicker
-                                views={["year"]}
-                                label="Year only"
-                                value=''
-                                onChange={()=>{}}
-                                animateYearScrolling
-                                />
-                            </div>
-                            </> */}
-
-                        <Button variant='contained' 
-                        disabled={!RegNo}
-                        type='submit'
-                        endIcon={<CheckBoxIcon/>}
-                        color='primary'>Verify</Button>
-
-
-                                </form>
-
-       
-                 <h5 style={{textAlign:'center'}}>Report Forgery to <a href="mailto:igpcminfo@gmail.com">igpcminfo@gmail.com</a></h5>
+                               
+                                <p><strong className='strong__style'>Lecture Schedules: </strong>Physical classes holds every Last Friday and Saturday of the month, virtual classes depends on individual candidate or group of candidates’ needs. Self-pace study is continuous.  </p>
+                                <p><strong className='strong__style'> First Semester:  </strong>Starts 2nd week of January-ends 2nd week of May with examination each academic year
+Submission of Project Proposals: Starts 3rd week of May and ends 4th week of May each academic year. Projects are community peace initiatives aimed at promoting community peace, enhanced peace building and in most case, mediating where conflict exist, train community leaders in peace building and providing skills to the youth and women. The result of your initiative will determine your graduation and certification.   The projects can be done in a group of 2-5 members per project.
+  </p>
+                                <p><strong className='strong__style'>Second Semester: </strong>Starts 1st week of June and ends 3rd of September each academic years. </p>
+                              
+                                <p><strong className='strong__style'>Methods of Delivery:  </strong>Self-paced Study, Virtual Lessons and Physical Classes    </p>
+                                
+                                <p><strong className='strong__style'>Lecture Tools:   </strong>Study Manuals, Video/Audio Recorded Lessons, Case Studies, Presentation, Simulation and Facilitation Techniques   </p>
+                               
+                                <p><strong className='strong__style'>Sales of Admission Forms:    </strong>ales of Forms and admission Runs from September-December each year. 
+Cost of Application Form: Pay N7,000 non-refundable, Download/ Fill the form and scan the filled form and upload it to <a href="mailto:igpcminfo@gmail.com">igpcminfo@gmail.com</a> /Fill ONLINE FORM/ return the printed filled form to our office in your state of resident.   </p>
 
 
 
 
-                            </Paper>
+
+
+                                </div>
+
 
 
 
                         </Container>
-
-
-
-                    </div>
                 </section>
+
+                <hr className='Hr__style'/>
 
 
                     <section className='Fees__section'>
@@ -624,31 +666,7 @@ function Certification() {
                 
                 
                 
-                <Dialog
-                open={open}
-                TransitionComponent={Transition}
-                keepMounted
-                onClose={handleClose}
-            >
-
-
-            <DialogTitle id="alert-dialog-slide-title">{"IGPCM Portal"}</DialogTitle>
-            <DialogContent>
-            <DialogContentText id="alert-dialog-slide-description">
-            Dear  User kindly hold on, result will be displayed in a bit...
-            <hr/>
-            Loading.....
-            </DialogContentText>
-            </DialogContent>
-            <DialogActions>
-            {/* <Button onClick={handleClose} color="primary">
-                Disagree
-            </Button> */}
-                <Button onClick={handleClose} color="primary">
-                    Close
-                </Button>
-            </DialogActions>
-      </Dialog>
+              
             
         </div>
         <Footer/>

@@ -21,7 +21,7 @@ function Nysc() {
                 <div className="nysc__container">
 
                     <div className="nysc__image">
-                    {/* <img src={Corper1} alt="Corper" /> */}
+                   
 
                     <Carousel infiniteLoop={true} autoPlay={true} showIndicators={false} showThumbs={false} width='100%'>
                     <div className='Nysc__slider'>

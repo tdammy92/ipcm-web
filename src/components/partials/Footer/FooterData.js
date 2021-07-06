@@ -10,25 +10,32 @@ const data = [
         path:'/register'
     },
     {
-        id:3,
-        name:'Media Center',
-        path:'/'
-    },
-    {
         id:4,
         name:'Career',
-        path:'/member'
+        path:'/career'
     },
     {
         id:5,
         name:'Projects',
-        path:'/member'
+        path:'/projects'
     },
     {
         id:6,
-        name:'Global Peace News',
-        path:'/'
+        name:'PCM License',
+        path:'/license'
     },
+    {
+        id:3,
+        name:'Consultancy',
+        path:'/consultancy'
+    },
+
+  
+    // {
+    //     id:7,
+    //     name:'Global Peace News',
+    //     path:'/'
+    // },
 
 ]
 

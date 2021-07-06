@@ -2,6 +2,8 @@ import React from 'react'
 import { motion } from "framer-motion";
 import { Container } from '@material-ui/core'
 
+import 'aos/dist/aos.css';
+
 import {useHistory} from 'react-router-dom'
 
 
@@ -279,7 +281,9 @@ function Home() {
                             </Container>
                             <Container>
                                             <h3 className='value__title'>CORE VALUES (T-A-L-E-N-T)   </h3>
-                                            <ul className='values__list'>
+                                            <ul className='values__list'
+                                            data-aos="flip-right"
+                                            >
                                                         <li><b>TOLERANCE:</b> We believe people should be given the opportunity to express their feelings and such expressions, viewpoints and opinions be tolerated no matter how provocative they seem.</li>
                                                         
                                                         <li><b>AMICABILITY:</b> We know that settling people’s differences in a friendly, objective and committed manner ensues peace.</li>

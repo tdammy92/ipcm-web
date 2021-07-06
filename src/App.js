@@ -5,6 +5,8 @@ import {
 } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
+import AOS from 'aos'
+import 'aos/dist/aos.css';
 import NavBar from './components/partials/NavBar/NavBar';
 // import Footer from './components/partials/Footer/Footer'
 import Home from './components/Home'
@@ -15,6 +17,10 @@ import Nysc from "./components/Pages/Nysc";
 import Examination from "./components/Pages/Examination";
 import Certification from "./components/Pages/Certification";
 import Register from "./components/Pages/Register";
+import Project from "./components/Pages/Project";
+import Career from "./components/Pages/Career";
+import Consult from "./components/Pages/Consult";
+import License from "./components/Pages/License";
 
 
 
@@ -32,6 +38,9 @@ const defualtTheme = createMuiTheme({
 
 
 function App() {
+
+ AOS.init()
+
   return (
     <ThemeProvider theme={defualtTheme}>
     <div className="index">
@@ -80,6 +89,26 @@ function App() {
                     <Route exact path='/register'>
 
                         <Register/>
+
+                    </Route>
+                    <Route exact path='/projects'>
+
+                        <Project/>
+
+                    </Route>
+                    <Route exact path='/career'>
+
+                        <Career/>
+
+                    </Route>
+                    <Route exact path='/consultancy'>
+
+                        <Consult/>
+
+                    </Route>
+                    <Route exact path='/license'>
+
+                        <License/>
 
                     </Route>
 

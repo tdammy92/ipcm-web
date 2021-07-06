@@ -23,7 +23,6 @@ body {
     width: 100%;
     box-sizing: border-box;
     font-family: 'Lato', sans-serif;
-    /* overflow: auto; */
 }
 
 .index {
@@ -827,6 +826,50 @@ body {
     align-items: center;
 }
 
+.Diploma__section {}
+
+.Diploma__wrapper {}
+
+.Diploma__wrapper>h3 {
+    font-size: 18px;
+    color: #01996D;
+}
+
+.Diploma__list {
+    margin-top: 10px;
+}
+
+.Diploma__list>h4 {
+    color: #01996D;
+}
+
+.Diploma__list__items {
+    list-style-type: lower-roman;
+}
+
+.Diploma__list__items>li {
+    padding: 4px;
+}
+
+.Diploma__Course__list {
+    list-style-type: lower-alpha;
+}
+
+.Diploma__Course__list>li {
+    padding: 4px;
+}
+
+.Requirement {}
+
+.Requirement>p {
+    padding-bottom: 4px;
+}
+
+.strong__style {
+    color: #01996D;
+    font-size: 17px;
+}
+
 .Fees__section {
     margin-top: 40px;
     width: 100%;
@@ -857,13 +900,121 @@ body {
 
 /* Exam page desin starts here */
 
-.shedule__item>h5 {
+.shedule__wrapper {
+    margin-bottom: 20px;
+}
+
+.shedule__item>h6 {
     text-decoration: underline;
     color: #01996D;
+    font-size: 16px;
 }
 
 .shedule__item>ol>li {
     margin: 4px;
+}
+
+.list__stype {
+    list-style-type: lower-roman;
+}
+
+.list__stype>li {
+    margin: 4px;
+}
+
+
+/* Start stylin for the project page */
+
+.Project__container {}
+
+.project__item {}
+
+.project__item>h4 {
+    color: #01996D;
+    font-size: 18px;
+}
+
+.project__item>p {
+    text-align: justify;
+    margin: 5px;
+    line-height: 1.5;
+}
+
+
+/* License styling start here */
+
+.License__wrapper {
+    width: 90%;
+}
+
+.license__item {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    /* border: 1px solid yellowgreen; */
+    flex-wrap: wrap;
+}
+
+.licence__image {
+    /* flex: 1; */
+    width: 500px;
+    /* border: 1px solid red; */
+    display: flex;
+    justify-content: center;
+}
+
+.licence__image>img {
+    width: 170px;
+    height: 200px;
+}
+
+.licence__question {
+    /* flex: 2; */
+    /* border: 1px solid blue; */
+    padding: 10px;
+    width: 500px;
+    border-left: 2px solid #01996D;
+}
+
+.licence__question>p {
+    text-align: justify;
+    font-size: 20px;
+    color: #01996D;
+}
+
+.cta__Goodnews {
+    margin: 20px;
+}
+
+.goodnews__title {
+    font-size: 20px;
+    color: #01996D;
+}
+
+.benefit__container {
+    margin: 20px;
+}
+
+.benefit__container>h4 {
+    color: #01996D;
+}
+
+.benefit {
+    list-style-type: lower-roman;
+}
+
+.benefit>li {
+    font-size: 16px;
+    padding: 8px;
+}
+
+
+/* Consultancy styling starts here */
+
+.consultancy__list {}
+
+.consultancy__list>li {
+    padding: 5px;
 }
 
 
@@ -874,13 +1025,15 @@ body {
 
 .footerContainer {
     width: 100%;
-    height: 200px;
+    height: 220px;
     display: flex;
     margin-top: 50px;
+    /* box-shadow: 3px 0px 1px rgba(78, 110, 73, 0.15); */
     background-color: #245852;
     /* position: fixed; */
     bottom: 0;
     padding: 10px;
+    box-shadow: 0px -4px 3px rgba(176, 241, 230, 0.75);
 }
 
 .DeskTopFooter__container {

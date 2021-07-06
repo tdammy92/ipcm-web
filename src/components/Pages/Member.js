@@ -1,20 +1,131 @@
-import React from 'react'
+import React,{useState,forwardRef} from 'react'
 import Footer from '../partials/Footer/Footer'
-// import { Paper } from '@material-ui/core'
-// import { Typography } from '@material-ui/core'
 import {Grid} from '@material-ui/core'
-import { Container } from '@material-ui/core'
+import { Container, Paper } from '@material-ui/core'
 import {useHistory} from 'react-router-dom'
 import BannerImage2 from '../../assets/images/banner2.jpg'
+
+
+import { Button, TextField} from '@material-ui/core'
+import CheckBoxIcon from '@material-ui/icons/CheckBox';
+
+
+
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import Slide from '@material-ui/core/Slide';
+
+
+
+const Transition = forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
 
 function Member() {
 
     const history = useHistory()
+
+    const [RegNo, setRegNo] = useState('')
+
+    const [open, setOpen] = useState(false);
+
+  
+
+    const handleClickOpen = () => {
+        setOpen(true);
+      };
+    
+      const handleClose = () => {
+        setOpen(false);
+
+
+      };
+
+      const handleSubmit = (e)=>{
+            e.preventDefault();
+           
+           
+            handleClickOpen()
+            
+      }
     return (
 
         <div className='base__page'>
             <div  className='Member__Container'>
             <h3 className='page__title'>IGPCM MEMBERSHIP</h3>
+
+            <section>
+            <div>
+                        <h4>Membership Verification</h4>
+
+                        <Container>
+
+                            <Paper elevation={3} style={{padding:'20px'}}>
+
+                                <h4>Kindly Input REG Number to verify</h4>
+
+                                <form onSubmit={(e)=>handleSubmit(e)} className='verify__form'>
+
+
+                                <TextField
+                                id="outlined-text-input"
+                                label="Reg No:"
+                                type="text"
+                                style={{width:'200px', margin:'10px'}}
+                                value={RegNo}
+                                onChange={(e)=>{setRegNo(e.target.value)}}
+                                variant="outlined"
+                                placeholder='123GFGXX-IGPCM'
+                        />
+
+                  
+                       
+
+
+
+                              <TextField
+                                id="outlined-helperText"
+                                label="Select Year"
+                                type="date"
+                                views={["year"]}
+                                style={{width:'200px', margin:'10px'}}
+                                value=""
+                                variant="outlined"
+                               
+                        /> 
+
+
+
+                        <Button variant='contained' 
+                        disabled={!RegNo}
+                        type='submit'
+                        endIcon={<CheckBoxIcon/>}
+                        color='primary'>Verify</Button>
+
+
+                                </form>
+
+       
+                 <h5 style={{textAlign:'center'}}>Report Forgery to <a href="mailto:igpcminfo@gmail.com">igpcminfo@gmail.com</a></h5>
+
+
+
+
+                            </Paper>
+
+
+
+                        </Container>
+
+
+
+                    </div>
+
+
+            </section>
 
                    
                     <div className="Member__items">
@@ -492,6 +603,32 @@ A rebate will be given to organizations sponsoring more than 3 of its staff for 
 
 
 </section>
+
+<Dialog
+                open={open}
+                TransitionComponent={Transition}
+                keepMounted
+                onClose={handleClose}
+            >
+
+
+            <DialogTitle id="alert-dialog-slide-title">{"IGPCM Portal"}</DialogTitle>
+            <DialogContent>
+            <DialogContentText id="alert-dialog-slide-description">
+            Dear  User kindly hold on, result will be displayed in a bit...
+            <hr/>
+            Loading.....
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+            {/* <Button onClick={handleClose} color="primary">
+                Disagree
+            </Button> */}
+                <Button onClick={handleClose} color="primary">
+                    Close
+                </Button>
+            </DialogActions>
+      </Dialog>
 
                 
             </div>
