@@ -203,6 +203,31 @@ Cost of Application Form: Pay N7,000 non-refundable, Download/ Fill the form and
                     </div>
                             <div className="Fees__container">
 
+                            <div className="bank__details" id="bankDetails">
+
+<h3>IGPCM Accountant Details</h3>
+
+<p>
+
+    Account Name:
+    <strong>
+        Institute of Global Peace and Conflict Management
+    </strong>
+</p>
+<p>
+    Account Number:
+    <strong>
+        0645754697</strong>
+
+</p>
+<p>
+
+    Bank:
+    <strong>
+        Guaranty Trust Bank</strong>
+</p>
+</div>
+
 
                             <TableContainer component={Paper}  style={{width:'350px', margin:'10px',padding:'10px'}}>
                                 <span style={{color:'#01996D'}}>  
@@ -656,8 +681,10 @@ Cost of Application Form: Pay N7,000 non-refundable, Download/ Fill the form and
 
 
 
-                            </div>
+                </div>
                     </section>
+
+                   
                 </div>
 
 

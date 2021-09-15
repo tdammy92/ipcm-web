@@ -119,6 +119,33 @@ function Examination() {
                     </div>
                 </div>
                 </Container>
+
+                <Container>
+                <div className="bank__details" id="bankDetails">
+
+<h3>IGPCM Accountant Details</h3>
+
+<p>
+
+    Account Name:
+    <strong>
+        Institute of Global Peace and Conflict Management
+    </strong>
+</p>
+<p>
+    Account Number:
+    <strong>
+        0645754697</strong>
+
+</p>
+<p>
+
+    Bank:
+    <strong>
+        Guaranty Trust Bank</strong>
+</p>
+</div>
+                </Container>
             </div>
             
         </div>

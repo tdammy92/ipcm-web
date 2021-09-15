@@ -629,7 +629,32 @@ A rebate will be given to organizations sponsoring more than 3 of its staff for 
                 </Button>
             </DialogActions>
       </Dialog>
+            <Container>
+            <div className="bank__details" id="bankDetails">
 
+<h3>IGPCM Accountant Details</h3>
+
+<p>
+
+    Account Name:
+    <strong>
+        Institute of Global Peace and Conflict Management
+    </strong>
+</p>
+<p>
+    Account Number:
+    <strong>
+        0645754697</strong>
+
+</p>
+<p>
+
+    Bank:
+    <strong>
+        Guaranty Trust Bank</strong>
+</p>
+</div>
+            </Container>
                 
             </div>
         <Footer/>

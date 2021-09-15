@@ -11,7 +11,7 @@ const data = [
     },
     {
         id:3,
-        name:'Member',
+        name:'Membership',
         path:'/member'
     },
     {

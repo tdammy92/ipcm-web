@@ -3,8 +3,8 @@ import {Link} from 'react-router-dom'
 import data from './FooterData'
 import FacebookIcon from '@material-ui/icons/Facebook';
 import InstagramIcon from '@material-ui/icons/Instagram';
-import TwitterIcon from '@material-ui/icons/Twitter';
-
+// import TwitterIcon from '@material-ui/icons/Twitter';
+import EmailIcon from '@material-ui/icons/Email';
 
 
 
@@ -50,13 +50,13 @@ function DesktopFooter() {
                             <h5>Instgram</h5>
                         </a>
                     
-                        <a href='https://www.twitter.com' className="SocialItem"
+                        <a href='mailto:igpcminfo@gmail.com' className="SocialItem"
                         target="_blank"
                         rel="noreferrer">
                            
 
-                            <TwitterIcon color='secondary'/>
-                            <h5>Twitter</h5>
+                            <EmailIcon color='secondary'/>
+                            <h5>igpcminfo@gmail.com</h5>
                         </a>
                  
                 </div>

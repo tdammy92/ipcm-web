@@ -74,12 +74,23 @@ body {
     height: 100%;
 }
 
+.Adownload {
+    text-decoration: none;
+    cursor: pointer;
+}
+
 .LogoText {
     font-size: 24px;
     margin: 0 0 0 4px;
     font-weight: '500';
     color: #01996D;
     font-family: 'Montserrat', sans-serif;
+}
+
+.RC_Number {
+    font-size: 10px;
+    padding-left: 2px;
+    font-family: 'Roboto', sans-serif;
 }
 
 .navListContainer {
@@ -160,7 +171,7 @@ body {
 
 .MobileNavListWrapper {
     margin: 0 0 10px;
-    height: 30%;
+    height: 35%;
     display: flex;
     background-color: #01996D;
     width: 100%;
@@ -1006,6 +1017,16 @@ body {
 .benefit>li {
     font-size: 16px;
     padding: 8px;
+}
+
+.bank__details {
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.bank__details>h3 {
+    color: #01996D;
 }
 
 

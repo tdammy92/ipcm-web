@@ -29,6 +29,7 @@ function NavBar() {
                     
                         <h2 className='LogoText'>
                             IGPCM
+                            <span className='RC_Number'>RC:1787595</span>
                         </h2>
 
                     </Link>

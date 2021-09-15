@@ -55,7 +55,7 @@ function MobilSlider(){
                 </div>
                 <div className='Mobile__slideImage__item'>
                     <img src={Image3} className='Mobile__slideImage' alt='slide'/>
-                    <p >Advancing woman and youth in peace building</p>
+                    <p >Advancing Women and youth in peace building</p>
                 </div>
                 <div className='Mobile__slideImage__item'>
                     <img src={Image4} className='Mobile__slideImage' alt='slide'/>
@@ -63,7 +63,7 @@ function MobilSlider(){
                 </div>
                 <div className='Mobile__slideImage__item'>
                     <img src={Image5} className='Mobile__slideImage' alt='slide'/>
-                    <p >Training and reaising Peace Builders</p>
+                    <p >Training and Raising Peace Builders </p>
                 </div>
                 <div className='Mobile__slideImage__item'>
                     <img src={Image6} className='Mobile__slideImage' alt='slide'/>
@@ -108,7 +108,7 @@ function DesktopSlider(){
                 </div>
                 <div className='slideImage__item'>
                     <img src={Image3} className='slideImage' alt='slide'/>
-                    <p >Advancing woman and youth in peace building</p>
+                    <p >Advancing Women and youth in peace building</p>
                 </div>
                 <div className='slideImage__item'>
                     <img src={Image4} className='slideImage' alt='slide'/>
@@ -116,7 +116,7 @@ function DesktopSlider(){
                 </div>
                 <div className='slideImage__item'>
                     <img src={Image5} className='slideImage' alt='slide'/>
-                    <p >Training and reaising Peace Builders</p>
+                    <p >Training and Raising Peace Builders</p>
                 </div>
                 <div className='slideImage__item'>
                     <img src={Image6} className='slideImage' alt='slide'/>
@@ -384,7 +384,30 @@ function Home() {
 
                     </section>
                         
-                
+                    <div className="bank__details" id="bankDetails">
+
+<h3>IGPCM Accountant Details</h3>
+
+<p>
+
+    Account Name:
+    <strong>
+        Institute of Global Peace and Conflict Management
+    </strong>
+</p>
+<p>
+    Account Number:
+    <strong>
+        0645754697</strong>
+
+</p>
+<p>
+
+    Bank:
+    <strong>
+        Guaranty Trust Bank</strong>
+</p>
+</div>
                 </div>
                 <Footer/>
         </div>

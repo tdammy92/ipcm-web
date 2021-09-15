@@ -17,11 +17,11 @@ function Project() {
                         <h4>Projects</h4>
 
                         <p>
-                       (a) Peace Clubs: The institute is working on establishing 50,000 Peace Clubs and Trains 100,000 Teachers in peace-building in both public and private Primary and Secondary schools across Nigeria in 7 years. The project starts 2022 and Ends 2028.  This project is inspired by the United States Institute of Peace (USIP) and the desire to contribute towards the attainment of SDGs goal 16 (Peace, Justice and Strong Institutions). The project aims to create at least 200 peace clubs and train 400 teachers in schools across the 36 states including the capital territory Abuja annually.  (DONATE)
+                       (a) Peace Clubs: The institute is working on establishing 50,000 <strong className="Adownload" style={{color:'green'}}>Peace Clubs</strong> and Trains 100,000 Teachers in peace-building in both public and private Primary and Secondary schools across Nigeria in 7 years. The project starts 2022 and Ends 2028.  This project is inspired by the United States Institute of Peace (USIP) and the desire to contribute towards the attainment of SDGs goal 16 (Peace, Justice and Strong Institutions). The project aims to create at least 200 peace clubs and train 400 teachers in schools across the 36 states including the capital territory Abuja annually. <strong className="Adownload"  style={{color:'green'}}>(DONATE)</strong>
 
                         </p>
 
-                    </div>
+                    </div> 
                     <div className="project__item">
                         <h4>Research Works</h4>
 
@@ -30,7 +30,7 @@ function Project() {
 
                         </p>
                         (b) Research work to eliminate the decamping of political leaders from one political party to another in order to strengthen the democratic institutions and encourage peace building and conflict resolution among political actors.
-(DONATE)
+
                         <p>
 
                         </p>
