@@ -21,7 +21,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import Slide from '@material-ui/core/Slide';
 
 
-import PdfForm from '../../assets/document/Form.pdf'
+import PdfForm from '../../assets/document/IGPCM__REGForm.pdf'
 
 const Transition = forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />;
@@ -90,7 +90,7 @@ function Register() {
 
                 <Paper>
 
-                    <form action=""  className='regForm'>
+                    <form action=""  className='regForm' >
 
 
                         <div className="form__list">
@@ -258,7 +258,7 @@ function Register() {
 
                        <Paper className={classes.paper}>Click here to 
                        
-                            <a className='Adownload' href={PdfForm}  download='IPGCM.pdf'>
+                            <a className='Adownload' href={PdfForm}  download='IGPCM__REGForm.pdf'>
                             
                                 <Button  color='primary' endIcon={<CloudDownloadIcon/>}>Download</Button>
                             </a> 

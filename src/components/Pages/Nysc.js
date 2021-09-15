@@ -10,7 +10,7 @@ import Corper1 from '../../assets/images/corper1.jpg'
 import Corper2 from '../../assets/images/Corper2.jpg'
 import Corper3 from '../../assets/images/Corper3.png'
 
-import PdfForm from '../../assets/document/Form.pdf'
+import PdfForm from '../../assets/document/IGPCM__REGForm.pdf'
 
 import "react-responsive-carousel/lib/styles/carousel.min.css"; // requires a loader
 import { Carousel } from 'react-responsive-carousel';
@@ -93,7 +93,7 @@ function Nysc() {
 
    <Paper className={classes.paper}>Click here to 
                        
-                       <a className='Adownload' href={PdfForm}  download='IPGCM.pdf'>
+                       <a className='Adownload' href={PdfForm}  download='IGPCM__REGForm.pdf'>
                        
                            <Button  color='primary' endIcon={<CloudDownloadIcon/>}>Download</Button>
                        </a> 
