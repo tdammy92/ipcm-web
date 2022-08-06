@@ -158,6 +158,7 @@ function Home() {
     const history = useHistory();
     const isMobile = useMediaQuery({maxWidth:ScreenSize.mobile})
 
+    
 
     return (
         <div className='base__page'>

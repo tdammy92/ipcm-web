@@ -1,7 +1,10 @@
+import React,{useEffect} from "react";
+
 import {
   BrowserRouter as Router,
   Switch,
-  Route
+  Route,
+
 } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
@@ -21,7 +24,10 @@ import Project from "./components/Pages/Project";
 import Career from "./components/Pages/Career";
 import Consult from "./components/Pages/Consult";
 import License from "./components/Pages/License";
-
+import Admin from "./components/Pages/admin/Admin";
+import SignUp from "./components/Pages/auth/SIgnUp";
+import SignIn from "./components/Pages/auth/SignIn";
+import NotFound from "./components/Pages/NotFound";
 
 
 const defualtTheme = createMuiTheme({
@@ -40,6 +46,7 @@ const defualtTheme = createMuiTheme({
 function App() {
 
  AOS.init()
+
 
   return (
     <ThemeProvider theme={defualtTheme}>
@@ -109,6 +116,26 @@ function App() {
                     <Route exact path='/license'>
 
                         <License/>
+
+                    </Route>
+                    <Route exact path='/admin'>
+
+                        <Admin/>
+
+                    </Route>
+                    <Route exact path='/siginup'>
+
+                        <SignUp/>
+
+                    </Route>
+                    <Route exact path='/signin'>
+
+                        <SignIn/>
+
+                    </Route>
+                    <Route exact path='*'>
+
+                        <NotFound/>
 
                     </Route>
 

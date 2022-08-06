@@ -31,6 +31,12 @@ const data = [
     },
 
   
+    {
+        id:7,
+        name:'Admin',
+        path:'/admin'
+    },
+  
     // {
     //     id:7,
     //     name:'Global Peace News',

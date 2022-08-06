@@ -1,4 +1,5 @@
 import React from 'react'
+import { useLocation } from 'react-router-dom'
 import {useMediaQuery} from 'react-responsive'
 import {ScreenSize} from '../../../Config'
 import {Link} from 'react-router-dom'
@@ -14,6 +15,8 @@ import MobileNavBar from './MobileNavBar'
 function NavBar() {
 
     const isMobile = useMediaQuery({maxWidth:ScreenSize.mobile})
+
+    const location = useLocation().pathname;
 
     return (
         <div className='navContainer'>
@@ -33,22 +36,26 @@ function NavBar() {
                         </h2>
 
                     </Link>
-
-
+{
+(location ==='/admin' || location === '/signin' || location === '/signup')? null :
+<>
                     {!isMobile &&
                  
 
                              <DesktopNavBar/>
 
                    }
-
-                    
                     {isMobile &&
                     
 
                      <MobileNavBar/>
 
                  }
+</>
+
+}
+
+                    
      
       
 
