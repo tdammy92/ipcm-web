@@ -1,4 +1,4 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 
 import {
   BrowserRouter as Router,
@@ -27,7 +27,13 @@ import License from "./components/Pages/License";
 import Admin from "./components/Pages/admin/Admin";
 import SignUp from "./components/Pages/auth/SIgnUp";
 import SignIn from "./components/Pages/auth/SignIn";
+import SerialNumber from "./components/Pages/admin/SerialNumber";
+import Students from "./components/Pages/admin/Students";
+import Student from "./components/Pages/admin/Student";
 import NotFound from "./components/Pages/NotFound";
+
+
+import ProtectedRoute from "./components/Pages/auth/ProtectedRoute";
 
 
 const defualtTheme = createMuiTheme({
@@ -45,7 +51,17 @@ const defualtTheme = createMuiTheme({
 
 function App() {
 
+    // const [Admin, setAdmin] = useState('');
+    const store = JSON.parse(localStorage.getItem('admin'));
+    // const [IsLoggedIn, setIsLoggedIn] = useState(false)
+
  AOS.init()
+
+const IsLoggedIn = store?.token !== undefined ? true : false
+
+
+
+console.log(IsLoggedIn);
 
 
   return (
@@ -118,11 +134,11 @@ function App() {
                         <License/>
 
                     </Route>
-                    <Route exact path='/admin'>
+                    {/* <Route exact path='/admin'>
 
                         <Admin/>
 
-                    </Route>
+                    </Route> */}
                     <Route exact path='/siginup'>
 
                         <SignUp/>
@@ -133,6 +149,44 @@ function App() {
                         <SignIn/>
 
                     </Route>
+                    {/* <Route exact path='/serial-number'>
+
+                        <SerialNumber/>
+
+                    </Route> */}
+                    {/* <Route exact path='/students'>
+
+                        <Student/>
+
+                    </Route> */}
+
+
+                    <ProtectedRoute
+                        exact
+                        path='/admin'
+                        IsLoggedin={IsLoggedIn}
+                        Component={Admin}/>
+
+                    <ProtectedRoute
+                        exact
+                        path='/students'
+                        IsLoggedin={IsLoggedIn}
+                        Component={Students}/>
+
+
+                    <ProtectedRoute
+                        exact
+                        path='/students/:id'
+                        IsLoggedin={IsLoggedIn}
+                        Component={Student}/>
+
+                    <ProtectedRoute
+                        exact
+                        path='/serial-number'
+                        IsLoggedin={IsLoggedIn}
+                        Component={SerialNumber}/>
+
+
                     <Route exact path='*'>
 
                         <NotFound/>

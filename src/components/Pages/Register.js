@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useEffect } from "react";
+import React, { useState, forwardRef, useEffect ,useRef} from "react";
 
 import { Button, Paper, Container } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
@@ -16,6 +16,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import FilledInput from '@material-ui/core/FilledInput';
+
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -24,6 +29,12 @@ import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
+
+import FormLabel from "@material-ui/core/FormLabel";
+
+import FormGroup from "@material-ui/core/FormGroup";
+
+import FormHelperText from "@material-ui/core/FormHelperText";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -38,158 +49,9 @@ import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 import PdfForm from "../../assets/document/IGPCM__REGForm.pdf";
 
+import { accordionData } from "../../components/Data/formData";
 import { getState, getCountry } from "../../Services/api/countryService";
 
-// const stateArray = [
-// 	{
-// 		code: "FC",
-// 		name: "Abuja",
-// 	},
-// 	{
-// 		code: "AB",
-// 		name: "Abia",
-// 	},
-// 	{
-// 		code: "AD",
-// 		name: "Adamawa",
-// 	},
-// 	{
-// 		code: "AK",
-// 		name: "AkwaIbom",
-// 	},
-// 	{
-// 		code: "AN",
-// 		name: "Anambra",
-// 	},
-// 	{
-// 		code: "BA",
-// 		name: "Bauchi",
-// 	},
-// 	{
-// 		code: "BY",
-// 		name: "Bayelsa",
-// 	},
-// 	{
-// 		code: "BE",
-// 		name: "Benue",
-// 	},
-// 	{
-// 		code: "BO",
-// 		name: "Borno",
-// 	},
-// 	{
-// 		code: "CR",
-// 		name: "CrossRiver",
-// 	},
-// 	{
-// 		code: "DE",
-// 		name: "Delta",
-// 	},
-// 	{
-// 		code: "EB",
-// 		name: "Ebonyi",
-// 	},
-// 	{
-// 		code: "ED",
-// 		name: "Edo",
-// 	},
-// 	{
-// 		code: "EK",
-// 		name: "Ekiti",
-// 	},
-// 	{
-// 		code: "EN",
-// 		name: "Enugu",
-// 	},
-// 	{
-// 		code: "GO",
-// 		name: "Gombe",
-// 	},
-// 	{
-// 		code: "IM",
-// 		name: "Imo",
-// 	},
-// 	{
-// 		code: "JI",
-// 		name: "Jigawa",
-// 	},
-// 	{
-// 		code: "KD",
-// 		name: "Kaduna",
-// 	},
-// 	{
-// 		code: "KN",
-// 		name: "Kano",
-// 	},
-// 	{
-// 		code: "KT",
-// 		name: "Katsina",
-// 	},
-// 	{
-// 		code: "KE",
-// 		name: "Kebbi",
-// 	},
-// 	{
-// 		code: "KO",
-// 		name: "Kogi",
-// 	},
-// 	{
-// 		code: "KW",
-// 		name: "Kwara",
-// 	},
-// 	{
-// 		code: "LA",
-// 		name: "Lagos",
-// 	},
-// 	{
-// 		code: "NA",
-// 		name: "Nassarawa",
-// 	},
-// 	{
-// 		code: "NI",
-// 		name: "Niger",
-// 	},
-// 	{
-// 		code: "OG",
-// 		name: "Ogun",
-// 	},
-// 	{
-// 		code: "ON",
-// 		name: "Ondo",
-// 	},
-// 	{
-// 		code: "OS",
-// 		name: "Osun",
-// 	},
-// 	{
-// 		code: "OY",
-// 		name: "Oyo",
-// 	},
-// 	{
-// 		code: "PL",
-// 		name: "Plateau",
-// 	},
-// 	{
-// 		code: "RI",
-// 		name: "Rivers",
-// 	},
-// 	{
-// 		code: "SO",
-// 		name: "Sokoto",
-// 	},
-// 	{
-// 		code: "TA",
-// 		name: "Taraba",
-// 	},
-// 	{
-// 		code: "YO",
-// 		name: "Yobe",
-// 	},
-// 	{
-// 		code: "ZA",
-// 		name: "Zamfara",
-// 	},
-// ];
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction='up' ref={ref} {...props} />;
 });
@@ -203,6 +65,10 @@ const useStyles = makeStyles((theme) => ({
 	// inputStyle:{
 	//     width:300,
 	// }
+	backdrop: {
+		zIndex: theme.zIndex.drawer + 1,
+		color: '#fff',
+	  },
 
 	paper: {
 		padding: 10,
@@ -217,10 +83,21 @@ const useStyles = makeStyles((theme) => ({
 	input: {
 		display: "none",
 	},
+	formControl: {
+		marginLeft: "20px",
+	},
+	serialContainer:{
+		width:`50%`,
+	
+		// maxHeight:'30px'
+	}
 }));
 
 function Register() {
+	// console.log(accordionData);
 	document.title = "IGPCM | Register";
+
+	const seleRef = useRef(null)
 
 	const [basicDetails, setBasicDetails] = useState({
 		title: "",
@@ -239,11 +116,16 @@ function Register() {
 	const [selectedCountry, setselectedCountry] = useState("");
 	const [AllState, setSAlltate] = useState([]);
 
+	const [acccordionDaata, setacccordionDaata] = useState(() => accordionData);
+	const [academicProgramList, setacademicProgramList] = useState([])
+	
+
 	//passed pyaload
 	const [myCountry, setmyCountry] = useState("");
 	const [slectedState, setslectedState] = useState("");
 
 	const [Loading, setLoading] = useState(false);
+	const [FormLoading, setFormLoading] = useState(false)
 
 	const [employmentDetails, setemploymentDetails] = useState({
 		organization: "",
@@ -254,20 +136,32 @@ function Register() {
 
 	const [membership, setmembership] = useState({
 		memberCdr: "",
+		memberRoutes:"",
 		applicationFee: "",
+		paymentMethods:"",
+		pgdCourses:""
 	});
 
+
 	const [Program, setProgram] = useState([]);
-	const [open, setOpen] = useState(false);
+	const [serialNumber, setserialNumber] = useState('')
+
+
+
+
+
+
+
+	const [openModal, setOpenModal] = useState(false);
 
 	const classes = useStyles();
 
-	const handleClickOpen = () => {
-		setOpen(true);
-	};
+	// const handleClickOpen = () => {
+	// 	setOpen(true);
+	// };
 
 	const handleClose = () => {
-		setOpen(false);
+		setOpenModal(false);
 	};
 
 	function HandleModalCheckBox(e) {
@@ -279,6 +173,88 @@ function Register() {
 		} else {
 			setProgram((prev) => [...prev, option]);
 		}
+
+	}
+	
+	
+	
+
+	function HandleNextedCheckBox(ListName) {
+		const option = ListName.target.name;
+		
+		updateNextedList() 
+
+		
+		if (academicProgramList.includes(option)) {
+			
+			const temp = academicProgramList.filter((selctecd) => option !== selctecd);
+			setacademicProgramList(temp);
+		} else {
+			setacademicProgramList((prev) => [...prev, option]);	
+		}
+// 		const temp = acccordionDaata[2];
+// 		const temp2 = acccordionDaata.filter(res=>res.id!==3)
+
+// 		const res = temp.List?.filter((ite)=>ite.name===ListName)[0];
+// 		const rem = temp.List?.filter((ite)=>ite.name!==ListName);
+
+// 		const modified = [...rem,{name:res?.name,isChecked:true}]
+
+
+
+// 		setacccordionDaata([...temp2,{name:temp.name,id:temp.id,description:temp.description,isSelected:temp.isSelected,List:modified}])
+
+		// console.log(modified)
+
+	
+	}
+
+
+	function ResetForm() {
+		setBasicDetails({title: "",
+		surname: "",
+		firstName: "",
+		middleName: "",
+		email: "",
+		dob: "",
+		phoneNo: "",
+		eduQualification: "",});
+
+		setacademicProgramList([])
+setmyCountry('')
+setslectedState('')
+setemploymentDetails({
+	organization: "",
+	startDate: "",
+	position: "",
+	location: "",
+})
+setmembership({
+	memberCdr: "",
+	memberRoutes:"",
+	applicationFee: "",
+	paymentMethods:"",
+	pgdCourses:""
+})
+setProgram([])
+setserialNumber('')
+
+
+
+
+	}
+
+
+	function updateNextedList() {
+		
+
+		// console.log("accademic list",academicProgramList.length)
+		if(academicProgramList.length){
+		//check if program list is already selected
+		if (Program.includes('ACADEMIC PROGRAMS')) return;
+
+		}
+
 	}
 
 	//   useEffect(() => {
@@ -291,6 +267,8 @@ function Register() {
 	// console.log(basicDetails, employmentDetails, membership);
 
 	async function handleSubmit(e) {
+
+		setFormLoading(true)
 		e.preventDefault();
 
 		const payload = JSON.stringify({
@@ -301,27 +279,43 @@ function Register() {
 			dob: basicDetails.dob,
 			phoneNumber: basicDetails.phoneNo,
 			email: basicDetails.email,
-			country: basicDetails.country,
-			state: basicDetails.state,
+			country: myCountry,
+
+			// country: basicDetails.country,
+			// state: basicDetails.state,
+			state:slectedState,
 			eduQualification: basicDetails.eduQualification,
 			currentEmploymet: employmentDetails,
 			membershipCadre: membership.memberCdr,
+			membershipRoute:membership.memberRoutes,
 			applicationFee: membership.applicationFee,
 			membershipType: Program,
+			pgdCourses:membership.pgdCourses,
+			paymentMethods:membership.paymentMethods,
+			academicPrograms:academicProgramList,
+			serialNumber:serialNumber
 		});
 
+		// console.log(JSON.parse(payload));
 		// console.log(payload);
+	
 
 		axios
-			.post(`${BaseUrl}student/register`, payload)
+			.post(`${BaseUrl}student/register`, payload,{headers:{'Content-Type': 'application/json'}})
 			.then((res) => {
 				console.log(res);
+				ResetForm()
+				setFormLoading(false)
+				setOpenModal(true)
 			})
 			.catch((err) => {
-				console.log(err);
+				console.log(err?.response?.data?.message);
+				setFormLoading(false)
+				
 			});
 	}
 
+	// get country api call
 	async function Country() {
 		setLoading(true);
 		try {
@@ -335,6 +329,7 @@ function Register() {
 		}
 	}
 
+	//get state api call
 	async function State() {
 		setLoading(true);
 
@@ -357,7 +352,6 @@ function Register() {
 		selectedCountry !== "" && State();
 	}, [selectedCountry]);
 
-	console.log(myCountry, slectedState);
 
 	return (
 		<>
@@ -388,7 +382,7 @@ function Register() {
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='outlined-age-native-simple'>
+												<InputLabel htmlFor='title'>
 													Title
 												</InputLabel>
 
@@ -419,7 +413,7 @@ function Register() {
 											</FormControl>
 
 											<TextField
-												id='outlined-text-input'
+												id='outlined-surname-input'
 												label='Surname'
 												type='text'
 												style={{ width: "300px", margin: "10px" }}
@@ -435,7 +429,7 @@ function Register() {
 											/>
 
 											<TextField
-												id='outlined-text-input'
+												id='outlined-firstname-input'
 												label='Firstname'
 												type='text'
 												style={{ width: "300px", margin: "10px" }}
@@ -451,7 +445,7 @@ function Register() {
 											/>
 
 											<TextField
-												id='outlined-helperText'
+												id='outlined-middleName-input'
 												label='Middle Name'
 												type='text'
 												style={{ width: "300px", margin: "10px" }}
@@ -487,7 +481,7 @@ function Register() {
 											/>
 
 											<TextField
-												id='outlined-helperText'
+												id='outlined-email'
 												label='Email'
 												type='email'
 												style={{ width: "300px", margin: "10px" }}
@@ -503,7 +497,7 @@ function Register() {
 											/>
 
 											<TextField
-												id='outlined-helperText'
+												id='outlined-phone'
 												label='Mobile No:'
 												type='phone'
 												style={{ width: "300px", margin: "10px" }}
@@ -522,7 +516,7 @@ function Register() {
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='outlined-age-native-simple'>
+												<InputLabel htmlFor='qualification'>
 													Highest Qualification
 												</InputLabel>
 
@@ -554,7 +548,7 @@ function Register() {
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='outlined-age-native-simple'>
+												<InputLabel htmlFor='Country-List'>
 													Country
 												</InputLabel>
 
@@ -592,7 +586,7 @@ function Register() {
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='outlined-age-native-simple'>
+												<InputLabel htmlFor='state-list'>
 													State/Province
 												</InputLabel>
 
@@ -626,7 +620,7 @@ function Register() {
 										<div className='form__inener__section'>
 											<Divider variant='middle' />
 											<TextField
-												id='outlined-multiline-static'
+												id='org-name'
 												label='Organisation'
 												style={{ width: "300px", margin: "10px" }}
 												placeholder='Xyz corprations'
@@ -660,7 +654,7 @@ function Register() {
 												}
 											/>
 											<TextField
-												id='outlined-multiline-static'
+												id='position-held'
 												label='Postion'
 												type='text'
 												style={{ width: "300px", margin: "10px" }}
@@ -676,7 +670,7 @@ function Register() {
 											/>
 
 											<TextField
-												id='outlined-multiline-static'
+												id='location'
 												label='Location'
 												style={{ width: "300px", margin: "10px" }}
 												multiline
@@ -755,11 +749,11 @@ function Register() {
 
 												<Select
 													native
-													value={membership.memberCdr}
+													value={membership.memberRoutes}
 													onChange={(e) =>
 														setmembership((prev) => ({
 															...prev,
-															memberCdr: e.target.value,
+															memberRoutes: e.target.value,
 														}))
 													}
 													label='Membership'
@@ -833,11 +827,11 @@ function Register() {
 
 												<Select
 													native
-													value={membership.applicationFee}
+													value={membership.pgdCourses}
 													onChange={(e) =>
 														setmembership((prev) => ({
 															...prev,
-															applicationFee: e.target.value,
+															pgdCourses: e.target.value,
 														}))
 													}
 													label='Membership'
@@ -852,13 +846,13 @@ function Register() {
 													<option value='PGD in Peace, Security Studies and Criminology'>
 														PGD in Peace, Security Studies and Criminology
 													</option>
-													<option value='	PGD in Peace, Security and Strategic Leadership'>
+													<option value='PGD in Peace, Security and Strategic Leadership'>
 														PGD in Peace, Security and Strategic Leadership
 													</option>
-													<option value='	PGD in Global Peace-Keeping and Diplomacy'>
+													<option value='PGD in Global Peace-Keeping and Diplomacy'>
 														PGD in Global Peace-Keeping and Diplomacy
 													</option>
-													<option value='	PGD in Peace Education'>
+													<option value='PGD in Peace Education'>
 														PGD in Peace Education
 													</option>
 													<option value='PGD in Peace and Conflict Journalism'>
@@ -871,7 +865,7 @@ function Register() {
 													<option value='PGD in Workplace Conflict Management'>
 														PGD in Workplace Conflict Management
 													</option>
-													<option value='	PGD in Sports Conflict Management and Mediation '>
+													<option value='PGD in Sports Conflict Management and Mediation '>
 														PGD in Sports Conflict Management and Mediation
 													</option>
 												</Select>
@@ -887,11 +881,11 @@ function Register() {
 
 												<Select
 													native
-													value={membership.applicationFee}
+													value={membership.paymentMethods}
 													onChange={(e) =>
 														setmembership((prev) => ({
 															...prev,
-															applicationFee: e.target.value,
+															paymentMethods: e.target.value,
 														}))
 													}
 													label='Membership'
@@ -912,278 +906,84 @@ function Register() {
 											</FormControl>
 
 											<div className={classes.root}>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions1-content'
-														id='additional-actions1-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='DIRECT MEMBERSHIP ADMISSION'
+												
+												{acccordionDaata.map((item) => {
+													return (
+														<Accordion  key={item.id}>
+															<AccordionSummary
+																expandIcon={<ExpandMoreIcon />}
+																aria-label='Expand'
+																aria-controls='additional-actions3-content'
+																id='additional-actions3-header'
+															>
+																<FormControlLabel
+																	aria-label='Acknowledge'
+																	onClick={(event) => event.stopPropagation()}
+																	onFocus={(event) => event.stopPropagation()}
+																	onChange={HandleModalCheckBox}
+																	ref={item?.name==='ACADEMIC PROGRAMS'? seleRef:null}
+																	control={
+																		<Checkbox
+																			color='primary'
+																			name={item?.name}
+																		/>
+																	}
+																	label={item?.name}
 																/>
-															}
-															label='DIRECT MEMBERSHIP ADMISSION '
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															Direct Membership Admission is membership based on
-															your years of work experience and academic
-															qualification. Here, you are not require to
-															undergo through our Executive Training Course or
-															academic Program but your years of work experience
-															and academic standing qualifies you into Various
-															Membership Cadres available.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions2-content'
-														id='additional-actions2-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='EXECUTIVE PROFESSIONAL PGD TRAINING COURSE'
-																/>
-															}
-															label='EXECUTIVE PROFESSIONAL PGD TRAINING COURSE'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															This is a maximum of 10-12 weeks training course
-															that empowers the working Professionals to gain
-															new skills, diversify knowledge and improve
-															performance. This PGD training is to help you
-															secure employment, gain promotion, provide
-															consultancy services and achieve professionalism.
-															It's open to graduates from all fields from NCE or
-															Diploma and above. Candidates will be admitted
-															into Various Membership Cadres according to their
-															working experiences after passing the Professional
-															Examination and paying the Induction and
-															Certification fees. (9 PGDs are available)
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='ACADEMIC PROGRAMS'
-																/>
-															}
-															label='ACADEMIC PROGRAMS'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															We offer academic programs that runs for a minimum
-															of 6 months to a maximum of 3 years. We have
-															Diploma courses, HND courses, PGD courses, Masters
-															and PhD programs available. The Academic Programs
-															are done in Partnership with US-Interglobal
-															University Somalia/USA and other accreditated
-															Universities around the globe. We have more than
-															15 areas of specialty to specialize in.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox color='primary' name='NYSC SCHEME' />
-															}
-															label='NYSC SCHEME'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															This is a one-year short PGD training, both
-															Professional and academic, that afford the serving
-															Youth Corps Members the opportunity to earn a PGD
-															during their service year to enable them gain
-															employment or proceed for master programs after
-															service.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='INTERNATIONAL DIPLOMA'
-																/>
-															}
-															label='INTERNATIONAL DIPLOMA'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															The International Diploma is a maximum of 9 months
-															course with Project thesis requirement inclusive
-															for the completion of the program. Offer in
-															Partnership with Polytechnics service.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='HIGHER NATIONAL DIPLOMA'
-																/>
-															}
-															label='HIGHER NATIONAL DIPLOMA'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															It's a minimum of 14- Maximum of 20 Months with
-															Project thesis requirement for completion of the
-															program. It's runs in Partnership with renown
-															Polytechnics.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={
-																<Checkbox
-																	color='primary'
-																	name='POSTGRADUATE DIPLOMA'
-																/>
-															}
-															label='POSTGRADUATE DIPLOMA'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															This program is run in Partnership with
-															US-Interglobal University, Somalia/USA. The
-															duration is between 6-9 months maximum. Project
-															work included.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={<Checkbox color='primary' name='M.SC' />}
-															label='M.SC'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															This is done in Partnership with reputable
-															Universities. It can last for a period of 14-18
-															months only. Project thesis requirement included.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
-												<Accordion>
-													<AccordionSummary
-														expandIcon={<ExpandMoreIcon />}
-														aria-label='Expand'
-														aria-controls='additional-actions3-content'
-														id='additional-actions3-header'
-													>
-														<FormControlLabel
-															aria-label='Acknowledge'
-															onClick={(event) => event.stopPropagation()}
-															onFocus={(event) => event.stopPropagation()}
-															onChange={HandleModalCheckBox}
-															control={<Checkbox color='primary' name='Ph.D' />}
-															label='Ph.D'
-														/>
-													</AccordionSummary>
-													<AccordionDetails>
-														<Typography color='textSecondary'>
-															This is a 44-56 month course. It's done in
-															Partnership with reputable Universities and has
-															thesis requirement for completion.
-														</Typography>
-													</AccordionDetails>
-												</Accordion>
+															</AccordionSummary>
+															<AccordionDetails>
+																<Typography color='textSecondary'>
+																	{item?.description}
+																</Typography>
+															</AccordionDetails>
+														{	item.List.length>0 &&	<AccordionDetails>
+																<FormControl
+																	required
+																	// error={error}
+																	component='fieldset'
+																	onChange={HandleNextedCheckBox}
+																	className={classes.formControl}
+																	onClick={(event) => event.stopPropagation()}
+																	onFocus={(event) => event.stopPropagation()}
+																>
+																	<FormLabel component='legend'>
+																		Admission Options
+																	</FormLabel>
+																	<FormGroup>
+
+																	{
+																	 item.List.map((list,i)=>{
+																			return (
+
+																		<FormControlLabel
+																		key={i}
+																			control={
+																				<Checkbox
+																				color="primary"
+																					// checked={list.isChecked}
+																					// onChange={()=>HandleNextedCheckBox(list?.name)}
+																					name={list?.name}
+																				/>
+																			}
+																			label={list?.name}
+																		/>
+																			)
+
+																			
+																		})
+																	}
+															
+																	</FormGroup>
+																	{/* <FormHelperText>
+		You can display an error
+	</FormHelperText> */}
+																</FormControl>
+															</AccordionDetails>}
+														</Accordion>
+													);
+												})}
+
+						
 											</div>
 											<Divider variant='middle' />
 											<h3 style={{ textAlign: "center" }}>Payment Details</h3>
@@ -1214,7 +1014,25 @@ function Register() {
 															Account Number : 0645754697
 														</Typography>
 													</CardContent>
-													<CardActions style={{marginBottom:10}}>
+													<CardActions
+														style={{ marginBottom: 10 ,display:'flex',alignItems:'center',justifyContent:'center'}}>
+
+		<FormControl fullWidth className={classes.serialContainer} variant="filled">
+          <InputLabel htmlFor="filled-adornment-amount">Serial Number</InputLabel>
+          <FilledInput
+              id="serial-number"
+			// style={{height:'40px'}}
+			// size='small'
+            value={serialNumber}
+            onChange={(e)=>setserialNumber(e.target.value)}
+            // startAdornment={<InputAdornment position="start">$</InputAdornment>}
+			placeholder="XXXX-XXXX-XXXX-XXXX-XXXX"
+            labelWidth={60}
+          />
+		    <FormHelperText id="component-error-text">Please contact admin for Serial Number</FormHelperText>
+        </FormControl>
+													</CardActions>
+												{/* <CardActions style={{marginBottom:10}}>
 												
 
 														<input
@@ -1235,7 +1053,7 @@ function Register() {
 																Upload Payment
 															</Button>
 														</label>
-													</CardActions>
+													</CardActions>  */}
 												</Card>
 											</div>
 										</div>
@@ -1246,7 +1064,7 @@ function Register() {
 											variant='contained'
 											disabled={
 												basicDetails.firstName === "" ||
-												basicDetails.surname === ""
+												basicDetails.surname === "" || serialNumber ===""
 											}
 											// onClick={handleClickOpen}
 											type='submit'
@@ -1261,13 +1079,13 @@ function Register() {
 						</div>
 
 						<Dialog
-							open={open}
+							open={openModal}
 							TransitionComponent={Transition}
 							keepMounted
 							onClose={handleClose}
 						>
 							<DialogTitle id='alert-dialog-slide-title'>
-								{"IGPCM  Portal"}
+							successful
 							</DialogTitle>
 							<DialogContent>
 								<DialogContentText id='alert-dialog-slide-description'>
@@ -1359,6 +1177,10 @@ function Register() {
 				</div>
 				<Footer />
 			</div>
+
+			<Backdrop className={classes.backdrop} open={FormLoading} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
 		</>
 	);
 }

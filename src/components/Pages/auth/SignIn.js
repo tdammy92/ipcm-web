@@ -1,9 +1,11 @@
 import React from "react";
+import {Redirect, useHistory} from 'react-router-dom'
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
+
 import axios from 'axios'
 import Paper from "@material-ui/core/Paper";
 import * as yup from "yup";
@@ -36,10 +38,24 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn() {
 	const classes = useStyles();
+	const history = useHistory()
 
 	async function HandleLogin(values) {
 		axios.post(`${BaseUrl}auth/login`, values)
-    .then((res)=>console.log(res.data))
+    .then((res)=>{
+
+		const admin = {token:res?.data?.token,admin:res?.data?.data?._doc};
+
+		localStorage.setItem('admin',JSON.stringify(admin))
+
+
+		if (res.status===200) {
+			 history.push('/admin')
+
+		}
+		
+		//  history.push('/admin');
+	})
     .catch((err)=>console.log(err));
 	}
 
