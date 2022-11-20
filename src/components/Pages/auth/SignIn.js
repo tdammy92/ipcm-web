@@ -1,12 +1,17 @@
 import React from "react";
-import {Redirect, useHistory} from 'react-router-dom'
+import { Redirect, useHistory ,useLocation} from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 
-import axios from 'axios'
+import {useSelector,useDispatch}  from 'react-redux';
+import  {iSLoading, saveUser ,LogOutUser}   from '../../../Store/feature'
+
+
+
+import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import * as yup from "yup";
 import { Formik, Field } from "formik";
@@ -38,26 +43,39 @@ const useStyles = makeStyles((theme) => ({
 
 function SignIn() {
 	const classes = useStyles();
-	const history = useHistory()
+	const history = useHistory();
+
+
+  const location = useLocation();
+
+
+  const { from } = location.state || { from: { pathname: "/" } };
+
+	const dispatch = useDispatch()
 
 	async function HandleLogin(values) {
-		axios.post(`${BaseUrl}auth/login`, values)
-    .then((res)=>{
 
-		const admin = {token:res?.data?.token,admin:res?.data?.data?._doc};
+		dispatch(iSLoading(true))
+		axios
+			.post(`${BaseUrl}auth/login`, values, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			})
+			.then((res) => {
+				const admin = { token: res?.data?.token, admin: res?.data?.data?._doc };
 
-		localStorage.setItem('admin',JSON.stringify(admin))
+				dispatch(saveUser(admin))
+				history.replace(from);
+			})
+			.catch((err) => {
+				console.log(err)
 
-
-		if (res.status===200) {
-			 history.push('/admin')
-
-		}
-		
-		//  history.push('/admin');
-	})
-    .catch((err)=>console.log(err));
-	}
+				dispatch(iSLoading(false))
+			
+			}
+				)};
+	
 
 	return (
 		<div className=''>
@@ -68,7 +86,7 @@ function SignIn() {
 					justifyContent: "center",
 				}}
 			>
-				<Paper elevation={3} className='paper__container'>
+				<Paper elevation={3}  style={{width:'95%'}} className='paper__container'>
 					<div className='login__container'>
 						<h3 className='form__header'>Login</h3>
 						<Formik

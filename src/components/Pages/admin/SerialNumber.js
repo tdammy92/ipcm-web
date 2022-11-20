@@ -43,6 +43,8 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 
 import { BaseUrl } from "../../../Services/api/BaseUrl";
+import { useSelector,useDispatch } from "react-redux";
+import { iSLoading } from "../../../Store/feature";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -83,8 +85,9 @@ const useStyles = makeStyles((theme) => ({
 
 function SerialNumber() {
 	const classes = useStyles();
-	const history = useHistory();
-	const store = JSON.parse(localStorage.getItem("admin"));
+
+	const dispatch = useDispatch()
+const {details}   = useSelector((state)=>state.users)
 
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -105,6 +108,7 @@ function SerialNumber() {
 	//generate serial number
 
 	async function generateSerial() {
+		dispatch(iSLoading(true))
 		try {
 			const res = await axios.post(
 				`${BaseUrl}serial/generate`,
@@ -112,32 +116,37 @@ function SerialNumber() {
 				{
 					headers: {
 						"Content-Type": "aplication/json",
-						Authorization: `Bearer ${store?.token}`,
+						Authorization: `Bearer ${details?.token}`,
 					},
 				}
 			);
 
-			console.log(res?.data?.data?.serial);
+			// console.log(res?.data?.data?.serial);
 
 			setSerial(res?.data?.data?.serial);
+			dispatch(iSLoading(false))
 		} catch (error) {
 			console.log(error);
+			dispatch(iSLoading(false))
 		}
 	}
 
 	//get all serial number
 	async function getAllSerial() {
+		dispatch(iSLoading(true))
 		try {
 			const res = await axios.get(`${BaseUrl}serial`, {
 				headers: {
 					"Content-Type": "aplication/json",
-					Authorization: `Bearer ${store?.token}`,
+					Authorization: `Bearer ${details?.token}`,
 				},
 			});
 			// console.log(res?.data);
 			setAllSerial(res?.data);
+			dispatch(iSLoading(false))
 		} catch (error) {
 			console.log(error);
+			dispatch(iSLoading(false))
 		}
 	}
 
@@ -153,18 +162,11 @@ function SerialNumber() {
 		};
 	}, [Serial]);
 
-	// useEffect(() => {
 
-	//     if (store?.admin?.token === undefined) {
-	//     history.push('/signin')
-	//     }
-	// }, [])
-
-	// console.log('beforeSToreDIsplay',store)
 	return (
 		<>
 			<CssBaseline />
-			<Container maxWidth='sm'>
+			<Container maxWidth="md">
 				<div className={classes.root}>
 					<Paper elevation={3} className={classes.cards}>
 						<TextField
@@ -342,6 +344,7 @@ function SerialNumber() {
 																			variant='outlined'
 																			color='primary'
 																			size='small'
+																			disabled={!isValid}
 																			className={classes.button}
 																			endIcon={<FileCopyIcon />}
 																			onClick={() => {
@@ -349,7 +352,7 @@ function SerialNumber() {
 																				setOpenToolTip(true);
 																			}}
 																		>
-																			Click
+																			Copy
 																		</Button>
 																	</Tooltip>
 																</div>

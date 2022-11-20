@@ -619,6 +619,10 @@ body {
     flex-wrap: wrap;
 }
 
+.paper__container {
+    width: 95%;
+}
+
 .information__list__left {
     flex: 1;
     min-width: 400px;

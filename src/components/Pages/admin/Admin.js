@@ -23,6 +23,9 @@ import TablePagination from '@material-ui/core/TablePagination';
 import Button from '@material-ui/core/Button';
 import { Link, Redirect,useHistory } from "react-router-dom";
 
+import {useSelector,useDispatch}  from 'react-redux'
+import { iSLoading } from "../../../Store/feature";
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -62,12 +65,10 @@ flexWrap:'wrap'
 
 function Admin() {
 	const classes = useStyles();
-const history = useHistory()
 
-const store = JSON.parse(localStorage.getItem('admin'));
 
-const [user, setuser] = useState('')
-
+const dispatch = useDispatch();
+const {details}  = useSelector((state)=>state.users);
 
 
 const [recentStudents, setrecentStudents] = useState([])
@@ -85,34 +86,25 @@ const [recentStudents, setrecentStudents] = useState([])
   };
 
   async function getRecentStudents() {
+
+	dispatch(iSLoading(true))
 		try {
 			const res = await axios.get(`${BaseUrl}student/recent`, {
 				headers: {
 					"Content-Type": "apllication/json",
-					Authorization: `Bearer ${store?.token}`,
+					Authorization: `Bearer ${details?.token}`,
 				},
 			});
 
 			setrecentStudents(res?.data);
+			dispatch(iSLoading(false))
 		} catch (error) {
 			console.log(error);
+			dispatch(iSLoading(false))
 		}
 	}
 
-// useEffect(() => {
 
-
-// 	if (store?.admin?.token === undefined) {
-//     history.push('/signin')
-
-//   // return  <Redirect  to='/signin'/>
-// 	}
-
-
-// 	if (store?.admin?.token !== undefined) {
-//    setuser(store)
-// 	}
-// }, [])
 
 useEffect(() => {
   getRecentStudents()
@@ -123,7 +115,7 @@ useEffect(() => {
 	return (
 		<>
 			<CssBaseline />
-			<Container maxWidth='sm'>
+			<Container maxWidth='md'>
 			
 
         <Paper   elevation={3} className={classes.headerCard}>

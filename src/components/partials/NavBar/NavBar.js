@@ -1,30 +1,29 @@
 import React from "react";
 import { useLocation,useHistory } from "react-router-dom";
+import { useSelector,useDispatch } from "react-redux";
 import { useMediaQuery } from "react-responsive";
 import { ScreenSize } from "../../../Config";
 import { Link } from "react-router-dom";
 import ImgeUrl from "../../../assets/images/ipcmLogo.png";
 import DesktopNavBar from "./DesktopNavBar";
 import MobileNavBar from "./MobileNavBar";
+import {LogOutUser} from '../../../Store/feature'
 
 function NavBar() {
-
+const dispatch = useDispatch()
     const history = useHistory()
-	const store = JSON.parse(localStorage.getItem("admin"));
+const {details:{admin}} = useSelector((state)=>state.users);
+
+
 
 	const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
 	const location = useLocation().pathname;
 
 
-    function handleLogout() {
-
-        localStorage.clear();
-
-        history.push('/')
-
-
-        
+    async function handleLogout() {
+    dispatch(LogOutUser())
+	history.replace('/')
     }
 
 	return (
@@ -66,7 +65,7 @@ certification */}
 					location === "/serial-number") && (
 					<div style={{ display: "flex", alignItems: "center" }}>
 						<p style={{ marginRight: "5px", color: "#01996D" }}>
-							{store?.admin?.email.split("@")[0].toUpperCase()}
+							{admin?.email.split("@")[0].toUpperCase()}
 						</p>
 						||
 						<span

@@ -1,18 +1,15 @@
-import React,{useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-
-} from "react-router-dom";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-import AOS from 'aos'
-import 'aos/dist/aos.css';
-import NavBar from './components/partials/NavBar/NavBar';
+import { useSelector, useDispatch } from "react-redux";
+// import { ToastContainer, toast } from 'react-toastify';
+import AOS from "aos";
+import "aos/dist/aos.css";
+import NavBar from "./components/partials/NavBar/NavBar";
 // import Footer from './components/partials/Footer/Footer'
-import Home from './components/Home'
+import Home from "./components/Home";
 import About from "./components/Pages/About";
 import Contact from "./components/Pages/Contact";
 import Member from "./components/Pages/Member";
@@ -32,176 +29,130 @@ import Students from "./components/Pages/admin/Students";
 import Student from "./components/Pages/admin/Student";
 import NotFound from "./components/Pages/NotFound";
 
-
 import ProtectedRoute from "./components/Pages/auth/ProtectedRoute";
-
+import Loader from "./components/partials/Loader";
 
 const defualtTheme = createMuiTheme({
-  palette:{
-    primary:{
-     main: "#01996D",
-    },
-    secondary:{
-     main: "#fff",
-    }
-  }
-
-})
-
+	palette: {
+		primary: {
+			main: "#01996D",
+		},
+		secondary: {
+			main: "#fff",
+		},
+	},
+});
 
 function App() {
+	const user = useSelector((state) => state.users);
+	const isLoggedin = user.isLoggedin;
 
-    // const [Admin, setAdmin] = useState('');
-    const store = JSON.parse(localStorage.getItem('admin'));
-    // const [IsLoggedIn, setIsLoggedIn] = useState(false)
+	AOS.init();
 
- AOS.init()
+	return (
+		<ThemeProvider theme={defualtTheme}>
+			{/* <ToastContainer
+				position='top-left'
+				autoClose={5000}
+				hideProgressBar={false}
+				newestOnTop={false}
+				closeOnClick
+				rtl={false}
+				pauseOnFocusLoss
+				draggable
+				pauseOnHover
+			/> */}
+			<Loader />
+			<div className='index'>
+				<Router>
+					<NavBar />
 
-const IsLoggedIn = store?.token !== undefined ? true : false
-
-
-
-console.log(IsLoggedIn);
-
-
-  return (
-    <ThemeProvider theme={defualtTheme}>
-    <div className="index">
-    
-       <Router>
-
-              <NavBar/>
-
-                    <Switch>
-
-                    <Route exact path='/'>
-
-                        <Home/>
-
-                    </Route>
-                    <Route exact path='/about'>
-
-                        <About/>
-
-                    </Route>
-                    <Route exact path='/contact'>
-
-                        <Contact/>
-
-                    </Route>
-                    <Route exact path='/member'>
-
-                        <Member/>
-
-                    </Route>
-                    <Route exact path='/nysc'>
-
-                        <Nysc/>
-
-                    </Route>
-                    <Route exact path='/examination'>
-
-                        <Examination/>
-
-                    </Route>
-                    <Route exact path='/certification'>
-
-                        <Certification/>
-
-                    </Route>
-                    <Route exact path='/register'>
-
-                        <Register/>
-
-                    </Route>
-                    <Route exact path='/projects'>
-
-                        <Project/>
-
-                    </Route>
-                    <Route exact path='/career'>
-
-                        <Career/>
-
-                    </Route>
-                    <Route exact path='/consultancy'>
-
-                        <Consult/>
-
-                    </Route>
-                    <Route exact path='/license'>
-
-                        <License/>
-
-                    </Route>
-                    {/* <Route exact path='/admin'>
+					<Switch>
+						<Route exact path='/'>
+							<Home />
+						</Route>
+						<Route exact path='/about'>
+							<About />
+						</Route>
+						<Route exact path='/contact'>
+							<Contact />
+						</Route>
+						<Route exact path='/member'>
+							<Member />
+						</Route>
+						<Route exact path='/nysc'>
+							<Nysc />
+						</Route>
+						<Route exact path='/examination'>
+							<Examination />
+						</Route>
+						<Route exact path='/certification'>
+							<Certification />
+						</Route>
+						<Route exact path='/register'>
+							<Register />
+						</Route>
+						<Route exact path='/projects'>
+							<Project />
+						</Route>
+						<Route exact path='/career'>
+							<Career />
+						</Route>
+						<Route exact path='/consultancy'>
+							<Consult />
+						</Route>
+						<Route exact path='/license'>
+							<License />
+						</Route>
+						{/* <Route exact path='/admin'>
 
                         <Admin/>
 
                     </Route> */}
-                    <Route exact path='/siginup'>
+						<Route exact path='/signup'>
+							<SignUp />
+						</Route>
+						<Route exact path='/signin'>
+							<SignIn />
+						</Route>
 
-                        <SignUp/>
+						<ProtectedRoute
+							exact
+							path='/admin'
+							IsLoggedin={isLoggedin}
+							Component={Admin}
+						/>
 
-                    </Route>
-                    <Route exact path='/signin'>
+						<ProtectedRoute
+							exact
+							path='/students'
+							IsLoggedin={isLoggedin}
+							Component={Students}
+						/>
 
-                        <SignIn/>
+						<ProtectedRoute
+							exact
+							path='/students/:id'
+							IsLoggedin={isLoggedin}
+							Component={Student}
+						/>
 
-                    </Route>
-                    {/* <Route exact path='/serial-number'>
+						<ProtectedRoute
+							exact
+							path='/serial-number'
+							IsLoggedin={isLoggedin}
+							Component={SerialNumber}
+						/>
 
-                        <SerialNumber/>
-
-                    </Route> */}
-                    {/* <Route exact path='/students'>
-
-                        <Student/>
-
-                    </Route> */}
-
-
-                    <ProtectedRoute
-                        exact
-                        path='/admin'
-                        IsLoggedin={IsLoggedIn}
-                        Component={Admin}/>
-
-                    <ProtectedRoute
-                        exact
-                        path='/students'
-                        IsLoggedin={IsLoggedIn}
-                        Component={Students}/>
-
-
-                    <ProtectedRoute
-                        exact
-                        path='/students/:id'
-                        IsLoggedin={IsLoggedIn}
-                        Component={Student}/>
-
-                    <ProtectedRoute
-                        exact
-                        path='/serial-number'
-                        IsLoggedin={IsLoggedIn}
-                        Component={SerialNumber}/>
-
-
-                    <Route exact path='*'>
-
-                        <NotFound/>
-
-                    </Route>
-
-
-
-                    </Switch>
-              {/* <Footer/> */}
-          </Router>
-         
-    </div>
-    </ThemeProvider>
-  );
+						<Route exact path='*'>
+							<NotFound />
+						</Route>
+					</Switch>
+					{/* <Footer/> */}
+				</Router>
+			</div>
+		</ThemeProvider>
+	);
 }
 
 export default App;

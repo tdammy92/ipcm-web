@@ -1,5 +1,5 @@
 import React, { useState, useEffect,useRef } from "react";
-import { Link, Redirect, useParams } from "react-router-dom";
+import { Link, Redirect, useParams,useHistory } from "react-router-dom";
 import axios from "axios";
 import { BaseUrl } from "../../../Services/api/BaseUrl";
 
@@ -18,6 +18,8 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import DeleteForeverIcon from '@material-ui/icons/DeleteForever';
 
 import { useReactToPrint } from "react-to-print";
+import {useSelector,useDispatch}  from 'react-redux'
+import { iSLoading } from "../../../Store/feature";
 
 import Pdf from "react-to-pdf";
 
@@ -48,28 +50,55 @@ const useStyles = makeStyles({
 function Student() {
 	const { id } = useParams();
 
+	const history = useHistory();
+
 	const classes = useStyles();
 
-	const store = JSON.parse(localStorage.getItem("admin"));
+
+	const dispatch = useDispatch();
+const {details}  = useSelector((state)=>state.users)
 
 	const [Details, setDetails] = useState({});
 
 	async function getStudent() {
+		dispatch(iSLoading(true))
 		try {
 			const res = await axios.get(`${BaseUrl}student/${id}`, {
 				headers: {
 					"Content-Type": "apllication/json",
-					Authorization: `Bearer ${store?.token}`,
+					Authorization: `Bearer ${details?.token}`,
 				},
 			});
 
 			// console.log(res?.data);
 
 			setDetails(res?.data);
+			dispatch(iSLoading(false))
 		} catch (error) {
 			console.log(error);
+			dispatch(iSLoading(false))
 		}
 	}
+
+	//function to delete student
+async function DeleteStudent() {
+	dispatch(iSLoading(true))
+	try {
+		const res = await axios.delete(`${BaseUrl}student/${id}`, {
+			headers: {
+				"Content-Type": "apllication/json",
+				Authorization: `Bearer ${details?.token}`,
+			},
+		});
+	
+		dispatch(iSLoading(false))
+
+		history.replace('/students')
+	} catch (error) {
+		console.log(error);
+		dispatch(iSLoading(false))
+	}
+}
 
   const componentRef = useRef();
 
@@ -134,6 +163,10 @@ function Student() {
 						<ListItem button divider>
 							Role/Postion: {Details?.currentEmploymet?.position}
 						</ListItem>
+						<Divider />
+						<ListItem button divider>
+						Total Years of  Career Experience: {Details?.currentEmploymet?.yearsExperience}
+						</ListItem>
 
 						<Divider light />
 						<ListItem button>
@@ -143,8 +176,7 @@ function Student() {
 							).toLocaleDateString()}
 						</ListItem>
 						<Divider light />
-						<ListItem button>Country: {Details?.country}</ListItem>
-						<Divider light />
+						
 						<ListItem button>
 							Address: {Details?.currentEmploymet?.location}
 						</ListItem>
@@ -225,6 +257,7 @@ function Student() {
 	style={{color:'red'}}
 						className={classes.button}
 						endIcon={<DeleteForeverIcon />}
+						onClick={DeleteStudent}
 					>
 						Remove
 					</Button>

@@ -13,7 +13,7 @@ function ProtectedRoute({IsLoggedin, Component,...rest}) {
             if(IsLoggedin){
                     return <Component {...props}/>
             }else{
-               return (<Redirect to={{pathname:"/signin", state:{from:props.location}}}/>)
+               return <Redirect to={{pathname:"/signin", state:{from:props.location}}}/>
             }
         }}
         />

@@ -7,6 +7,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
+// import { DownloadTableExcel } from "react-export-table-to-excel";
+import { useDownloadExcel, downloadExcel } from "react-export-table-to-excel";
+
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import BlurLinearIcon from "@material-ui/icons/BlurLinear";
 
@@ -42,6 +45,8 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 
 import { useReactToPrint } from "react-to-print";
+import { useSelector, useDispatch } from "react-redux";
+import { iSLoading } from "../../../Store/feature";
 
 import Pdf from "react-to-pdf";
 
@@ -83,16 +88,59 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Students() {
-	const store = JSON.parse(localStorage.getItem("admin"));
-	const classes = useStyles();
-	const history = useHistory();
+	const date = Date.now();
+	const fileName = new Date(date).toLocaleDateString().toString();
 
+	const classes = useStyles();
+	const dispatch = useDispatch();
+	const { details } = useSelector((state) => state.users);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
 	const [Search, setSearch] = useState("");
 	const [Students, setStudents] = useState([]);
 
 	const componentRef = useRef();
+	// const ExcelRef = useRef(null);
+
+	function handleDownloadExcel() {
+		const header = [
+			"S/N",
+			"Title",
+			"FULL NAME",
+			"PHONE",
+			"DateOfBirth",
+			"EMAIL",
+			"COUNTRY",
+			"STATE",
+			"DATE  Registered",
+			"PAYMENT METHOD",
+			"Application Fee",
+		];
+
+		downloadExcel({
+			fileName: `All students ${fileName}`,
+			sheet: `All students ${fileName}`,
+			tablePayload: {
+				header,
+				// accept two different data structures
+				body: Students?.map((item, index) => {
+					return {
+						index: `${index + 1}`,
+						Title: `${item?.title}`,
+						name: `${item?.surname} ${item?.firstName} ${item?.middleName}`,
+						Phone: `${item?.phoneNumber}`,
+						DOB: `${new Date(item?.dob).toLocaleDateString()}`,
+						email: `${item?.email}`,
+						country: `${item?.country}`,
+						state: `${item?.state}`,
+						date: `${new Date(item?.createdAt).toLocaleDateString()}`,
+						PaymentType: `${item?.paymentMethods}`,
+						ApplicationFee: `${item?.applicationFee}`,
+					};
+				}),
+			},
+		});
+	}
 
 	const handlePrint = useReactToPrint({
 		content: () => componentRef.current,
@@ -107,36 +155,42 @@ function Students() {
 		setPage(0);
 	};
 
+	function handleSearch(e) {
+		e.preventDefault();
+
+		const serachValue = e.target.value.toLowerCase();
+
+		setSearch(serachValue);
+	}
+
 	async function getAllStudents() {
+		dispatch(iSLoading(true));
 		try {
 			const res = await axios.get(`${BaseUrl}student`, {
 				headers: {
 					"Content-Type": "apllication/json",
-					Authorization: `Bearer ${store?.token}`,
+					Authorization: `Bearer ${details?.token}`,
 				},
 			});
 
 			setStudents(res?.data);
+			dispatch(iSLoading(false));
 		} catch (error) {
 			console.log(error);
+			dispatch(iSLoading(false));
 		}
 	}
-
-	// useEffect(() => {
-
-	//   if (store?.admin?.token === undefined) {
-	//     history.push('/signin')
-	//   }
-	// }, [])
 
 	useEffect(() => {
 		getAllStudents();
 	}, []);
 
+	// console.log(Students);
+
 	return (
 		<>
 			<CssBaseline />
-			<Container maxWidth='sm'>
+			<Container maxWidth='md'>
 				<div className={classes.root}>
 					<Paper elevation={3} className={classes.cards}>
 						<TextField
@@ -145,7 +199,7 @@ function Students() {
 							// label="Search"
 							placeholder='Search'
 							value={Search}
-							onChange={(e) => setSearch(e.target.value)}
+							onChange={handleSearch}
 							InputProps={{
 								startAdornment: (
 									<InputAdornment position='start'>
@@ -185,15 +239,23 @@ function Students() {
 								)}
 							</Pdf>
 
+							{/* <DownloadTableExcel
+								filename={`All student ${new Date().toLocaleDateString()}`}
+								sheet={`All student ${new Date().toLocaleDateString()}`}
+								currentTableRef={ExcelRef.current}
+							> */}
 							<Button
 								variant='contained'
 								color='primary'
 								size='small'
 								className={classes.button}
 								startIcon={<GridOnIcon />}
+								onClick={handleDownloadExcel}
+								// onClick={onDownload}
 							>
 								Excel
 							</Button>
+							{/* </DownloadTableExcel> */}
 						</div>
 					</Paper>
 				</div>
@@ -206,7 +268,12 @@ function Students() {
 								className={classes.container}
 								// ref={componentRef}
 							>
-								<Table stickyHeader aria-label='sticky table' id='table-to-xls'>
+								<Table
+									stickyHeader
+									aria-label='sticky table'
+									id='table-to-xls'
+									// ref={ExcelRef}
+								>
 									<TableHead>
 										<TableRow>
 											<TableCell
@@ -275,7 +342,15 @@ function Students() {
 												<TableCell>No Result Found</TableCell>
 											</TableRow>
 										) : (
-											Students?.map((item) => {
+											Students.filter(
+												(stu) =>
+													stu.firstName.toLowerCase().includes(Search) ||
+													stu.surname.toLowerCase().includes(Search) ||
+													stu.state.toLowerCase().includes(Search) ||
+													stu.country.toLowerCase().includes(Search) ||
+													stu.email.toLowerCase().includes(Search) ||
+													stu.phoneNumber.toLowerCase().includes(Search) 
+											).map((item) => {
 												const {
 													_id,
 													surname,

@@ -1,4 +1,4 @@
-import React, { useState, forwardRef, useEffect ,useRef} from "react";
+import React, { useState, forwardRef, useEffect, useRef } from "react";
 
 import { Button, Paper, Container } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
@@ -16,11 +16,11 @@ import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
-import OutlinedInput from '@material-ui/core/OutlinedInput';
-import FilledInput from '@material-ui/core/FilledInput';
+import OutlinedInput from "@material-ui/core/OutlinedInput";
+import FilledInput from "@material-ui/core/FilledInput";
 
-import Backdrop from '@material-ui/core/Backdrop';
-import CircularProgress from '@material-ui/core/CircularProgress';
+import Backdrop from "@material-ui/core/Backdrop";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -67,8 +67,8 @@ const useStyles = makeStyles((theme) => ({
 	// }
 	backdrop: {
 		zIndex: theme.zIndex.drawer + 1,
-		color: '#fff',
-	  },
+		color: "#fff",
+	},
 
 	paper: {
 		padding: 10,
@@ -86,18 +86,18 @@ const useStyles = makeStyles((theme) => ({
 	formControl: {
 		marginLeft: "20px",
 	},
-	serialContainer:{
-		width:`50%`,
-	
+	serialContainer: {
+		width: `50%`,
+
 		// maxHeight:'30px'
-	}
+	},
 }));
 
 function Register() {
 	// console.log(accordionData);
 	document.title = "IGPCM | Register";
 
-	const seleRef = useRef(null)
+	const seleRef = useRef(null);
 
 	const [basicDetails, setBasicDetails] = useState({
 		title: "",
@@ -117,40 +117,33 @@ function Register() {
 	const [AllState, setSAlltate] = useState([]);
 
 	const [acccordionDaata, setacccordionDaata] = useState(() => accordionData);
-	const [academicProgramList, setacademicProgramList] = useState([])
-	
+	const [academicProgramList, setacademicProgramList] = useState([]);
 
 	//passed pyaload
 	const [myCountry, setmyCountry] = useState("");
 	const [slectedState, setslectedState] = useState("");
 
 	const [Loading, setLoading] = useState(false);
-	const [FormLoading, setFormLoading] = useState(false)
+	const [FormLoading, setFormLoading] = useState(false);
 
 	const [employmentDetails, setemploymentDetails] = useState({
 		organization: "",
 		startDate: "",
+		yearsExperience: "",
 		position: "",
 		location: "",
 	});
 
 	const [membership, setmembership] = useState({
 		memberCdr: "",
-		memberRoutes:"",
+		memberRoutes: "",
 		applicationFee: "",
-		paymentMethods:"",
-		pgdCourses:""
+		paymentMethods: "",
+		pgdCourses: "",
 	});
 
-
 	const [Program, setProgram] = useState([]);
-	const [serialNumber, setserialNumber] = useState('')
-
-
-
-
-
-
+	const [serialNumber, setserialNumber] = useState("");
 
 	const [openModal, setOpenModal] = useState(false);
 
@@ -173,88 +166,73 @@ function Register() {
 		} else {
 			setProgram((prev) => [...prev, option]);
 		}
-
 	}
-	
-	
-	
 
 	function HandleNextedCheckBox(ListName) {
 		const option = ListName.target.name;
-		
-		updateNextedList() 
 
-		
+		updateNextedList();
+
 		if (academicProgramList.includes(option)) {
-			
-			const temp = academicProgramList.filter((selctecd) => option !== selctecd);
+			const temp = academicProgramList.filter(
+				(selctecd) => option !== selctecd
+			);
 			setacademicProgramList(temp);
 		} else {
-			setacademicProgramList((prev) => [...prev, option]);	
+			setacademicProgramList((prev) => [...prev, option]);
 		}
-// 		const temp = acccordionDaata[2];
-// 		const temp2 = acccordionDaata.filter(res=>res.id!==3)
+		// 		const temp = acccordionDaata[2];
+		// 		const temp2 = acccordionDaata.filter(res=>res.id!==3)
 
-// 		const res = temp.List?.filter((ite)=>ite.name===ListName)[0];
-// 		const rem = temp.List?.filter((ite)=>ite.name!==ListName);
+		// 		const res = temp.List?.filter((ite)=>ite.name===ListName)[0];
+		// 		const rem = temp.List?.filter((ite)=>ite.name!==ListName);
 
-// 		const modified = [...rem,{name:res?.name,isChecked:true}]
+		// 		const modified = [...rem,{name:res?.name,isChecked:true}]
 
-
-
-// 		setacccordionDaata([...temp2,{name:temp.name,id:temp.id,description:temp.description,isSelected:temp.isSelected,List:modified}])
+		// 		setacccordionDaata([...temp2,{name:temp.name,id:temp.id,description:temp.description,isSelected:temp.isSelected,List:modified}])
 
 		// console.log(modified)
-
-	
 	}
-
 
 	function ResetForm() {
-		setBasicDetails({title: "",
-		surname: "",
-		firstName: "",
-		middleName: "",
-		email: "",
-		dob: "",
-		phoneNo: "",
-		eduQualification: "",});
+		setBasicDetails({
+			title: "",
+			surname: "",
+			firstName: "",
+			middleName: "",
+			email: "",
+			dob: "",
+			phoneNo: "",
+			eduQualification: "",
+		});
 
-		setacademicProgramList([])
-setmyCountry('')
-setslectedState('')
-setemploymentDetails({
-	organization: "",
-	startDate: "",
-	position: "",
-	location: "",
-})
-setmembership({
-	memberCdr: "",
-	memberRoutes:"",
-	applicationFee: "",
-	paymentMethods:"",
-	pgdCourses:""
-})
-setProgram([])
-setserialNumber('')
-
-
-
-
+		setacademicProgramList([]);
+		setmyCountry("");
+		setslectedState("");
+		setemploymentDetails({
+			organization: "",
+			startDate: "",
+			position: "",
+			yearsExperience: "",
+			location: "",
+		});
+		setmembership({
+			memberCdr: "",
+			memberRoutes: "",
+			applicationFee: "",
+			paymentMethods: "",
+			pgdCourses: "",
+		});
+		setProgram([]);
+		setserialNumber("");
 	}
 
-
 	function updateNextedList() {
-		
-
 		// console.log("accademic list",academicProgramList.length)
-		if(academicProgramList.length){
-		//check if program list is already selected
-		if (Program.includes('ACADEMIC PROGRAMS')) return;
-
+		if (academicProgramList.length) {
+			//check if program list is already selected
+			if (Program.includes("ACADEMIC PROGRAMS")) return;
 		}
-
 	}
 
 	//   useEffect(() => {
@@ -267,8 +245,7 @@ setserialNumber('')
 	// console.log(basicDetails, employmentDetails, membership);
 
 	async function handleSubmit(e) {
-
-		setFormLoading(true)
+		setFormLoading(true);
 		e.preventDefault();
 
 		const payload = JSON.stringify({
@@ -283,35 +260,35 @@ setserialNumber('')
 
 			// country: basicDetails.country,
 			// state: basicDetails.state,
-			state:slectedState,
+			state: slectedState,
 			eduQualification: basicDetails.eduQualification,
 			currentEmploymet: employmentDetails,
 			membershipCadre: membership.memberCdr,
-			membershipRoute:membership.memberRoutes,
+			membershipRoute: membership.memberRoutes,
 			applicationFee: membership.applicationFee,
 			membershipType: Program,
-			pgdCourses:membership.pgdCourses,
-			paymentMethods:membership.paymentMethods,
-			academicPrograms:academicProgramList,
-			serialNumber:serialNumber
+			pgdCourses: membership.pgdCourses,
+			paymentMethods: membership.paymentMethods,
+			academicPrograms: academicProgramList,
+			serialNumber: serialNumber,
 		});
 
 		// console.log(JSON.parse(payload));
 		// console.log(payload);
-	
 
 		axios
-			.post(`${BaseUrl}student/register`, payload,{headers:{'Content-Type': 'application/json'}})
+			.post(`${BaseUrl}student/register`, payload, {
+				headers: { "Content-Type": "application/json" },
+			})
 			.then((res) => {
 				console.log(res);
-				ResetForm()
-				setFormLoading(false)
-				setOpenModal(true)
+				ResetForm();
+				setFormLoading(false);
+				setOpenModal(true);
 			})
 			.catch((err) => {
 				console.log(err?.response?.data?.message);
-				setFormLoading(false)
-				
+				setFormLoading(false);
 			});
 	}
 
@@ -352,7 +329,6 @@ setserialNumber('')
 		selectedCountry !== "" && State();
 	}, [selectedCountry]);
 
-
 	return (
 		<>
 			<div className='Loader'>
@@ -382,9 +358,7 @@ setserialNumber('')
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='title'>
-													Title
-												</InputLabel>
+												<InputLabel htmlFor='title'>Title</InputLabel>
 
 												<Select
 													native
@@ -548,9 +522,7 @@ setserialNumber('')
 												variant='outlined'
 												style={{ width: "300px", margin: "10px" }}
 											>
-												<InputLabel htmlFor='Country-List'>
-													Country
-												</InputLabel>
+												<InputLabel htmlFor='Country-List'>Country</InputLabel>
 
 												<Select
 													native
@@ -668,7 +640,36 @@ setserialNumber('')
 													}))
 												}
 											/>
+											<FormControl
+												variant='outlined'
+												style={{ width: "300px", margin: "10px" }}
+											>
+												<InputLabel htmlFor='qualification'>
+													Years of Career Experience
+												</InputLabel>
 
+												<Select
+													native
+													value={employmentDetails.yearsExperience}
+													onChange={(e) =>
+														setemploymentDetails((prev) => ({
+															...prev,
+															yearsExperience: e.target.value,
+														}))
+													}
+													label='Years of experince'
+													autoWidth='false'
+												>
+													<option aria-label='None' value='' />
+													<option value='0-1 yr'>0-1 yr</option>
+													<option value='1-2 yrs'>1-2 yrs</option>
+													<option value='2-4 yrs'>2-4 yrs</option>
+													<option value='4-10 yrs'>4-10 yrs</option>
+													<option value='10-15 yrs'>10-15 yrs</option>
+													<option value='15-20 yrs'>15-20 yrs</option>
+													<option value='25 yrs - above'>25 yrs - above</option>
+												</Select>
+											</FormControl>
 											<TextField
 												id='location'
 												label='Location'
@@ -685,6 +686,7 @@ setserialNumber('')
 													}))
 												}
 											/>
+
 											<Divider variant='middle' />
 										</div>
 										<h3>Membership</h3>
@@ -723,9 +725,9 @@ setserialNumber('')
 													</option>
 													<option value='Full Member'>Full Member</option>
 													<option value='Senior Member'>Senior Member</option>
-													<option value='Fellowship Member'>
+													{/* <option value='Fellowship Member'>
 														Fellowship Member
-													</option>
+													</option> */}
 													<option value='Research Fellow'>
 														Research Fellow
 													</option>
@@ -906,10 +908,9 @@ setserialNumber('')
 											</FormControl>
 
 											<div className={classes.root}>
-												
 												{acccordionDaata.map((item) => {
 													return (
-														<Accordion  key={item.id}>
+														<Accordion key={item.id}>
 															<AccordionSummary
 																expandIcon={<ExpandMoreIcon />}
 																aria-label='Expand'
@@ -921,7 +922,11 @@ setserialNumber('')
 																	onClick={(event) => event.stopPropagation()}
 																	onFocus={(event) => event.stopPropagation()}
 																	onChange={HandleModalCheckBox}
-																	ref={item?.name==='ACADEMIC PROGRAMS'? seleRef:null}
+																	ref={
+																		item?.name === "ACADEMIC PROGRAMS"
+																			? seleRef
+																			: null
+																	}
 																	control={
 																		<Checkbox
 																			color='primary'
@@ -936,57 +941,58 @@ setserialNumber('')
 																	{item?.description}
 																</Typography>
 															</AccordionDetails>
-														{	item.List.length>0 &&	<AccordionDetails>
-																<FormControl
-																	required
-																	// error={error}
-																	component='fieldset'
-																	onChange={HandleNextedCheckBox}
-																	className={classes.formControl}
-																	onClick={(event) => event.stopPropagation()}
-																	onFocus={(event) => event.stopPropagation()}
-																>
-																	<FormLabel component='legend'>
-																		Admission Options
-																	</FormLabel>
-																	<FormGroup>
-
-																	{
-																	 item.List.map((list,i)=>{
-																			return (
-
-																		<FormControlLabel
-																		key={i}
-																			control={
-																				<Checkbox
-																				color="primary"
-																					// checked={list.isChecked}
-																					// onChange={()=>HandleNextedCheckBox(list?.name)}
-																					name={list?.name}
-																				/>
-																			}
-																			label={list?.name}
-																		/>
-																			)
-
-																			
-																		})
-																	}
-															
-																	</FormGroup>
-																	{/* <FormHelperText>
+															{item.List.length > 0 && (
+																<AccordionDetails>
+																	<FormControl
+																		required
+																		// error={error}
+																		component='fieldset'
+																		onChange={HandleNextedCheckBox}
+																		className={classes.formControl}
+																		onClick={(event) => event.stopPropagation()}
+																		onFocus={(event) => event.stopPropagation()}
+																	>
+																		<FormLabel component='legend'>
+																			Admission Options
+																		</FormLabel>
+																		<FormGroup>
+																			{item.List.map((list, i) => {
+																				return (
+																					<FormControlLabel
+																						key={i}
+																						control={
+																							<Checkbox
+																								color='primary'
+																								// checked={list.isChecked}
+																								// onChange={()=>HandleNextedCheckBox(list?.name)}
+																								name={list?.name}
+																							/>
+																						}
+																						label={list?.name}
+																					/>
+																				);
+																			})}
+																		</FormGroup>
+																		{/* <FormHelperText>
 		You can display an error
 	</FormHelperText> */}
-																</FormControl>
-															</AccordionDetails>}
+																	</FormControl>
+																</AccordionDetails>
+															)}
 														</Accordion>
 													);
 												})}
-
-						
 											</div>
 											<Divider variant='middle' />
 											<h3 style={{ textAlign: "center" }}>Payment Details</h3>
+											<p style={{ textAlign: "center", color: "#01996D" ,fontSize:'16px'}}>
+												{" "}
+												<sup style={{ color: "#01996D", fontSize: "20px" }}>
+													*
+												</sup>
+												Pay application fee to obtain Serial Number to complete
+												your application .
+											</p>
 											<Divider variant='middle' />
 											<div
 												className='form__inener__section'
@@ -1015,24 +1021,58 @@ setserialNumber('')
 														</Typography>
 													</CardContent>
 													<CardActions
-														style={{ marginBottom: 10 ,display:'flex',alignItems:'center',justifyContent:'center'}}>
-
-		<FormControl fullWidth className={classes.serialContainer} variant="filled">
-          <InputLabel htmlFor="filled-adornment-amount">Serial Number</InputLabel>
-          <FilledInput
-              id="serial-number"
-			// style={{height:'40px'}}
-			// size='small'
-            value={serialNumber}
-            onChange={(e)=>setserialNumber(e.target.value)}
-            // startAdornment={<InputAdornment position="start">$</InputAdornment>}
-			placeholder="XXXX-XXXX-XXXX-XXXX-XXXX"
-            labelWidth={60}
-          />
-		    <FormHelperText id="component-error-text">Please contact admin for Serial Number</FormHelperText>
-        </FormControl>
+														style={{
+															marginBottom: 10,
+															display: "flex",
+															alignItems: "center",
+															justifyContent: "center",
+														}}
+													>
+														<FormControl
+															fullWidth
+															className={classes.serialContainer}
+															variant='filled'
+														>
+															<InputLabel htmlFor='filled-adornment-amount'>
+																Serial Number
+															</InputLabel>
+															<FilledInput
+																id='serial-number'
+																// style={{height:'40px'}}
+																// size='small'
+																value={serialNumber}
+																onChange={(e) =>
+																	setserialNumber(e.target.value)
+																}
+																// startAdornment={<InputAdornment position="start">$</InputAdornment>}
+																placeholder='XXXX-XXXX-XXXX-XXXX-XXXX'
+																labelWidth={60}
+															/>
+															<div style={{textAlign:'center',padding:0}} >
+																<p
+																	style={{
+																		color: "#01996D",
+																		fontSize: "18px",
+																		padding:0
+																		
+																	}}
+																>
+																	Please contact admin for Serial Number:
+																</p>
+																<span style={{ fontSize: "20px",padding:0 }}>
+																	08074090417, 07038286393, 07033458730
+																</span>
+															</div>
+															{/* <FormHelperText id="component-error-text">
+			<span  style={{color:'#01996D',fontSize:'18px',width:'100%'}}>
+			Please contact admin for Serial Number: 
+			</span>
+			<span  style={{fontSize:'20px'}}>08074090417,
+07038286393,
+07033458730</span></FormHelperText> */}
+														</FormControl>
 													</CardActions>
-												{/* <CardActions style={{marginBottom:10}}>
+													{/* <CardActions style={{marginBottom:10}}>
 												
 
 														<input
@@ -1064,7 +1104,8 @@ setserialNumber('')
 											variant='contained'
 											disabled={
 												basicDetails.firstName === "" ||
-												basicDetails.surname === "" || serialNumber ===""
+												basicDetails.surname === "" ||
+												serialNumber === ""
 											}
 											// onClick={handleClickOpen}
 											type='submit'
@@ -1085,7 +1126,7 @@ setserialNumber('')
 							onClose={handleClose}
 						>
 							<DialogTitle id='alert-dialog-slide-title'>
-							successful
+								successful
 							</DialogTitle>
 							<DialogContent>
 								<DialogContentText id='alert-dialog-slide-description'>
@@ -1178,9 +1219,9 @@ setserialNumber('')
 				<Footer />
 			</div>
 
-			<Backdrop className={classes.backdrop} open={FormLoading} >
-        <CircularProgress color="inherit" />
-      </Backdrop>
+			<Backdrop className={classes.backdrop} open={FormLoading}>
+				<CircularProgress color='inherit' />
+			</Backdrop>
 		</>
 	);
 }
