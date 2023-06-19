@@ -9,28 +9,29 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import NavBar from "./components/partials/NavBar/NavBar";
 // import Footer from './components/partials/Footer/Footer'
-import Home from "./components/Home";
-import About from "./components/Pages/About";
-import Contact from "./components/Pages/Contact";
-import Member from "./components/Pages/Member";
-import Nysc from "./components/Pages/Nysc";
-import Examination from "./components/Pages/Examination";
-import Certification from "./components/Pages/Certification";
-import Register from "./components/Pages/Register";
-import Project from "./components/Pages/Project";
-import Career from "./components/Pages/Career";
-import Consult from "./components/Pages/Consult";
-import License from "./components/Pages/License";
-import Admin from "./components/Pages/admin/Admin";
-import SignUp from "./components/Pages/auth/SIgnUp";
-import SignIn from "./components/Pages/auth/SignIn";
-import SerialNumber from "./components/Pages/admin/SerialNumber";
-import Students from "./components/Pages/admin/Students";
-import Student from "./components/Pages/admin/Student";
-import NotFound from "./components/Pages/NotFound";
+import Home from "./Pages/Home";
+import About from "./Pages/About";
+import Contact from "./Pages/Contact";
+import Member from "./Pages/Member";
+import Nysc from "./Pages/Nysc";
+import Examination from "./Pages/Examination";
+import Certification from "./Pages/Certification";
+import Register from "./Pages/Register";
+import Project from "./Pages/Project";
+import Career from "./Pages/Career";
+import Consult from "./Pages/Consult";
+import License from "./Pages/License";
+import Admin from "./Pages/admin/Admin";
+import SignUp from "./Pages/auth/SIgnUp";
+import SignIn from "./Pages/auth/SignIn";
+import SerialNumber from "./Pages/admin/SerialNumber";
+import Students from "./Pages/admin/Students";
+import Student from "./Pages/admin/Student";
+import NotFound from "./Pages/NotFound";
 
-import ProtectedRoute from "./components/Pages/auth/ProtectedRoute";
+import ProtectedRoute from "./Pages/auth/ProtectedRoute";
 import Loader from "./components/partials/Loader";
+import Gallery from "./Pages/Gallery";
 
 const defualtTheme = createMuiTheme({
 	palette: {
@@ -63,45 +64,48 @@ function App() {
 				pauseOnHover
 			/> */}
 			<Loader />
-			<div className='index'>
+			<div className="index">
 				<Router>
 					<NavBar />
 
 					<Switch>
-						<Route exact path='/'>
+						<Route exact path="/">
 							<Home />
 						</Route>
-						<Route exact path='/about'>
+						<Route exact path="/about">
 							<About />
 						</Route>
-						<Route exact path='/contact'>
+						<Route exact path="/contact">
 							<Contact />
 						</Route>
-						<Route exact path='/member'>
+						<Route exact path="/member">
 							<Member />
 						</Route>
-						<Route exact path='/nysc'>
+						<Route exact path="/nysc">
 							<Nysc />
 						</Route>
-						<Route exact path='/examination'>
+						<Route exact path="/examination">
 							<Examination />
 						</Route>
-						<Route exact path='/certification'>
+						<Route exact path="/certification">
 							<Certification />
 						</Route>
-						<Route exact path='/register'>
+						<Route exact path="/register">
 							<Register />
 						</Route>
-						<Route exact path='/projects'>
+						<Route exact path="/projects">
 							<Project />
 						</Route>
-						<Route exact path='/career'>
+						<Route exact path="/gallery">
+							<Gallery />
+						</Route>
+						<Route exact path="/career">
 							<Career />
 						</Route>
-						<Route exact path='/consultancy'>
+						<Route exact path="/consultancy">
 							<Consult />
 						</Route>
-						<Route exact path='/license'>
+						<Route exact path="/license">
 							<License />
 						</Route>
 						{/* <Route exact path='/admin'>
@@ -109,42 +113,42 @@ function App() {
                         <Admin/>
 
                     </Route> */}
-						<Route exact path='/signup'>
+						<Route exact path="/signup">
 							<SignUp />
 						</Route>
-						<Route exact path='/signin'>
+						<Route exact path="/signin">
 							<SignIn />
 						</Route>
 
 						<ProtectedRoute
 							exact
-							path='/admin'
+							path="/admin"
 							IsLoggedin={isLoggedin}
 							Component={Admin}
 						/>
 
 						<ProtectedRoute
 							exact
-							path='/students'
+							path="/students"
 							IsLoggedin={isLoggedin}
 							Component={Students}
 						/>
 
 						<ProtectedRoute
 							exact
-							path='/students/:id'
+							path="/students/:id"
 							IsLoggedin={isLoggedin}
 							Component={Student}
 						/>
 
 						<ProtectedRoute
 							exact
-							path='/serial-number'
+							path="/serial-number"
 							IsLoggedin={isLoggedin}
 							Component={SerialNumber}
 						/>
 
-						<Route exact path='*'>
+						<Route exact path="*">
 							<NotFound />
 						</Route>
 					</Switch>
