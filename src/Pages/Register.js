@@ -1,5 +1,16 @@
 import React, { useState, forwardRef, useEffect, useRef } from "react";
 
+import {
+	Page,
+	Text,
+	View,
+	Document,
+	StyleSheet,
+	renderToFile,
+	PDFDownloadLink,
+} from "@react-pdf/renderer";
+import ReactPDF from "@react-pdf/renderer";
+
 import { Button, Paper, Container } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import TextField from "@material-ui/core/TextField";
@@ -65,6 +76,7 @@ import { getState, getCountry } from "../Services/api/countryService";
 import { avatar } from "../components/Data/common";
 
 import Documents from "../components/partials/uploadDocuments";
+import PrintForm from "./printForm";
 
 const Transition = forwardRef(function Transition(props, ref) {
 	return <Slide direction="up" ref={ref} {...props} />;
@@ -134,13 +146,10 @@ function Register() {
 		dob: `${new Date()?.toLocaleDateString()}`,
 		phoneNo: "",
 		eduQualification: "",
-		// country: "",
-		// state: "",
 	});
 
 	//all  refs
 	const imgRef = useRef(null);
-
 	const jambDocRef = useRef(null);
 	const AnyDocRef = useRef(null);
 
@@ -178,7 +187,7 @@ function Register() {
 
 	const [serialNumber, setserialNumber] = useState("");
 
-	const [openModal, setOpenModal] = useState(false);
+	const [openModal, setOpenModal] = useState(true);
 
 	const [documentType, setDocumentType] = useState("");
 
@@ -224,6 +233,11 @@ function Register() {
 		setPrograms([]);
 		setserialNumber("");
 		setDocuments([]);
+
+		setacccordionDaata([...accordionData]);
+
+		setPassport("");
+		setPrograms([]);
 	}
 
 	function handleProgramOptions(e, name) {
@@ -293,9 +307,6 @@ function Register() {
 			phoneNumber: basicDetails?.phoneNo,
 			email: basicDetails?.email,
 			country: myCountry,
-
-			// country: basicDetails.country,
-			// state: basicDetails.state,
 			state: selectedState,
 			eduQualification: basicDetails.eduQualification,
 			currentEmploymet: employmentDetails,
@@ -310,15 +321,16 @@ function Register() {
 			documents: documents,
 		});
 
-		console.log("======= Form Payload =======\n", JSON.parse(payload, null, 2));
-		// console.log(payload);
+		// console.log("======= Form Payload =======\n", JSON.parse(payload, null, 2));
+
 		axios
 			.post(`${BaseUrl}student/register`, payload, {
 				headers: { "Content-Type": "application/json" },
 			})
 			.then((res) => {
-				console.log(res);
-				ResetForm();
+				if (res.statusCode === 201) {
+					ResetForm();
+				}
 				setOpenModal(true);
 			})
 			.catch((err) => {
@@ -537,7 +549,7 @@ function Register() {
 													label="Title"
 													autoWidth={false}
 												>
-													{titleArray.map((value, i) => (
+													{titleArray?.map((value, i) => (
 														<option key={i} value={value}>
 															{value}
 														</option>
@@ -604,13 +616,14 @@ function Register() {
 												<InputLabel htmlFor="gender">Gender</InputLabel>
 												<Select
 													native
-													value={basicDetails?.gender}
-													onChange={(e) =>
+													value={basicDetails.gender}
+													onChange={(e) => {
+														console.log("selected gender", e.target.value);
 														setBasicDetails((prev) => ({
 															...prev,
 															gender: e.target.value,
-														}))
-													}
+														}));
+													}}
 													label="gender"
 													autoWidth={false}
 												>
@@ -716,12 +729,6 @@ function Register() {
 												<Select
 													native
 													value={basicDetails.country}
-													// onChange={(e) =>
-													// 	setBasicDetails((prev) => ({
-													// 		...prev,
-													// 		country: e.target.value,
-													// 	}))
-													// }
 													onChange={(e) => {
 														const code = e.target.value.split(/[,.\s]/)[0];
 														const country = e.target.value.split(/[,.\s]/)[1];
@@ -1424,6 +1431,28 @@ function Register() {
 									<Button onClick={handleClose} color="primary">
 										Close
 									</Button>
+
+									<PDFDownloadLink
+										document={
+											<PrintForm
+												details={{
+													name: "damilola Taiwo",
+													job: "software developer",
+												}}
+											/>
+										}
+										fileName="IGPCM_FORM"
+									>
+										{({ loading }) =>
+											loading ? (
+												<Button disabled={true} color="primary">
+													Getting Pdf
+												</Button>
+											) : (
+												<Button color="primary">Print</Button>
+											)
+										}
+									</PDFDownloadLink>
 								</DialogActions>
 							</Dialog>
 

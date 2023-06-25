@@ -60,7 +60,8 @@ function NavBar() {
 						{(location === "/admin" ||
 							location === "/students/*" ||
 							location === "/students" ||
-							location === "/serial-number") && (
+							location === "/serial-number" ||
+							location === "/gallery-settings") && (
 							<div style={{ display: "flex", alignItems: "center" }}>
 								<p style={{ marginRight: "5px", color: "#01996D" }}>
 									{admin?.email.split("@")[0].toUpperCase()}

@@ -8,7 +8,6 @@ import { useSelector, useDispatch } from "react-redux";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import NavBar from "./components/partials/NavBar/NavBar";
-// import Footer from './components/partials/Footer/Footer'
 import Home from "./Pages/Home";
 import About from "./Pages/About";
 import Contact from "./Pages/Contact";
@@ -27,11 +26,13 @@ import SignIn from "./Pages/auth/SignIn";
 import SerialNumber from "./Pages/admin/SerialNumber";
 import Students from "./Pages/admin/Students";
 import Student from "./Pages/admin/Student";
+import Gallery from "./Pages/Gallery";
+import GallerySettings from "./Pages/admin/GallerySettings";
+import PrintForm from "./Pages/printForm";
 import NotFound from "./Pages/NotFound";
 
 import ProtectedRoute from "./Pages/auth/ProtectedRoute";
 import Loader from "./components/partials/Loader";
-import Gallery from "./Pages/Gallery";
 
 const defualtTheme = createMuiTheme({
 	palette: {
@@ -40,7 +41,10 @@ const defualtTheme = createMuiTheme({
 		},
 		secondary: {
 			main: "#fff",
+			danger: "#f50057",
 		},
+		// error: {
+		// },
 	},
 });
 
@@ -108,6 +112,9 @@ function App() {
 						<Route exact path="/license">
 							<License />
 						</Route>
+						<Route exact path="/form">
+							<PrintForm />
+						</Route>
 						{/* <Route exact path='/admin'>
 
                         <Admin/>
@@ -132,6 +139,12 @@ function App() {
 							path="/students"
 							IsLoggedin={isLoggedin}
 							Component={Students}
+						/>
+						<ProtectedRoute
+							exact
+							path="/gallery-settings"
+							IsLoggedin={isLoggedin}
+							Component={GallerySettings}
 						/>
 
 						<ProtectedRoute

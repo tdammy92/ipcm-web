@@ -23,13 +23,6 @@ import axios from "axios";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
-import Table from "@material-ui/core/Table";
-import TableBody from "@material-ui/core/TableBody";
-import TableCell from "@material-ui/core/TableCell";
-import TableContainer from "@material-ui/core/TableContainer";
-import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
-import TablePagination from "@material-ui/core/TablePagination";
 
 import Button from "@material-ui/core/Button";
 import ButtonGroup from "@material-ui/core/ButtonGroup";
@@ -43,6 +36,14 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
+
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableContainer from "@material-ui/core/TableContainer";
+import TableHead from "@material-ui/core/TableHead";
+import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 
 import { useReactToPrint } from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
@@ -94,8 +95,8 @@ function Students() {
 	const classes = useStyles();
 	const dispatch = useDispatch();
 	const { details } = useSelector((state) => state.users);
-	const [page, setPage] = React.useState(0);
-	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [page, setPage] = useState(0);
+	const [rowsPerPage, setRowsPerPage] = useState(10);
 	const [Search, setSearch] = useState("");
 	const [Students, setStudents] = useState([]);
 
@@ -147,11 +148,13 @@ function Students() {
 	});
 
 	const handleChangePage = (event, newPage) => {
+		console.log("THis  shit got fired");
 		setPage(newPage);
 	};
 
 	const handleChangeRowsPerPage = (event) => {
-		setRowsPerPage(+event.target.value);
+		console.log("THis  shit got fired");
+		setRowsPerPage(+event?.target?.value);
 		setPage(0);
 	};
 
@@ -185,12 +188,15 @@ function Students() {
 		getAllStudents();
 	}, []);
 
-	// console.log(Students);
+	// ?.slice(
+	// 	page * rowsPerPage,
+	// 	page * rowsPerPage + rowsPerPage
+	// )
 
 	return (
 		<>
 			<CssBaseline />
-			<Container maxWidth="md">
+			<Container maxWidth="lg">
 				<div className={classes.root}>
 					<Paper elevation={3} className={classes.cards}>
 						<TextField
@@ -337,12 +343,12 @@ function Students() {
 										</TableRow>
 									</TableHead>
 									<TableBody>
-										{Students.length < 1 ? (
+										{Students?.length < 1 ? (
 											<TableRow>
 												<TableCell>No Result Found</TableCell>
 											</TableRow>
 										) : (
-											Students.filter(
+											Students?.filter(
 												(stu) =>
 													stu.firstName.toLowerCase().includes(Search) ||
 													stu.surname.toLowerCase().includes(Search) ||
@@ -350,7 +356,7 @@ function Students() {
 													stu.country.toLowerCase().includes(Search) ||
 													stu.email.toLowerCase().includes(Search) ||
 													stu.phoneNumber.toLowerCase().includes(Search)
-											).map((item) => {
+											)?.map((item) => {
 												const {
 													_id,
 													surname,

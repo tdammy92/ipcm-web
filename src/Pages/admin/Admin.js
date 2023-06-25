@@ -9,6 +9,7 @@ import { BaseUrl } from "../../Services/api/BaseUrl";
 import GroupAddIcon from "@material-ui/icons/GroupAdd";
 import BlurLinearIcon from "@material-ui/icons/BlurLinear";
 import VisibilityIcon from "@material-ui/icons/Visibility";
+import PhotoLibraryIcon from "@material-ui/icons/PhotoLibrary";
 
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -28,13 +29,14 @@ import { iSLoading } from "../../Store/feature";
 const useStyles = makeStyles((theme) => ({
 	headerCard: {
 		display: "flex",
-		width: "100%",
-		// width: theme.spacing(50),
+		width: "auto",
 		alignItems: "center",
-		justifyContent: "space-evenly",
-		height: "80px",
+		justifyContent: "space-between",
+		height: "100px",
 		marginTop: theme.spacing(3),
 		flexWrap: "wrap",
+
+		border: "1px solid  red",
 	},
 	root: {
 		display: "flex",
@@ -59,10 +61,12 @@ const useStyles = makeStyles((theme) => ({
 		flexDirection: "column",
 		justifyContent: "center",
 		alignItems: "center",
-		height: "75%",
-		width: "40%",
-		minWidth: "150px",
+		height: "80%",
+		width: "30%",
+		minWidth: "80px",
 		textDecoration: "none",
+
+		border: "1px solid  blue",
 	},
 }));
 
@@ -75,6 +79,8 @@ function Admin() {
 	const [recentStudents, setrecentStudents] = useState([]);
 	const [page, setPage] = React.useState(0);
 	const [rowsPerPage, setRowsPerPage] = React.useState(10);
+	const [studentCount, setStudentCount] = useState(0);
+	const [serialNumberCount, setSerialNumberCount] = useState(0);
 
 	const handleChangePage = (event, newPage) => {
 		setPage(newPage);
@@ -103,15 +109,56 @@ function Admin() {
 		}
 	}
 
+	async function getStudentsCount() {
+		dispatch(iSLoading(true));
+		try {
+			const res = await axios.get(`${BaseUrl}student/count`, {
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${details?.token}`,
+				},
+			});
+
+			if (typeof res?.data?.count === "number") {
+				setStudentCount(res.data?.count);
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			dispatch(iSLoading(false));
+		}
+	}
+	async function getSerialNumbersCount() {
+		dispatch(iSLoading(true));
+		try {
+			const res = await axios.get(`${BaseUrl}serial/count`, {
+				headers: {
+					"Content-Type": "apllication/json",
+					Authorization: `Bearer ${details?.token}`,
+				},
+			});
+
+			if (typeof res?.data?.count === "number") {
+				setSerialNumberCount(res.data?.count);
+			}
+		} catch (error) {
+			console.log(error);
+		} finally {
+			dispatch(iSLoading(false));
+		}
+	}
+
 	useEffect(() => {
 		getRecentStudents();
+		getStudentsCount();
+		getSerialNumbersCount();
 	}, []);
 
 	return (
 		<>
 			<CssBaseline />
-			<Container maxWidth="md">
-				<Paper elevation={3} className={classes.headerCard}>
+			<Container maxWidth="lg">
+				<Paper elevation={2} className={classes.headerCard}>
 					<Paper
 						elevation={1}
 						className={classes.cards}
@@ -119,8 +166,11 @@ function Admin() {
 						to="/students"
 					>
 						<GroupAddIcon color="primary" fontSize="large" />
-						<h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+						<h3 style={{ margin: 0, padding: 0, color: "#01996D" }}>
 							Students
+						</h3>
+						<h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+							Total Students: {studentCount ?? 0}
 						</h5>
 					</Paper>
 					<Paper
@@ -130,9 +180,26 @@ function Admin() {
 						to="/serial-number"
 					>
 						<BlurLinearIcon color="primary" fontSize="large" />
-						<h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+						<h3 style={{ margin: 0, padding: 0, color: "#01996D" }}>
 							Serial Number
+						</h3>
+						<h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+							Total Serial No generated: {serialNumberCount ?? 0}
 						</h5>
+					</Paper>
+					<Paper
+						elevation={1}
+						className={classes.cards}
+						component={Link}
+						to="/gallery-settings"
+					>
+						<PhotoLibraryIcon color="primary" fontSize="large" />
+						<h3 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+							Gallery Settings
+						</h3>
+						{/* <h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+							Total Serial No generated: {serialNumberCount ?? 0}
+						</h5> */}
 					</Paper>
 				</Paper>
 
