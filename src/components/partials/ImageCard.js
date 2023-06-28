@@ -2,29 +2,37 @@ import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
-// import CardActions from '@material-ui/core/CardActions';
+
 import CardContent from "@material-ui/core/CardContent";
 import CardMedia from "@material-ui/core/CardMedia";
-// import Button from '@material-ui/core/Button';
+
 import Typography from "@material-ui/core/Typography";
+import { trimText } from "../../utils";
 
 const useStyles = makeStyles({
-	root: {
-		maxWidth: 345,
-		marginTop: "15px",
-	},
-	media: {
-		height: 140,
-	},
+  root: {
+    maxWidth: 345,
+    marginTop: "15px",
+    marginLeft: "5px",
+    marginRight: "5px",
+  },
+  media: {
+    height: 140,
+  },
+  caption: {
+    color: "primary",
+    padding: "4px",
+    wordWrap: "break-word",
+  },
 });
 
-function ImageCard({ image_url }) {
-	const classes = useStyles();
+function ImageCard({ image_url, caption }) {
+  const classes = useStyles();
 
-	return (
-		<Card className={classes.root}>
-			<CardActionArea>
-				{/* <CardMedia
+  return (
+    <Card className={classes.root}>
+      <CardActionArea>
+        {/* <CardMedia
 					component="img"
 					
 					className={classes.media}
@@ -33,17 +41,26 @@ function ImageCard({ image_url }) {
                     style={{}}
 				/> */}
 
-				<img src={image_url} height="100%" width="100%" />
-				{/* <CardContent>
-					<Typography
-						variant="body2"
-						color="textSecondary"
-						component="p"
-					></Typography>
-				</CardContent> */}
-			</CardActionArea>
-		</Card>
-	);
+        <img
+          src={image_url}
+          height="100%"
+          width="100%"
+        />
+        {/* <CardContent> */}
+        {caption && caption !== "" && (
+          <Typography
+            variant="body2"
+            color="primary"
+            component="p"
+            className={classes.caption}
+          >
+            {trimText(caption, 40)}
+          </Typography>
+        )}
+        {/* </CardContent> */}
+      </CardActionArea>
+    </Card>
+  );
 }
 
 export default ImageCard;

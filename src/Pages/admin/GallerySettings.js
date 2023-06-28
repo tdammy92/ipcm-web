@@ -31,415 +31,458 @@ import { iSLoading } from "../../Store/feature";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
 const StyledBadge = withStyles((theme) => ({
-	badge: {
-		right: -12,
-		top: 15,
-		border: `2px solid ${theme.palette.background.paper}`,
-		padding: "0 4px",
-	},
+  badge: {
+    right: -12,
+    top: 15,
+    border: `2px solid ${theme.palette.background.paper}`,
+    padding: "0 4px",
+  },
 }))(Badge);
 
 const useStyles = makeStyles((theme) => ({
-	root: {},
+  root: {},
 
-	headerText: {
-		marginTop: theme.spacing(5),
-	},
-	headerCard: {
-		display: "flex",
-		flexDirection: "column",
-		width: "auto",
-		minWidth: "350px",
-		alignItems: "center",
-		justifyContent: "center",
-		height: "auto",
-		marginTop: theme.spacing(2),
-		paddingTop: theme.spacing(1),
-		paddingBottom: theme.spacing(1),
-		flexWrap: "wrap",
+  headerText: {
+    marginTop: theme.spacing(5),
+  },
+  headerCard: {
+    display: "flex",
+    flexDirection: "column",
+    width: "auto",
+    minWidth: "350px",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "auto",
+    marginTop: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(1),
+    flexWrap: "wrap",
 
-		// border: "1px solid  yellow",
-	},
-	ImageCard: {
-		display: "flex",
-		flexDirection: "column",
-		width: "auto",
-		alignItems: "center",
-		justifyContent: "center",
-		height: "auto",
-		marginTop: theme.spacing(4),
+    // border: "1px solid  yellow",
+  },
+  ImageCard: {
+    display: "flex",
+    flexDirection: "column",
+    width: "auto",
+    alignItems: "center",
+    justifyContent: "center",
+    height: "auto",
+    marginTop: theme.spacing(4),
 
-		// border: "1px solid  red",
-	},
-	card: {
-		height: "3rem",
-	},
-	OptionContainer: {
-		display: "flex",
-		flexDirection: "column",
-		width: "auto",
-		minWidth: "350px",
-		alignItems: "center",
-		justifyContent: "space-between",
-		justifySelf: "center",
-		alignSelf: "center",
-		padding: theme.spacing(2),
+    // border: "1px solid  red",
+  },
+  card: {
+    height: "3rem",
+  },
+  OptionContainer: {
+    display: "flex",
+    flexDirection: "column",
+    width: "auto",
+    minWidth: "350px",
+    alignItems: "center",
+    justifyContent: "space-between",
+    justifySelf: "center",
+    alignSelf: "center",
+    padding: theme.spacing(2),
 
-		cursor: "pointer",
+    cursor: "pointer",
 
-		// border: "1px dotted red",
-	},
+    // border: "1px dotted red",
+  },
 
-	imageIconWrapper: {
-		display: "flex",
-		flexDirection: "row",
-		alignItems: "center",
-		width: "100%",
-		padding: theme.spacing(1),
-		borderRadius: theme.spacing(1),
+  imageIconWrapper: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    width: "100%",
+    padding: theme.spacing(1),
+    borderRadius: theme.spacing(1),
 
-		// border: "1px dotted  red",
-		border: "1px dotted  #01996d",
-	},
-	imageIcon: {
-		// flex: 1,
-		height: theme.spacing(5),
-		width: theme.spacing(5),
-		backgroundColor: "rgba(1, 153, 109, 0.6)",
-		display: "flex",
-		alignItems: "center",
-		justifyContent: "center",
-		borderRadius: "0.5rem",
-	},
-	uploadText: {
-		// flex: 1,
-		marginRight: theme.spacing(2),
-		marginLeft: theme.spacing(1),
-	},
+    // border: "1px dotted  red",
+    border: "1px dotted  #01996d",
+  },
+  imageIcon: {
+    // flex: 1,
+    height: theme.spacing(5),
+    width: theme.spacing(5),
+    backgroundColor: "rgba(1, 153, 109, 0.6)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    borderRadius: "0.5rem",
+  },
+  uploadText: {
+    // flex: 1,
+    marginRight: theme.spacing(2),
+    marginLeft: theme.spacing(1),
+  },
 
-	textInput: {
-		width: "100%",
-		marginTop: theme.spacing(1),
-		// marginBottom: theme.spacing(1),
-	},
-	buttonUpload: {
-		marginTop: theme.spacing(1),
-		marginBottom: theme.spacing(1),
-		width: "100%",
-		// color: theme.color(theme.palette.info),
-	},
-	button: {
-		marginTop: theme.spacing(1),
-		marginBottom: theme.spacing(1),
+  textInput: {
+    width: "100%",
+    marginTop: theme.spacing(1),
+    // marginBottom: theme.spacing(1),
+  },
+  buttonUpload: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
+    width: "100%",
+    // color: theme.color(theme.palette.info),
+  },
+  button: {
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(1),
 
-		// color: theme.color(theme.palette.info),
-	},
+    // color: theme.color(theme.palette.info),
+  },
 
-	infoText: {
-		maxWidth: "350px",
-		textAlign: "justify",
-	},
+  infoText: {
+    maxWidth: "350px",
+    textAlign: "justify",
+  },
 
-	tableContainer: {
-		marginTop: theme.spacing(5),
-	},
-	table: {
-		minWidth: 350,
-		marginTop: theme.spacing(1),
-	},
-	Image: {
-		marginLeft: theme.spacing(4),
-		width: theme.spacing(30),
-		// maxWidth: theme.spacing(30),
-		height: theme.spacing(25),
-		resizeMode: "contain",
-	},
+  tableContainer: {
+    marginTop: theme.spacing(5),
+  },
+  table: {
+    minWidth: 350,
+    marginTop: theme.spacing(1),
+  },
+  Image: {
+    marginLeft: theme.spacing(4),
+    width: theme.spacing(30),
+    // maxWidth: theme.spacing(30),
+    height: theme.spacing(25),
+    resizeMode: "contain",
+  },
 }));
 
 const InitialValue = {
-	imageUrl: "",
-	fileName: "",
-	caption: "",
+  imageUrl: "",
+  fileName: "",
+  caption: "",
 };
 function GallerySettings() {
-	const classes = useStyles();
+  const classes = useStyles();
 
-	const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-	const imgRef = useRef(null);
+  const imgRef = useRef(null);
 
-	const { details } = useSelector((state) => state.users);
+  const { details } = useSelector((state) => state.users);
 
-	const [file, setFile] = useState();
+  const [file, setFile] = useState();
 
-	const [image, setImage] = useState(() => ({
-		...InitialValue,
-	}));
+  const [image, setImage] = useState(() => ({
+    ...InitialValue,
+  }));
 
-	const [Images, setImages] = useState([]);
+  const [Images, setImages] = useState([]);
 
-	//handle Uploads
-	const selectImage = (e) => {
-		// e.preventDefault();
-		if (imgRef?.current) {
-			imgRef?.current?.click();
-		}
-	};
+  //handle Uploads
+  const selectImage = (e) => {
+    // e.preventDefault();
+    if (imgRef?.current) {
+      imgRef?.current?.click();
+    }
+  };
 
-	const uploadImage = async () => {
-		// console.log("User detail", JSON.stringify(details?.token, null, 2));
-		if (image?.imageUrl === "") return;
+  const uploadImage = async () => {
+    // console.log("User detail", JSON.stringify(details?.token, null, 2));
+    if (image?.imageUrl === "") return;
 
-		dispatch(iSLoading(true));
-		const payload = {
-			imageFile: image?.imageUrl,
-			caption: image?.caption,
-			uploadedBy: details?.admin?._id,
-		};
+    dispatch(iSLoading(true));
+    const payload = {
+      imageFile: image?.imageUrl,
+      caption: image?.caption,
+      uploadedBy: details?.admin?._id,
+    };
 
-		try {
-			const newImageResponse = await axios.post(
-				`${BaseUrl}gallery/upload`,
-				payload,
-				{
-					headers: {
-						"Content-Type": "application/json",
-						Authorization: `Bearer ${details?.token}`,
-					},
-				}
-			);
+    try {
+      const newImageResponse = await axios.post(
+        `${BaseUrl}gallery/upload`,
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${details?.token}`,
+          },
+        }
+      );
 
-			if (newImageResponse.status === 201) {
-				setImage({ ...InitialValue });
-				getGalleryImages();
-			}
-		} catch (error) {
-		} finally {
-			dispatch(iSLoading(false));
-		}
-	};
+      if (newImageResponse.status === 201) {
+        setImage({ ...InitialValue });
+        getGalleryImages();
+      }
+    } catch (error) {
+    } finally {
+      dispatch(iSLoading(false));
+    }
+  };
 
-	const handleDelete = useCallback(async (Id, publicId) => {
-		dispatch(iSLoading(true));
+  const handleDelete = useCallback(async (Id, publicId) => {
+    dispatch(iSLoading(true));
 
-		const payload = {
-			mongoDbId: Id,
-			cloudinaryPublic: publicId,
-		};
+    const payload = {
+      mongoDbId: Id,
+      cloudinaryPublic: publicId,
+    };
 
-		try {
-			const deleteRes = await axios.delete(`${BaseUrl}gallery/${Id}`, {
-				data: payload,
-				headers: {
-					Authorization: `Bearer ${details?.token}`,
-				},
-			});
+    try {
+      const deleteRes = await axios.delete(`${BaseUrl}gallery/${Id}`, {
+        data: payload,
+        headers: {
+          Authorization: `Bearer ${details?.token}`,
+        },
+      });
 
-			if (deleteRes.status === 200) {
-				getGalleryImages();
-			}
-			// console.log(
-			// 	"response from delete response",
-			// 	JSON.stringify(deleteRes, null, 2)
-			// );
-		} catch (error) {
-		} finally {
-			dispatch(iSLoading(false));
-		}
-	}, []);
+      if (deleteRes.status === 200) {
+        getGalleryImages();
+      }
+      // console.log(
+      // 	"response from delete response",
+      // 	JSON.stringify(deleteRes, null, 2)
+      // );
+    } catch (error) {
+    } finally {
+      dispatch(iSLoading(false));
+    }
+  }, []);
 
-	const getGalleryImages = async () => {
-		dispatch(iSLoading(true));
-		try {
-			const res = await axios.get(`${BaseUrl}gallery`, {
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${details?.token}`,
-				},
-			});
+  const getGalleryImages = async () => {
+    dispatch(iSLoading(true));
+    try {
+      const res = await axios.get(`${BaseUrl}gallery`, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${details?.token}`,
+        },
+      });
 
-			setImages(res?.data);
-		} catch (error) {
-			console.log(error);
-		} finally {
-			dispatch(iSLoading(false));
-		}
-	};
+      setImages(res?.data);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      dispatch(iSLoading(false));
+    }
+  };
 
-	useEffect(() => {
-		getGalleryImages();
+  useEffect(() => {
+    getGalleryImages();
 
-		return () => {};
-	}, []);
+    return () => {};
+  }, []);
 
-	//fires to get base64 for  Image
-	useEffect(() => {
-		if (file) {
-			setImage((prev) => ({
-				...prev,
-				fileName: file?.name,
-			}));
-			const Reader = new FileReader();
-			Reader.onload = () => {
-				setImage((prev) => ({ ...prev, imageUrl: Reader?.result }));
-			};
-			Reader.readAsDataURL(file);
-		}
-	}, [file]);
+  //fires to get base64 for  Image
+  useEffect(() => {
+    if (file) {
+      setImage((prev) => ({
+        ...prev,
+        fileName: file?.name,
+      }));
+      const Reader = new FileReader();
+      Reader.onload = () => {
+        setImage((prev) => ({ ...prev, imageUrl: Reader?.result }));
+      };
+      Reader.readAsDataURL(file);
+    }
+  }, [file]);
 
-	// console.log("Image file", image);
+  // console.log("Image file", image);
 
-	return (
-		<div>
-			<CssBaseline />
-			<Container maxWidth="lg" mt={5}>
-				<Typography
-					variant="h5"
-					color="primary"
-					gutterBottom
-					className={classes.headerText}
-				>
-					Gallery Dashboard
-				</Typography>
+  return (
+    <div>
+      <CssBaseline />
+      <Container
+        maxWidth="lg"
+        mt={5}
+      >
+        <Typography
+          variant="h5"
+          color="primary"
+          gutterBottom
+          className={classes.headerText}
+        >
+          Gallery Dashboard
+        </Typography>
 
-				<Box component="span" mt={4}>
-					<Paper
-						variant="outlined"
-						elevation={3}
-						className={classes.headerCard}
-					>
-						<Paper elevation={0} className={classes.OptionContainer}>
-							<div className={classes.imageIconWrapper} onClick={selectImage}>
-								<div className={classes.imageIcon}>
-									<WallpaperIcon fontSize="small" color="secondary" />
-								</div>
+        <Box
+          component="span"
+          mt={4}
+        >
+          <Paper
+            variant="outlined"
+            elevation={3}
+            className={classes.headerCard}
+          >
+            <Paper
+              elevation={0}
+              className={classes.OptionContainer}
+            >
+              <div
+                className={classes.imageIconWrapper}
+                onClick={selectImage}
+              >
+                <div className={classes.imageIcon}>
+                  <WallpaperIcon fontSize="small" />
+                </div>
 
-								<Typography
-									variant="subtitle1"
-									color="primary"
-									className={classes.uploadText}
-								>
-									{image?.fileName !== ""
-										? image?.fileName
-										: `Upload an Image. Max size 2 MB`}
-								</Typography>
+                <Typography
+                  variant="subtitle1"
+                  color="primary"
+                  className={classes.uploadText}
+                >
+                  {image?.fileName !== ""
+                    ? image?.fileName
+                    : `Upload an Image. Max size 2 MB`}
+                </Typography>
 
-								<input
-									type="file"
-									accept="image/*"
-									style={{ display: "none" }}
-									ref={imgRef}
-									onChange={(e) => {
-										const file = e?.target?.files[0];
-										if (file && file?.type?.substring(0, 5) === "image") {
-											setFile(file);
-										} else {
-											setFile(null);
-										}
-									}}
-								/>
-							</div>
-							<TextField
-								id="standard-text-input"
-								color="primary"
-								label="Caption"
-								type="text"
-								variant="outlined"
-								autoComplete="false"
-								value={image?.caption}
-								onChange={(e) =>
-									setImage((prev) => ({ ...prev, caption: e.target.value }))
-								}
-								className={classes.textInput}
-							/>
-							<Button
-								onClick={uploadImage}
-								variant="outlined"
-								color="primary"
-								disabled={image?.imageUrl === ""}
-								className={classes.buttonUpload}
-								startIcon={<CloudUploadIcon />}
-							>
-								Upload
-							</Button>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: "none" }}
+                  ref={imgRef}
+                  onChange={(e) => {
+                    const file = e?.target?.files[0];
+                    if (file && file?.type?.substring(0, 5) === "image") {
+                      setFile(file);
+                    } else {
+                      setFile(null);
+                    }
+                  }}
+                />
+              </div>
+              <TextField
+                id="standard-text-input"
+                color="primary"
+                label="Caption"
+                type="text"
+                variant="outlined"
+                autoComplete="false"
+                value={image?.caption}
+                onChange={(e) =>
+                  setImage((prev) => ({ ...prev, caption: e.target.value }))
+                }
+                className={classes.textInput}
+              />
+              <Button
+                onClick={uploadImage}
+                variant="outlined"
+                color="primary"
+                disabled={image?.imageUrl === ""}
+                className={classes.buttonUpload}
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload
+              </Button>
 
-							<div>
-								<Typography variant="subtitle1" className={classes.infoText}>
-									NB: Maximum Image allowed in gallery database is 32 images,
-									Once image exceeds 32, old images will be removed to replace
-									newer once
-								</Typography>
-							</div>
-						</Paper>
-					</Paper>
-					{/* <Paper elevation={3} className={classes.ImageCard}></Paper>
-					 */}
+              <div>
+                <Typography
+                  variant="subtitle1"
+                  className={classes.infoText}
+                >
+                  NB: Maximum Image allowed in gallery database is 32 images,
+                  Once image exceeds 32, old images will be removed to replace
+                  newer once
+                </Typography>
+              </div>
+            </Paper>
+          </Paper>
+          {/* <Paper elevation={3} className={classes.ImageCard}></Paper>
+           */}
 
-					<TableContainer component={Paper} className={classes.tableContainer}>
-						<Table className={classes.table} aria-label="simple table">
-							<TableHead>
-								<TableRow>
-									<TableCell align="center" variant="head" size="medium">
-										<StyledBadge color="primary" badgeContent={Images?.length}>
-											<Typography variant="h5" color="primary">
-												Images
-											</Typography>
-										</StyledBadge>
-									</TableCell>
-									<TableCell align="center">
-										<Typography variant="h5" color="primary">
-											Captions
-										</Typography>
-									</TableCell>
-									<TableCell align="center">
-										<Typography variant="h5" color="primary">
-											Delete
-										</Typography>
-									</TableCell>
-								</TableRow>
-							</TableHead>
-							<TableBody>
-								{Images?.map(({ _id, image, caption }, i) => (
-									<TableRow key={_id}>
-										<TableCell align="center">
-											<Badge color="primary" badgeContent={i + 1}>
-												<Avatar
-													alt={`image ${i}`}
-													src={image?.url}
-													className={classes.Image}
-													variant="rounded"
-													style={{
-														resizeMode: "contain",
-														objectFit: "contain",
-													}}
-												/>
-											</Badge>
-										</TableCell>
-										<TableCell align="center">
-											<Typography variant="h5" color="primary">
-												{caption !== "" ? caption : `Nil`}
-											</Typography>
-										</TableCell>
-										<TableCell align="center">
-											<Button
-												onClick={() => handleDelete(_id, image?.public_id)}
-												variant="outlined"
-												color="secondary.danger"
-												className={classes.button}
-												startIcon={<DeleteIcon />}
-											>
-												Delete
-											</Button>
-										</TableCell>
-									</TableRow>
-								))}
-							</TableBody>
-						</Table>
-					</TableContainer>
-				</Box>
-			</Container>
-		</div>
-	);
+          <TableContainer
+            component={Paper}
+            className={classes.tableContainer}
+          >
+            <Table
+              className={classes.table}
+              aria-label="simple table"
+            >
+              <TableHead>
+                <TableRow>
+                  <TableCell
+                    align="center"
+                    variant="head"
+                    size="medium"
+                  >
+                    <StyledBadge
+                      color="primary"
+                      badgeContent={Images?.length}
+                    >
+                      <Typography
+                        variant="h5"
+                        color="primary"
+                      >
+                        Images
+                      </Typography>
+                    </StyledBadge>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography
+                      variant="h5"
+                      color="primary"
+                    >
+                      Captions
+                    </Typography>
+                  </TableCell>
+                  <TableCell align="center">
+                    <Typography
+                      variant="h5"
+                      color="primary"
+                    >
+                      Delete
+                    </Typography>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Images?.map(({ _id, image, caption }, i) => (
+                  <TableRow key={_id}>
+                    <TableCell align="center">
+                      <Badge
+                        color="primary"
+                        badgeContent={i + 1}
+                      >
+                        <Avatar
+                          alt={`image ${i}`}
+                          src={image?.url}
+                          className={classes.Image}
+                          variant="rounded"
+                          style={{
+                            resizeMode: "contain",
+                            objectFit: "contain",
+                          }}
+                        />
+                      </Badge>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Typography
+                        variant="h5"
+                        color="primary"
+                      >
+                        {caption !== "" ? caption : `Nil`}
+                      </Typography>
+                    </TableCell>
+                    <TableCell align="center">
+                      <Button
+                        onClick={() => handleDelete(_id, image?.public_id)}
+                        variant="outlined"
+                        color="primary"
+                        className={classes.button}
+                        startIcon={<DeleteIcon />}
+                      >
+                        Delete
+                      </Button>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </Box>
+      </Container>
+    </div>
+  );
 }
 
 export default GallerySettings;
