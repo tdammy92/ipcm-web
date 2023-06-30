@@ -5,3 +5,11 @@ export const trimText = (text, lenght) => {
 
   return text?.substring(0, lenght) + "...";
 };
+
+export const modifyUrl = (url) => {
+  if (url === "" || url === undefined) return;
+
+  return process.env.NODE_ENV === "development"
+    ? url
+    : url.replace("http://", "https://");
+};

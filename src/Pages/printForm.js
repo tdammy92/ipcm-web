@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-
+import { modifyUrl } from "../utils/index";
 const primaryColor = "#01996D";
 
 const PrintForm = ({ studentDetails }) => {
@@ -156,7 +156,7 @@ const PrintForm = ({ studentDetails }) => {
               <View style={styles.studentPassportContainer}>
                 <Image
                   style={styles.studentPassport}
-                  src={studentDetails.passport.url}
+                  src={modifyUrl(studentDetails.passport.url)}
                 />
                 <View style={styles.imageStamp}>
                   <Text style={styles.imageStampText}>

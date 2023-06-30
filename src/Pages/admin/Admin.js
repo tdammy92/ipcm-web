@@ -193,7 +193,7 @@ function Admin() {
               Serial Number
             </h3>
             <h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-              Total Serial No generated: {serialNumberCount ?? 0}
+              Total Serial No: {serialNumberCount ?? 0}
             </h5>
           </Paper>
           <Paper

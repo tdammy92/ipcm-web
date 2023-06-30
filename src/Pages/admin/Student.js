@@ -93,8 +93,7 @@ function Student() {
 
   //function to delete student
   async function DeleteStudent() {
-    // console.log(JSON.stringify(Details, null, 2));
-    // dispatch(iSLoading(true));
+    dispatch(iSLoading(true));
 
     const documentIds = Details?.documents?.map((doc) => doc?.file?.public_id);
 
@@ -109,8 +108,6 @@ function Student() {
       cloudinaryPublicIds,
     };
 
-    console.log(payload);
-
     try {
       const res = await axios.delete(`${BaseUrl}student/${id}`, {
         data: payload,
@@ -119,11 +116,10 @@ function Student() {
         },
       });
 
-      dispatch(iSLoading(false));
-
       history.replace("/students");
     } catch (error) {
       console.log(error);
+    } finally {
       dispatch(iSLoading(false));
     }
   }
