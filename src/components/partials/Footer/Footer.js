@@ -7,25 +7,25 @@ import MobileFooter from "./MobileFooter";
 import { Container } from "@material-ui/core";
 
 function Footer() {
-	const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
+  const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
-	const location = useLocation().pathname;
+  const location = useLocation().pathname;
 
-	return (
-		<>
-			{location === "/sigin" ||
-			location === "/signup" ||
-			location === "/admin" ? null : (
-				<footer className="footerContainer">
-					<Container>
-						{isMobile && <MobileFooter />}
+  return (
+    <>
+      {location === "/sigin" ||
+      location === "/signup" ||
+      location === "/admin" ? null : (
+        <footer className="footerContainer">
+          <Container>
+            {isMobile && <MobileFooter />}
 
-						{!isMobile && <DesktopFooter />}
-					</Container>
-				</footer>
-			)}
-		</>
-	);
+            {!isMobile && <DesktopFooter />}
+          </Container>
+        </footer>
+      )}
+    </>
+  );
 }
 
 export default Footer;

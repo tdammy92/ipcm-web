@@ -7,13 +7,8 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
-import { FaBookReader } from "react-icons/fa";
-import { GrGallery } from "react-icons/gr";
-import { HiUserGroup } from "react-icons/hi2";
-import { LiaBarcodeSolid } from "react-icons/lia";
-import VisibilityIcon from "@material-ui/icons/Visibility";
-
-import { makeStyles } from "@material-ui/core/styles";
+import { MdDownloadForOffline } from "react-icons/md";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -51,17 +46,19 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     width: "auto",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    // height: "100px",
+    flexDirection: "column",
+    justifyContent: "center",
+    maxHeightheight: "150px",
     marginTop: theme.spacing(3),
     marginBottom: theme.spacing(4),
-    flexWrap: "wrap",
+    // padding: theme.spacing(2),
+    // flexWrap: "wrap",
 
     // border: "1px solid  red",
   },
   cards: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     height: "90px",
@@ -74,34 +71,29 @@ const useStyles = makeStyles((theme) => ({
     // border: "1px solid  blue",
   },
 
-  cardsInfoBox: {
-    marginLeft: "10px",
-  },
-
   cardsInfoIcon: {
-    fontSize: "50px",
+    fontSize: "80px",
     color: "#01996D",
+    cursor: "pointer",
   },
 
-  cardsInfoDetails: {
-    fontFamily: "10px",
+  noticeUl: {
+    fontFamily: "8px",
     margin: 0,
     padding: 0,
     color: "#01996D",
+    listStyle: "none",
+    marginTop: "3px",
+    marginBottom: "5px",
   },
 }));
 
-function Admin() {
+function UploadExam() {
   const classes = useStyles();
-
-  const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
 
-  const [recentStudents, setrecentStudents] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [studentCount, setStudentCount] = useState(0);
-  const [serialNumberCount, setSerialNumberCount] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -112,156 +104,53 @@ function Admin() {
     setPage(0);
   };
 
-  async function getRecentStudents() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/recent`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      setrecentStudents(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
-
-  async function getStudentsCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/count`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      if (typeof res?.data?.count === "number") {
-        setStudentCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-  async function getSerialNumbersCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}serial/count`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      if (typeof res?.data?.count === "number") {
-        setSerialNumberCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-
-  useEffect(() => {
-    getRecentStudents();
-    getStudentsCount();
-    getSerialNumbersCount();
-  }, []);
-
+  const HandleExcelUpload = () => {
+    console.log("Upload excel sheet");
+  };
   return (
-    <>
+    <div>
       <CssBaseline />
       <Container maxWidth="lg" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
-        <Box spacing={3} className={classes.headerCard} mx="auto">
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/students"
-          >
-            <HiUserGroup className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Students
-              </h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Students: {studentCount ?? 0}
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/exam-board"
-          >
-            <FaBookReader className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>Exam</h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Exam Dashboard
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/serial-number"
-          >
-            <LiaBarcodeSolid className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Serial Number
-              </h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Serial No: {serialNumberCount ?? 0}
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/gallery-settings"
-          >
-            <GrGallery className={classes.cardsInfoIcon} />
+        <Typography
+          variant="h6"
+          component="h4"
+          mt={20}
+          align="center"
+          color="primary"
+          style={{ marginTop: 20 }}
+        >
+          Exam Upload
+        </Typography>
 
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Gallery Settings
-              </h4>
-            </Box>
-            {/* <h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-							Total Serial No generated: {serialNumberCount ?? 0}
-						</h5> */}
-          </Paper>
-        </Box>
-        {/* </Paper> */}
+        <Paper elevation={2} className={classes.headerCard}>
+          <MdDownloadForOffline
+            className={classes.cardsInfoIcon}
+            onClick={HandleExcelUpload}
+          />
+          <Typography
+            variant="body2"
+            component="h3"
+            align="center"
+            style={{ color: "#01996D" }}
+          >
+            Please take note of the following steps before uploading an exam
+          </Typography>
+
+          <ul className={classes.noticeUl}>
+            <li>
+              Click on the download button above to download an excel template.
+            </li>
+            <li>
+              fill the space ment for answer and questions, without modifing the
+              excel sheet in any way.
+            </li>
+            <li>When your done and has verified it, upload the form </li>
+          </ul>
+        </Paper>
 
         <div>
-          <h3 style={{ color: "#01996D" }}>Recently Registered Student(s)</h3>
           <div>
             <Paper className={classes.root2}>
               <TableContainer
@@ -277,7 +166,7 @@ function Admin() {
                           minWidth: 120,
                         }}
                       >
-                        FULL NAME
+                        Exam Title
                       </TableCell>
                       <TableCell
                         align="center"
@@ -285,7 +174,7 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        PHONE
+                        Duration
                       </TableCell>
 
                       <TableCell
@@ -294,7 +183,7 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        EMAIL
+                        Total Questions
                       </TableCell>
 
                       <TableCell
@@ -303,24 +192,9 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        COUNTRY
+                        Uploaded On
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        STATE
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        DATE
-                      </TableCell>
+
                       <TableCell
                         align="center"
                         style={{
@@ -331,7 +205,7 @@ function Admin() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  {/* <TableBody>
                     {recentStudents.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -384,14 +258,14 @@ function Admin() {
                         );
                       })
                     )}
-                  </TableBody>
+                  </TableBody> */}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={recentStudents?.length}
+                // count={recentStudents?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -401,8 +275,8 @@ function Admin() {
           </div>
         </div>
       </Container>
-    </>
+    </div>
   );
 }
 
-export default Admin;
+export default UploadExam;
