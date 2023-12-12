@@ -13,7 +13,7 @@ import About from "./Pages/About";
 import Contact from "./Pages/Contact";
 import Member from "./Pages/Member";
 import Nysc from "./Pages/Nysc";
-import Examination from "./Pages/Examination";
+
 import Certification from "./Pages/Certification";
 import Register from "./Pages/Register";
 import Project from "./Pages/Project";
@@ -35,6 +35,10 @@ import ProtectedRoute from "./Pages/auth/ProtectedRoute";
 import Loader from "./components/partials/Loader";
 
 import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
+import ExamInfo from "./Pages/exam/ExamInfo";
+import ExamBoard from "./Pages/admin/ExamBoard";
+import UploadExam from "./Pages/admin/UploadExam";
+import StudentResults from "./Pages/admin/StudentResults";
 
 const defualtTheme = createMuiTheme({
   palette: {
@@ -75,82 +79,43 @@ function App() {
           <NavBar />
 
           <Switch>
-            <Route
-              exact
-              path="/"
-            >
+            <Route exact path="/">
               <Home />
             </Route>
-            <Route
-              exact
-              path="/about"
-            >
+            <Route exact path="/about">
               <About />
             </Route>
-            <Route
-              exact
-              path="/contact"
-            >
+            <Route exact path="/contact">
               <Contact />
             </Route>
-            <Route
-              exact
-              path="/member"
-            >
+            <Route exact path="/member">
               <Member />
             </Route>
-            <Route
-              exact
-              path="/nysc"
-            >
+            <Route exact path="/nysc">
               <Nysc />
             </Route>
-            <Route
-              exact
-              path="/examination"
-            >
-              <Examination />
+            <Route exact path="/exam-info">
+              <ExamInfo />
             </Route>
-            <Route
-              exact
-              path="/certification"
-            >
+            <Route exact path="/certification">
               <Certification />
             </Route>
-            <Route
-              exact
-              path="/register"
-            >
+            <Route exact path="/register">
               <Register />
             </Route>
-            <Route
-              exact
-              path="/projects"
-            >
+            <Route exact path="/projects">
               <Project />
             </Route>
-            <Route
-              exact
-              path="/gallery"
-            >
+            <Route exact path="/gallery">
               <Gallery />
             </Route>
-            <Route
-              exact
-              path="/career"
-            >
+            <Route exact path="/career">
               <Career />
             </Route>
-            <Route
-              exact
-              path="/consultancy"
-            >
+            <Route exact path="/consultancy">
               <Consult />
             </Route>
-            <Route
-              exact
-              path="/license"
-            >
+            <Route exact path="/license">
               <License />
             </Route>
             {/* <Route
@@ -164,16 +129,10 @@ function App() {
                       <Admin/>
 
                   </Route> */}
-            <Route
-              exact
-              path="/signup"
-            >
+            <Route exact path="/signup">
               <SignUp />
             </Route>
-            <Route
-              exact
-              path="/signin"
-            >
+            <Route exact path="/signin">
               <SignIn />
             </Route>
 
@@ -189,6 +148,24 @@ function App() {
               path="/students"
               IsLoggedin={isLoggedin}
               Component={Students}
+            />
+            <ProtectedRoute
+              exact
+              path="/exam-board"
+              IsLoggedin={isLoggedin}
+              Component={ExamBoard}
+            />
+            <ProtectedRoute
+              exact
+              path="/exam-upload"
+              IsLoggedin={isLoggedin}
+              Component={UploadExam}
+            />
+            <ProtectedRoute
+              exact
+              path="/student-result"
+              IsLoggedin={isLoggedin}
+              Component={StudentResults}
             />
             <ProtectedRoute
               exact
@@ -211,10 +188,7 @@ function App() {
               Component={SerialNumber}
             />
 
-            <Route
-              exact
-              path="*"
-            >
+            <Route exact path="*">
               <NotFound />
             </Route>
           </Switch>

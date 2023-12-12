@@ -7,13 +7,10 @@ import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
-import { FaBookReader } from "react-icons/fa";
-import { GrGallery } from "react-icons/gr";
-import { HiUserGroup } from "react-icons/hi2";
-import { LiaBarcodeSolid } from "react-icons/lia";
-import VisibilityIcon from "@material-ui/icons/Visibility";
+import { GrScorecard } from "react-icons/gr";
+import { FaCloudUploadAlt } from "react-icons/fa";
 
-import { makeStyles } from "@material-ui/core/styles";
+import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -61,7 +58,7 @@ const useStyles = makeStyles((theme) => ({
   },
   cards: {
     display: "flex",
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
     height: "90px",
@@ -74,13 +71,10 @@ const useStyles = makeStyles((theme) => ({
     // border: "1px solid  blue",
   },
 
-  cardsInfoBox: {
-    marginLeft: "10px",
-  },
+  cardsInfoBox: {},
 
   cardsInfoIcon: {
     fontSize: "50px",
-    color: "#01996D",
   },
 
   cardsInfoDetails: {
@@ -91,17 +85,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Admin() {
+function ExamBoard() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
 
-  const [recentStudents, setrecentStudents] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [studentCount, setStudentCount] = useState(0);
-  const [serialNumberCount, setSerialNumberCount] = useState(0);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -112,156 +103,69 @@ function Admin() {
     setPage(0);
   };
 
-  async function getRecentStudents() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/recent`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      setrecentStudents(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
-
-  async function getStudentsCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/count`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      if (typeof res?.data?.count === "number") {
-        setStudentCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-  async function getSerialNumbersCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}serial/count`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      if (typeof res?.data?.count === "number") {
-        setSerialNumberCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-
-  useEffect(() => {
-    getRecentStudents();
-    getStudentsCount();
-    getSerialNumbersCount();
-  }, []);
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="lg" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
+        <Typography
+          variant="h5"
+          component="h4"
+          mt={20}
+          align="center"
+          color="primary"
+          style={{ marginTop: 20 }}
+        >
+          Exam Dashboard
+        </Typography>
+
         <Box spacing={3} className={classes.headerCard} mx="auto">
           <Paper
             elevation={1}
             className={classes.cards}
             component={Link}
-            to="/students"
+            to="/exam-upload"
           >
-            <HiUserGroup className={classes.cardsInfoIcon} />
+            <FaCloudUploadAlt style={{ fontSize: "30px", color: "#01996D" }} />
             <Box className={classes.cardsInfoBox}>
               <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Students
+                Upload Exam
               </h4>
-              <Typography
+              {/* <Typography
                 variant="body2"
                 component="P"
                 className={classes.cardsInfoDetails}
               >
                 Total Students: {studentCount ?? 0}
-              </Typography>
+              </Typography> */}
             </Box>
           </Paper>
           <Paper
             elevation={1}
             className={classes.cards}
             component={Link}
-            to="/exam-board"
+            to="/student-result"
           >
-            <FaBookReader className={classes.cardsInfoIcon} />
+            <GrScorecard style={{ fontSize: "30px", color: "#01996D" }} />
             <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>Exam</h4>
-              <Typography
+              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
+                Results
+              </h4>
+              {/* <Typography
                 variant="body2"
                 component="P"
                 className={classes.cardsInfoDetails}
               >
-                Exam Dashboard
-              </Typography>
+                Exam Management
+              </Typography> */}
             </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/serial-number"
-          >
-            <LiaBarcodeSolid className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Serial Number
-              </h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Serial No: {serialNumberCount ?? 0}
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/gallery-settings"
-          >
-            <GrGallery className={classes.cardsInfoIcon} />
-
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Gallery Settings
-              </h4>
-            </Box>
-            {/* <h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-							Total Serial No generated: {serialNumberCount ?? 0}
-						</h5> */}
           </Paper>
         </Box>
         {/* </Paper> */}
 
         <div>
-          <h3 style={{ color: "#01996D" }}>Recently Registered Student(s)</h3>
+          <h3 style={{ color: "#01996D" }}>Available Exams</h3>
           <div>
             <Paper className={classes.root2}>
               <TableContainer
@@ -277,7 +181,7 @@ function Admin() {
                           minWidth: 120,
                         }}
                       >
-                        FULL NAME
+                        Exam Title
                       </TableCell>
                       <TableCell
                         align="center"
@@ -285,7 +189,7 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        PHONE
+                        Duration
                       </TableCell>
 
                       <TableCell
@@ -294,7 +198,7 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        EMAIL
+                        Total Questions
                       </TableCell>
 
                       <TableCell
@@ -303,24 +207,9 @@ function Admin() {
                           minWidth: 70,
                         }}
                       >
-                        COUNTRY
+                        Uploaded On
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        STATE
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        DATE
-                      </TableCell>
+
                       <TableCell
                         align="center"
                         style={{
@@ -331,7 +220,7 @@ function Admin() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  {/* <TableBody>
                     {recentStudents.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -384,14 +273,14 @@ function Admin() {
                         );
                       })
                     )}
-                  </TableBody>
+                  </TableBody> */}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={recentStudents?.length}
+                // count={recentStudents?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
@@ -405,4 +294,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default ExamBoard;
