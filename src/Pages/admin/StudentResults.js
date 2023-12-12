@@ -106,7 +106,7 @@ function StudentResults() {
       <Container maxWidth="lg" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
-        <Typography
+        {/* <Typography
           variant="h5"
           component="h4"
           mt={20}
@@ -115,16 +115,16 @@ function StudentResults() {
           style={{ marginTop: 20 }}
         >
           Student Results
-        </Typography>
+        </Typography> */}
 
         <div>
           <Typography
             variant="h6"
             component="h3"
             align="center"
-            style={{ color: "#01996D" }}
+            style={{ color: "#01996D", marginTop: 20 }}
           >
-            List of students and their result
+            List of students result
           </Typography>
           <div>
             <Paper className={classes.root2}>

@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     padding: 0,
     color: "#01996D",
-    listStyle: "none",
+    // listStyle: "none",
     marginTop: "3px",
     marginBottom: "5px",
   },
