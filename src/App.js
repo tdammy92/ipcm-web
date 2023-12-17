@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-import { useSelector, useDispatch } from "react-redux";
-// import { ToastContainer, toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import { ToastContainer } from "react-toastify";
 import AOS from "aos";
 import "aos/dist/aos.css";
 import NavBar from "./components/partials/NavBar/NavBar";
@@ -28,17 +28,18 @@ import Students from "./Pages/admin/Students";
 import Student from "./Pages/admin/Student";
 import Gallery from "./Pages/Gallery";
 import GallerySettings from "./Pages/admin/GallerySettings";
-import PrintForm from "./Pages/printForm";
+
 import NotFound from "./Pages/NotFound";
 
 import ProtectedRoute from "./Pages/auth/ProtectedRoute";
 import Loader from "./components/partials/Loader";
 
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
 import ExamInfo from "./Pages/exam/ExamInfo";
 import ExamBoard from "./Pages/admin/ExamBoard";
 import UploadExam from "./Pages/admin/UploadExam";
 import StudentResults from "./Pages/admin/StudentResults";
+
+import "react-toastify/dist/ReactToastify.css";
 
 const defualtTheme = createMuiTheme({
   palette: {
@@ -62,7 +63,7 @@ function App() {
 
   return (
     <ThemeProvider theme={defualtTheme}>
-      {/* <ToastContainer
+      <ToastContainer
         position="top-left"
         autoClose={5000}
         hideProgressBar={false}
@@ -72,7 +73,7 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      /> */}
+      />
       <Loader />
       <div className="index">
         <Router>

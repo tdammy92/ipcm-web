@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
+import TextField from "@material-ui/core/TextField";
 import { BaseUrl } from "../../Services/api/BaseUrl";
-
+import { toast } from "react-toastify";
+import { ImUpload } from "react-icons/im";
 import { MdDownloadForOffline } from "react-icons/md";
 import { withStyles, makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -17,11 +19,20 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
+import Slide from "@material-ui/core/Slide";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+
 import Button from "@material-ui/core/Button";
 import { Link, Redirect, useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { iSLoading } from "../../Store/feature";
+import { read, utils, writeFileXLSX } from "xlsx";
+import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,6 +47,13 @@ const useStyles = makeStyles((theme) => ({
   },
   root2: {
     width: "100%",
+  },
+
+  form: {
+    "& > *": {
+      margin: theme.spacing(1),
+      width: "25ch",
+    },
   },
 
   tableContainer: {
@@ -72,9 +90,26 @@ const useStyles = makeStyles((theme) => ({
   },
 
   cardsInfoIcon: {
-    fontSize: "80px",
+    fontSize: "70px",
     color: "#01996D",
     cursor: "pointer",
+    marginLeft: "20px",
+  },
+  cardsInfoIcon2: {
+    fontSize: "40px",
+    color: "#01996D",
+    cursor: "pointer",
+    marginLeft: "10px",
+  },
+
+  formItem: {
+    width: "80%",
+    minWidth: "300px",
+    marginTop: "10px",
+    marginBottom: "15px",
+    marginLeft: "15px",
+
+    // backgroundColor:"#f45"
   },
 
   noticeUl: {
@@ -88,13 +123,28 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
+const InitialExam = {
+  exam_title: "",
+  exam_duration: "",
+  exam_questions: [],
+};
+
 function UploadExam() {
   const classes = useStyles();
+
+  const docRef = useRef(null);
   const { details } = useSelector((state) => state.users);
+
+  const [Exam, setExam] = useState(() => InitialExam);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
+  const [open, setOpen] = React.useState(false);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -104,9 +154,142 @@ function UploadExam() {
     setPage(0);
   };
 
-  const HandleExcelUpload = () => {
-    console.log("Upload excel sheet");
+  //handle Uploads
+  const OpenFilePicker = (e) => {
+    e.preventDefault();
+    if (docRef?.current) {
+      docRef?.current?.click();
+    }
   };
+
+  const extractSheet = (e) => {
+    //get file from input
+    const file = e?.target?.files[0];
+
+    //instantiate a new file reader
+    const fileReader = new FileReader();
+
+    //conver file to binary
+    fileReader.readAsBinaryString(file);
+
+    //red file
+    fileReader.onload = (e) => {
+      const data = e.target.result;
+      const workbook = read(data, { type: "binary" });
+      const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+      /* get first worksheet */
+      const raw_data = utils.sheet_to_json(worksheet);
+      // const raw_data = utils.sheet_to_json(worksheet, {
+      //   header: 1,
+      // });
+
+      const transformedData = raw_data?.map((exam) => {
+        const { Serial_Number, Question, answer, ...rest } = exam;
+        const options = Object.values(rest);
+
+        if (!Question) {
+          toast.error(`Qst ${Serial_Number} is not filled`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            // pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+
+          return;
+        }
+
+        if (!answer) {
+          toast.error(`Qst ${Serial_Number} has no answer`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            // pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+
+          return;
+        }
+        return {
+          Serial_Number,
+          Question,
+          answer,
+          options,
+        };
+      });
+
+      if (!!raw_data) {
+        setExam((prev) => ({
+          ...prev,
+          exam_questions: transformedData,
+        }));
+      }
+    };
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleUpload = () => {
+    if (Exam.exam_title === "") {
+      toast.error(`Exam title can not be empty`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      return;
+    }
+    if (Exam.exam_duration === "") {
+      toast.error(`Exam duration can not be empty`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      return;
+    }
+
+    if (Exam.exam_questions?.length === 0) {
+      toast.error(`Questions not uploaded`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      return;
+    }
+
+    // setOpen(false);
+  };
+
+  // console.log(JSON.stringify(Exam, null, 2));
   return (
     <div>
       <CssBaseline />
@@ -125,10 +308,29 @@ function UploadExam() {
         </Typography>
 
         <Paper elevation={2} className={classes.headerCard}>
-          <MdDownloadForOffline
-            className={classes.cardsInfoIcon}
-            onClick={HandleExcelUpload}
-          />
+          <Box
+            m={3}
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+            }}
+          >
+            <ImUpload
+              className={classes.cardsInfoIcon}
+              onClick={handleClickOpen}
+            />
+
+            <Link
+              to={QUESTION_TEMPLATE}
+              download="Exam_question_template"
+              target="_blank"
+              rel="noreferrer"
+              style={{ alignSelf: "flex-end" }}
+            >
+              <MdDownloadForOffline className={classes.cardsInfoIcon2} />
+            </Link>
+          </Box>
           <Typography
             variant="body2"
             component="h3"
@@ -140,7 +342,8 @@ function UploadExam() {
 
           <ul className={classes.noticeUl}>
             <li>
-              Click on the download button above to download an excel template.
+              Click on the download button on the right to download an excel
+              template.
             </li>
             <li>
               fill the space ment for answer and questions, without modifing the
@@ -275,6 +478,86 @@ function UploadExam() {
           </div>
         </div>
       </Container>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+        style={{ height: "70%" }}
+      >
+        <DialogTitle id="alert-dialog-title" align="center">
+          Upload
+        </DialogTitle>
+        <DialogContent>
+          <form className={classes.form} noValidate autoComplete="off">
+            <div className={classes.formItem}>
+              <TextField
+                id="outlined-basic"
+                size="small"
+                style={{ width: "100%" }}
+                required
+                label="Exam title"
+                variant="outlined"
+                value={Exam.exam_title}
+                onChange={(e) =>
+                  setExam((prev) => ({ ...prev, exam_title: e.target.value }))
+                }
+              />
+            </div>
+            <div className={classes.formItem}>
+              <TextField
+                id="outlined-basic"
+                size="small"
+                style={{ width: "100%" }}
+                InputProps={{ inputProps: { min: 0, max: 10 } }}
+                required
+                min="1"
+                max="5"
+                type="number"
+                label="Exam duration"
+                variant="outlined"
+                value={Exam.exam_duration}
+                onChange={(e) =>
+                  setExam((prev) => ({
+                    ...prev,
+                    exam_duration: e.target.value,
+                  }))
+                }
+              />
+            </div>
+            <div className={classes.formItem}>
+              <input
+                type="file"
+                accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                style={{ display: "none" }}
+                ref={docRef}
+                onChange={extractSheet}
+              />
+
+              <Button
+                onClick={OpenFilePicker}
+                style={{ width: "100%" }}
+                variant="contained"
+                color="default"
+                className={classes.button}
+                startIcon={<CloudUploadIcon />}
+              >
+                Upload xlx sheet
+              </Button>
+            </div>
+          </form>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            Cancle
+          </Button>
+          <Button onClick={handleUpload} color="primary" autoFocus>
+            Upload
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 }
