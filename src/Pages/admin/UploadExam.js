@@ -31,7 +31,7 @@ import { Link, Redirect, useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { iSLoading } from "../../Store/feature";
-import { read, utils, writeFileXLSX } from "xlsx";
+import { read, utils } from "xlsx";
 import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
 
 const useStyles = makeStyles((theme) => ({
@@ -67,11 +67,14 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: "column",
     justifyContent: "center",
     maxHeightheight: "150px",
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(4),
+    marginTop: theme.spacing(1),
+    marginBottom: theme.spacing(2),
+    paddingTop: theme.spacing(1),
+    paddingBottom: theme.spacing(3),
     // padding: theme.spacing(2),
     // flexWrap: "wrap",
 
+    // backgroundColor: "yellow",
     // border: "1px solid  red",
   },
   cards: {
@@ -117,9 +120,10 @@ const useStyles = makeStyles((theme) => ({
     margin: 0,
     padding: 0,
     color: "#01996D",
+    wordWrap: "wrap",
     // listStyle: "none",
-    marginTop: "3px",
-    marginBottom: "5px",
+    // marginTop: "3px",
+    // marginBottom: "5px",
   },
 }));
 
@@ -128,9 +132,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const InitialExam = {
-  exam_title: "",
-  exam_duration: "",
-  exam_questions: [],
+  examName: "",
+  duration: 0,
+  questions: [],
 };
 
 function UploadExam() {
@@ -183,51 +187,53 @@ function UploadExam() {
       //   header: 1,
       // });
 
-      const transformedData = raw_data?.map((exam) => {
-        const { Serial_Number, Question, answer, ...rest } = exam;
-        const options = Object.values(rest);
+      const transformedData = raw_data
+        ?.map((exam) => {
+          const { qstNumber, question, answer, ...rest } = exam;
+          const options = Object.values(rest);
 
-        if (!Question) {
-          toast.error(`Qst ${Serial_Number} is not filled`, {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            // pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!question) {
+            toast.error(`Qst ${qstNumber} is not filled`, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              // pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
 
-          return;
-        }
+            return;
+          }
 
-        if (!answer) {
-          toast.error(`Qst ${Serial_Number} has no answer`, {
-            position: "top-center",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            // pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
+          if (!answer) {
+            toast.error(`Qst ${qstNumber} has no answer`, {
+              position: "top-center",
+              autoClose: 5000,
+              hideProgressBar: false,
+              closeOnClick: true,
+              // pauseOnHover: true,
+              draggable: true,
+              progress: undefined,
+              theme: "light",
+            });
 
-          return;
-        }
-        return {
-          Serial_Number,
-          Question,
-          answer,
-          options,
-        };
-      });
+            return;
+          }
+          return {
+            qstNumber,
+            question,
+            answer,
+            options,
+          };
+        })
+        ?.filter(Boolean);
 
       if (!!raw_data) {
         setExam((prev) => ({
           ...prev,
-          exam_questions: transformedData,
+          questions: transformedData,
         }));
       }
     };
@@ -241,8 +247,8 @@ function UploadExam() {
     setOpen(false);
   };
 
-  const handleUpload = () => {
-    if (Exam.exam_title === "") {
+  const handleUpload = async () => {
+    if (Exam.examName === "") {
       toast.error(`Exam title can not be empty`, {
         position: "top-center",
         autoClose: 5000,
@@ -256,7 +262,7 @@ function UploadExam() {
 
       return;
     }
-    if (Exam.exam_duration === "") {
+    if (Exam.duration === "") {
       toast.error(`Exam duration can not be empty`, {
         position: "top-center",
         autoClose: 5000,
@@ -271,7 +277,7 @@ function UploadExam() {
       return;
     }
 
-    if (Exam.exam_questions?.length === 0) {
+    if (Exam.questions?.length === 0) {
       toast.error(`Questions not uploaded`, {
         position: "top-center",
         autoClose: 5000,
@@ -286,10 +292,45 @@ function UploadExam() {
       return;
     }
 
+    const payload = { ...Exam, uploadedBy: details?.admin?._id };
+
+    // console.log(payload);
+
+    try {
+      const postExam = await axios.post(`${BaseUrl}exams/upload`, payload, {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${details?.token}`,
+        },
+      });
+
+      if (postExam.status === 201) {
+        setExam({ ...InitialExam });
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+
     // setOpen(false);
   };
 
+  // console.log(JSON.stringify(details, null, 2));
   // console.log(JSON.stringify(Exam, null, 2));
+
+  useEffect(() => {
+    return () => {};
+  }, []);
+
   return (
     <div>
       <CssBaseline />
@@ -307,9 +348,10 @@ function UploadExam() {
           Exam Upload
         </Typography>
 
-        <Paper elevation={2} className={classes.headerCard}>
+        <Paper elevation={2} p={2} className={classes.headerCard}>
           <Box
             m={3}
+            mx="auto"
             style={{
               display: "flex",
               flexDirection: "row",
@@ -396,6 +438,14 @@ function UploadExam() {
                         }}
                       >
                         Uploaded On
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
+                        Uploaded by
                       </TableCell>
 
                       <TableCell
@@ -500,9 +550,9 @@ function UploadExam() {
                 required
                 label="Exam title"
                 variant="outlined"
-                value={Exam.exam_title}
+                value={Exam.examName}
                 onChange={(e) =>
-                  setExam((prev) => ({ ...prev, exam_title: e.target.value }))
+                  setExam((prev) => ({ ...prev, examName: e.target.value }))
                 }
               />
             </div>
@@ -518,11 +568,11 @@ function UploadExam() {
                 type="number"
                 label="Exam duration"
                 variant="outlined"
-                value={Exam.exam_duration}
+                value={Exam.duration}
                 onChange={(e) =>
                   setExam((prev) => ({
                     ...prev,
-                    exam_duration: e.target.value,
+                    duration: +e.target.value,
                   }))
                 }
               />
