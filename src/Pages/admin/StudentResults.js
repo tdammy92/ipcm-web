@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { BaseUrl } from "../../Services/api/BaseUrl";
-
+import { toast } from "react-toastify";
 import { GrScorecard } from "react-icons/gr";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
@@ -91,6 +91,7 @@ function StudentResults() {
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [studentResults, setStudentResults] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,6 +101,44 @@ function StudentResults() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const getStudentResults = async () => {
+    try {
+      const responds = await axios.get(
+        `${BaseUrl}result`,
+        // { params: { type: "full" } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${details?.token}`,
+          },
+        }
+      );
+
+      if (responds.status === 200) {
+        setStudentResults(responds?.data);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getStudentResults();
+    return () => {};
+  }, []);
+
+  console.log(JSON.stringify(studentResults, null, 3));
+
   return (
     <div>
       <CssBaseline />
@@ -151,6 +190,14 @@ function StudentResults() {
                       >
                         Exam Title
                       </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
+                        Passed
+                      </TableCell>
 
                       <TableCell
                         align="center"
@@ -180,23 +227,20 @@ function StudentResults() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {/* <TableBody>
-                    {recentStudents.length < 1 ? (
+                  <TableBody>
+                    {studentResults?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      recentStudents?.map((item) => {
+                      studentResults?.map((item) => {
                         const {
                           _id,
-                          surname,
-                          firstName,
-
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
+                          total_score,
+                          pass,
                           createdAt,
+                          exam: { examName },
+                          student: { surname, firstName, middleName, gender },
                         } = item;
                         return (
                           <TableRow
@@ -204,17 +248,22 @@ function StudentResults() {
                             role="checkbox"
                             tabIndex={-1}
                             key={_id}
-                            component={Link}
-                            to={`/students/${_id}`}
+                            // component={Link}
+                            // to={`/students/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
                             <TableCell align="center">
                               {surname} {firstName}
                             </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
+                            <TableCell align="center">{examName}</TableCell>
+                            <TableCell
+                              align="center"
+                              style={{ color: pass ? "green" : "red" }}
+                            >
+                              {pass ? "Pass" : "Fail"}
+                            </TableCell>
+                            <TableCell align="center">{total_score}</TableCell>
+
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
                             </TableCell>
@@ -224,7 +273,7 @@ function StudentResults() {
                                 color="primary"
                                 size="small"
                                 className={classes.button}
-                                endIcon={<VisibilityIcon />}
+                                // endIcon={<VisibilityIcon />}
                               >
                                 View
                               </Button>
@@ -233,14 +282,14 @@ function StudentResults() {
                         );
                       })
                     )}
-                  </TableBody> */}
+                  </TableBody>{" "}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                // count={recentStudents?.length}
+                count={studentResults?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

@@ -6,7 +6,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import { BaseUrl } from "../../Services/api/BaseUrl";
-
+import { toast } from "react-toastify";
 import { GrScorecard } from "react-icons/gr";
 import { FaCloudUploadAlt } from "react-icons/fa";
 
@@ -90,7 +90,7 @@ function ExamBoard() {
 
   const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
-
+  const [ExamList, setExamList] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -102,6 +102,41 @@ function ExamBoard() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const getExams = async () => {
+    try {
+      const responds = await axios.get(
+        `${BaseUrl}exams`,
+        { params: { type: "full" } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${details?.token}`,
+          },
+        }
+      );
+
+      if (responds.status === 200) {
+        setExamList(responds?.data);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getExams();
+    return () => {};
+  }, []);
 
   return (
     <>
@@ -207,6 +242,14 @@ function ExamBoard() {
                           minWidth: 70,
                         }}
                       >
+                        Uploaded by
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
                         Uploaded On
                       </TableCell>
 
@@ -220,22 +263,19 @@ function ExamBoard() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {/* <TableBody>
-                    {recentStudents.length < 1 ? (
+                  <TableBody>
+                    {ExamList?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      recentStudents?.map((item) => {
+                      ExamList?.map((item) => {
                         const {
-                          _id,
-                          surname,
-                          firstName,
-
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
+                          exam_uuid,
+                          name,
+                          duration,
+                          uploadedBy: { username },
+                          questions,
                           createdAt,
                         } = item;
                         return (
@@ -243,18 +283,18 @@ function ExamBoard() {
                             hover
                             role="checkbox"
                             tabIndex={-1}
-                            key={_id}
-                            component={Link}
-                            to={`/students/${_id}`}
+                            key={exam_uuid}
+                            // component={Link}
+                            // to={`/students/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
+                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">{duration} Min</TableCell>
                             <TableCell align="center">
-                              {surname} {firstName}
+                              {questions?.length}
                             </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
+                            <TableCell align="center">{username}</TableCell>
+
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
                             </TableCell>
@@ -264,7 +304,7 @@ function ExamBoard() {
                                 color="primary"
                                 size="small"
                                 className={classes.button}
-                                endIcon={<VisibilityIcon />}
+                                // endIcon={<VisibilityIcon />}
                               >
                                 View
                               </Button>
@@ -273,14 +313,14 @@ function ExamBoard() {
                         );
                       })
                     )}
-                  </TableBody> */}
+                  </TableBody>
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                // count={recentStudents?.length}
+                count={ExamList?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}
