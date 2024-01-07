@@ -1,7 +1,12 @@
 import React from "react";
 
 import { Container } from "@material-ui/core";
+import Typography from "@material-ui/core/Typography";
+import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
+import Button from "@material-ui/core/Button";
 import Footer from "../../components/partials/Footer/Footer";
+import { Link } from "react-router-dom";
 
 function ExamInfo() {
   return (
@@ -10,13 +15,34 @@ function ExamInfo() {
         <div className="About__container">
           {/* <h3 className='page__title'>Examination</h3> */}
 
-          <div className="about__body">
-            {/* <Paper color='primary'>
-                <Typography variant="h4" component="h2" color='primary' align='center'>
-                    Coming Soon
-                    </Typography>
-                </Paper> */}
+          <div style={{ marginTop: 50 }}>
+            <Paper my={5} elevation={2}>
+              <Box
+                display="flex"
+                flexDirection="column"
+                height={100}
+                justifyContent="center"
+                alignItems="center"
+                spacing={2}
+              >
+                <Typography variant="subtitle1" pb={5} gutterBottom>
+                  Click on the button to take an exam!
+                </Typography>
+                <Button
+                  mt={5}
+                  component={Link}
+                  to="/online-exam"
+                  variant="contained"
+                  color="primary"
+                  size="small"
+                >
+                  Take an Exam !
+                </Button>
+              </Box>
+            </Paper>
+          </div>
 
+          <div className="about__body">
             <h4 className="page__title">
               SEE ANNUAL TRAINING AND EXAMINATION SCHEDULES BELOW:
             </h4>

@@ -39,6 +39,8 @@ import ExamInfo from "./Pages/exam/ExamInfo";
 import ExamBoard from "./Pages/admin/ExamBoard";
 import UploadExam from "./Pages/admin/UploadExam";
 import StudentResults from "./Pages/admin/StudentResults";
+import StartExam from "./Pages/exam/StartExam";
+import OnlineExam from "./Pages/exam/OnlineExam";
 
 const defualtTheme = createMuiTheme({
   palette: {
@@ -117,6 +119,12 @@ function App() {
             </Route>
             <Route exact path="/license">
               <License />
+            </Route>
+            <Route exact path="/start-exam">
+              <StartExam />
+            </Route>
+            <Route exact path="/online-exam">
+              <OnlineExam />
             </Route>
             {/* <Route
               exact

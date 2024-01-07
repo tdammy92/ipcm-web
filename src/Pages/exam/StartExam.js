@@ -1,7 +1,12 @@
 import React from "react";
 
-function StartExam() {
-  return <div>StartExam</div>;
-}
+const StartExam = () => {
+  return (
+    <div>
+      StartExam
+      <h1>Start Exam</h1>
+    </div>
+  );
+};
 
 export default StartExam;
