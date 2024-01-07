@@ -48,10 +48,11 @@ const defualtTheme = createMuiTheme({
     },
     secondary: {
       main: "#fff",
-      danger: "#f50057",
+      light: "#Eeefff",
     },
-    // error: {
-    // },
+    error: {
+      main: "#f50057",
+    },
   },
 });
 

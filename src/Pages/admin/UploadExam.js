@@ -10,7 +10,7 @@ import { BaseUrl } from "../../Services/api/BaseUrl";
 import { toast } from "react-toastify";
 import { ImUpload } from "react-icons/im";
 import { MdDownloadForOffline } from "react-icons/md";
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -19,7 +19,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
 
-import VisibilityIcon from "@material-ui/icons/Visibility";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
@@ -28,7 +27,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
 import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
 import { iSLoading } from "../../Store/feature";
@@ -294,7 +293,11 @@ function UploadExam() {
       return;
     }
 
-    const payload = { ...Exam, uploadedBy: details?.admin?._id };
+    const payload = {
+      ...Exam,
+      totalQuestions: Exam.questions?.length,
+      uploadedBy: details?.admin?._id,
+    };
 
     // console.log(payload);
 
@@ -370,16 +373,17 @@ function UploadExam() {
       <Container maxWidth="lg" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
-        <Typography
-          variant="h6"
-          component="h4"
-          mt={20}
-          align="center"
-          color="primary"
-          style={{ marginTop: 20 }}
-        >
-          Exam Upload
-        </Typography>
+        <Box my={4}>
+          <Typography
+            variant="h6"
+            component="h4"
+            mt={4}
+            align="center"
+            color="primary"
+          >
+            Exam Upload
+          </Typography>
+        </Box>
 
         <Paper elevation={2} p={2} className={classes.headerCard}>
           <Box
@@ -410,7 +414,7 @@ function UploadExam() {
             variant="body2"
             component="h3"
             align="center"
-            style={{ color: "#01996D" }}
+            color="primary"
           >
             Please take note of the following steps before uploading an exam
           </Typography>
@@ -429,133 +433,131 @@ function UploadExam() {
         </Paper>
 
         <div>
-          <div>
-            <Paper className={classes.root2}>
-              <TableContainer
-                className={classes.container}
-                // ref={componentRef}
-              >
-                <Table stickyHeader aria-label="sticky table" id="table-to-xls">
-                  <TableHead>
+          <Paper className={classes.root2}>
+            <TableContainer
+              className={classes.container}
+              // ref={componentRef}
+            >
+              <Table stickyHeader aria-label="sticky table" id="table-to-xls">
+                <TableHead>
+                  <TableRow>
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 120,
+                      }}
+                    >
+                      Exam Title
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      Duration
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      Total Questions
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      Uploaded by
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      Uploaded On
+                    </TableCell>
+
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      ACTION
+                    </TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {ExamList?.length < 1 ? (
                     <TableRow>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 120,
-                        }}
-                      >
-                        Exam Title
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        Duration
-                      </TableCell>
-
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        Total Questions
-                      </TableCell>
-
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        Uploaded by
-                      </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        Uploaded On
-                      </TableCell>
-
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        ACTION
-                      </TableCell>
+                      <TableCell>No Result Found</TableCell>
                     </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {ExamList?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      ExamList?.map((item) => {
-                        const {
-                          exam_uuid,
-                          name,
-                          duration,
-                          uploadedBy: { username },
-                          questions,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={exam_uuid}
-                            // component={Link}
-                            // to={`/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">{name}</TableCell>
-                            <TableCell align="center">{duration} Min</TableCell>
-                            <TableCell align="center">
-                              {questions?.length}
-                            </TableCell>
-                            <TableCell align="center">{username}</TableCell>
+                  ) : (
+                    ExamList?.map((item) => {
+                      const {
+                        exam_uuid,
+                        name,
+                        duration,
+                        uploadedBy: { username },
+                        questions,
+                        createdAt,
+                      } = item;
+                      return (
+                        <TableRow
+                          hover
+                          role="checkbox"
+                          tabIndex={-1}
+                          key={exam_uuid}
+                          // component={Link}
+                          // to={`/students/${_id}`}
+                          style={{ textDecoration: "none" }}
+                        >
+                          <TableCell align="center">{name}</TableCell>
+                          <TableCell align="center">{duration} Min</TableCell>
+                          <TableCell align="center">
+                            {questions?.length}
+                          </TableCell>
+                          <TableCell align="center">{username}</TableCell>
 
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                // endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
-                </Table>
-              </TableContainer>
+                          <TableCell align="center">
+                            {new Date(createdAt).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell align="center">
+                            <Button
+                              variant="contained"
+                              color="primary"
+                              size="small"
+                              className={classes.button}
+                              // endIcon={<VisibilityIcon />}
+                            >
+                              View
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })
+                  )}
+                </TableBody>
+              </Table>
+            </TableContainer>
 
-              <TablePagination
-                rowsPerPageOptions={[10, 25, 100]}
-                component="div"
-                count={ExamList?.length}
-                rowsPerPage={rowsPerPage}
-                page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
-              />
-            </Paper>
-          </div>
+            <TablePagination
+              rowsPerPageOptions={[10, 25, 100]}
+              component="div"
+              count={ExamList?.length}
+              rowsPerPage={rowsPerPage}
+              page={page}
+              onPageChange={handleChangePage}
+              onRowsPerPageChange={handleChangeRowsPerPage}
+            />
+          </Paper>
         </div>
       </Container>
       <Dialog

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
+import Grid from "@material-ui/core/Grid";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
@@ -28,6 +29,8 @@ import { Link, Redirect, useHistory } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { iSLoading } from "../../Store/feature";
 
+import DashItem from "../../components/partials/dashcardItem";
+
 const useStyles = makeStyles((theme) => ({
   root: {
     display: "flex",
@@ -39,39 +42,13 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(16),
     },
   },
-  root2: {
-    width: "100%",
-  },
 
-  tableContainer: {
-    maxHeight: 550,
-  },
-
-  headerCard: {
+  dashContainer: {
     display: "flex",
-    width: "auto",
+    flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-evenly",
-    // height: "100px",
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(4),
-    flexWrap: "wrap",
-
-    // border: "1px solid  red",
-  },
-  cards: {
-    display: "flex",
-    flexDirection: "row",
-    justifyContent: "center",
-    alignItems: "center",
-    height: "90px",
-    width: "45%",
-    // minWidth: "80px",
-    textDecoration: "none",
-    borderRadius: 2,
-    margin: "8px",
-
-    // border: "1px solid  blue",
+    marginTop: 20,
+    marginBottom: 10,
   },
 
   cardsInfoBox: {
@@ -79,14 +56,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   cardsInfoIcon: {
-    fontSize: "50px",
-    color: "#01996D",
-  },
-
-  cardsInfoDetails: {
-    fontFamily: "10px",
-    margin: 0,
-    padding: 0,
+    fontSize: "35px",
     color: "#01996D",
   },
 }));
@@ -179,90 +149,43 @@ function Admin() {
     <>
       <CssBaseline />
       <Container maxWidth="lg" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
+        <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
+          <Grid container spacing={2}>
+            <DashItem
+              title="STUDENTS"
+              description="Total Students: "
+              count={studentCount ?? 0}
+              Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
+              url={"/students"}
+            />
+            <DashItem
+              title="EXAMS"
+              description=" Exam Dashboard"
+              Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
+              url={"/exam-board"}
+            />
+            <DashItem
+              title="SERIAL NUMBER"
+              description="Total Generated serial: "
+              count={serialNumberCount ?? 0}
+              Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
+              url={"/serial-number"}
+            />
+            <DashItem
+              title="GALLERY"
+              description="Upload and remove images"
+              // count={serialNumberCount ?? 0}
+              Icon={() => <GrGallery className={classes.cardsInfoIcon} />}
+              url={"/gallery-settings"}
+            />
+          </Grid>
+        </Container>
 
-        <Box spacing={3} className={classes.headerCard} mx="auto">
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/students"
-          >
-            <HiUserGroup className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Students
-              </h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Students: {studentCount ?? 0}
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/exam-board"
-          >
-            <FaBookReader className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>Exam</h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Exam Dashboard
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/serial-number"
-          >
-            <LiaBarcodeSolid className={classes.cardsInfoIcon} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Serial Number
-              </h4>
-              <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Serial No: {serialNumberCount ?? 0}
-              </Typography>
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/gallery-settings"
-          >
-            <GrGallery className={classes.cardsInfoIcon} />
-
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Gallery Settings
-              </h4>
-            </Box>
-            {/* <h5 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-							Total Serial No generated: {serialNumberCount ?? 0}
-						</h5> */}
-          </Paper>
-        </Box>
-        {/* </Paper> */}
-
-        <div>
-          <h3 style={{ color: "#01996D" }}>Recently Registered Student(s)</h3>
-          <div>
+        <Box>
+          <Typography variant="h6" color="primary">
+            Recently Registered Student(s)
+          </Typography>
+          <Box>
             <Paper className={classes.root2}>
               <TableContainer
                 className={classes.container}
@@ -398,8 +321,8 @@ function Admin() {
                 onRowsPerPageChange={handleChangeRowsPerPage}
               />
             </Paper>
-          </div>
-        </div>
+          </Box>
+        </Box>
       </Container>
     </>
   );

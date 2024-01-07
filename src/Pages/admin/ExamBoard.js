@@ -3,14 +3,15 @@ import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+
+import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 import { toast } from "react-toastify";
 import { GrScorecard } from "react-icons/gr";
 import { FaCloudUploadAlt } from "react-icons/fa";
-
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import DashItem from "../../components/partials/dashcardItem";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -36,51 +37,17 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(16),
     },
   },
-  root2: {
-    width: "100%",
-  },
 
-  tableContainer: {
-    maxHeight: 550,
-  },
-
-  headerCard: {
-    display: "flex",
-    width: "auto",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    // height: "100px",
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(4),
-    flexWrap: "wrap",
-
-    // border: "1px solid  red",
-  },
-  cards: {
+  dashContainer: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
-    height: "90px",
-    width: "45%",
-    // minWidth: "80px",
-    textDecoration: "none",
-    borderRadius: 2,
-    margin: "8px",
-
-    // border: "1px solid  blue",
+    marginTop: 20,
+    marginBottom: 10,
   },
-
-  cardsInfoBox: {},
 
   cardsInfoIcon: {
-    fontSize: "50px",
-  },
-
-  cardsInfoDetails: {
-    fontFamily: "10px",
-    margin: 0,
-    padding: 0,
+    fontSize: "35px",
     color: "#01996D",
   },
 }));
@@ -147,57 +114,29 @@ function ExamBoard() {
         <Typography
           variant="h5"
           component="h4"
-          mt={20}
           align="center"
           color="primary"
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10 }}
         >
           Exam Dashboard
         </Typography>
 
-        <Box spacing={3} className={classes.headerCard} mx="auto">
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/exam-upload"
-          >
-            <FaCloudUploadAlt style={{ fontSize: "30px", color: "#01996D" }} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Upload Exam
-              </h4>
-              {/* <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Students: {studentCount ?? 0}
-              </Typography> */}
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/student-result"
-          >
-            <GrScorecard style={{ fontSize: "30px", color: "#01996D" }} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Results
-              </h4>
-              {/* <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Exam Management
-              </Typography> */}
-            </Box>
-          </Paper>
-        </Box>
-        {/* </Paper> */}
+        <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
+          <Grid container spacing={2}>
+            <DashItem
+              title="UPLOAD EXAMS"
+              Icon={() => (
+                <FaCloudUploadAlt className={classes.cardsInfoIcon} />
+              )}
+              url={"/exam-upload"}
+            />
+            <DashItem
+              title="RESULTS"
+              Icon={() => <GrScorecard className={classes.cardsInfoIcon} />}
+              url={"/student-result"}
+            />
+          </Grid>
+        </Container>
 
         <div>
           <h3 style={{ color: "#01996D" }}>Available Exams</h3>

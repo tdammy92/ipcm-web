@@ -134,18 +134,12 @@ function Student() {
     getStudent();
   }, [id]);
 
+  console.log(JSON.stringify(studentDetails, null, 2));
   return (
     <div>
-      <Card
-        className={classes.root}
-        variant="outlined"
-        elevation={3}
-      >
+      <Card className={classes.root} variant="outlined" elevation={3}>
         <CardContent ref={componentRef}>
-          <Typography
-            variant="h4"
-            color="primary"
-          >
+          <Typography variant="h4" color="primary">
             {Details.title} {Details.surname} {Details.firstName}{" "}
             {Details.middleName}
           </Typography>
@@ -159,10 +153,7 @@ function Student() {
           >
             <ListItem button>Email : {Details?.email}</ListItem>
             <Divider />
-            <ListItem
-              button
-              divider
-            >
+            <ListItem button divider>
               Phone: {Details?.phoneNumber}
             </ListItem>
             <ListItem button>Phone: {Details?.phoneNumber}</ListItem>
@@ -192,17 +183,11 @@ function Student() {
               Organisation : {Details?.currentEmploymet?.organization}
             </ListItem>
             <Divider />
-            <ListItem
-              button
-              divider
-            >
+            <ListItem button divider>
               Role/Postion: {Details?.currentEmploymet?.position}
             </ListItem>
             <Divider />
-            <ListItem
-              button
-              divider
-            >
+            <ListItem button divider>
               Total Years of Career Experience:{" "}
               {Details?.currentEmploymet?.yearsExperience}
             </ListItem>
@@ -236,10 +221,7 @@ function Student() {
               Payment Method: {Details?.paymentMethods}
             </ListItem>
             <Divider />
-            <ListItem
-              button
-              divider
-            >
+            <ListItem button divider>
               MemberShip Cader: {Details?.membershipCadre}
             </ListItem>
             <Divider light />
@@ -286,10 +268,7 @@ function Student() {
           >
             {({ loading }) =>
               loading ? (
-                <Button
-                  disabled={true}
-                  color="primary"
-                >
+                <Button disabled={true} color="primary">
                   Getting Pdf
                 </Button>
               ) : (
