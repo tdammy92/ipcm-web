@@ -32,10 +32,7 @@ function Gallery() {
   return (
     <div className="base__page">
       <div className="About__container">
-        <Container
-          fluid="true"
-          mx="auto"
-        >
+        <Container fluid="true" mx="auto">
           <h4 className="page__title">Gallery</h4>
 
           <ResponsiveMasonry
@@ -54,7 +51,6 @@ function Gallery() {
           </ResponsiveMasonry>
         </Container>
       </div>
-      <Footer />
     </div>
   );
 }

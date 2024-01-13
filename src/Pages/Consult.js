@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../components/partials/Footer/Footer";
 import { Container } from "@material-ui/core";
 function Consult() {
   return (
@@ -227,7 +226,6 @@ function Consult() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }

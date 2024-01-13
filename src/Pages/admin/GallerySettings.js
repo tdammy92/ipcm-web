@@ -21,7 +21,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
-
+import IconButton from "@material-ui/core/IconButton";
 //icons
 import WallpaperIcon from "@material-ui/icons/Wallpaper";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
@@ -101,16 +101,7 @@ const useStyles = makeStyles((theme) => ({
     // border: "1px dotted  red",
     border: "1px dotted  #01996d",
   },
-  imageIcon: {
-    // flex: 1,
-    height: theme.spacing(5),
-    width: theme.spacing(5),
-    backgroundColor: "rgba(1, 153, 109, 0.6)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "0.5rem",
-  },
+
   uploadText: {
     // flex: 1,
     marginRight: theme.spacing(2),
@@ -287,15 +278,10 @@ function GallerySettings() {
     }
   }, [file]);
 
-  // console.log("Image file", image);
-
   return (
     <div>
       <CssBaseline />
-      <Container
-        maxWidth="lg"
-        mt={5}
-      >
+      <Container maxWidth="md" mt={5}>
         <Typography
           variant="h5"
           color="primary"
@@ -305,26 +291,17 @@ function GallerySettings() {
           Gallery Dashboard
         </Typography>
 
-        <Box
-          component="span"
-          mt={4}
-        >
+        <Box component="span" mt={4}>
           <Paper
             variant="outlined"
             elevation={3}
             className={classes.headerCard}
           >
-            <Paper
-              elevation={0}
-              className={classes.OptionContainer}
-            >
-              <div
-                className={classes.imageIconWrapper}
-                onClick={selectImage}
-              >
-                <div className={classes.imageIcon}>
-                  <WallpaperIcon fontSize="small" />
-                </div>
+            <Paper elevation={0} className={classes.OptionContainer}>
+              <div className={classes.imageIconWrapper} onClick={selectImage}>
+                <IconButton>
+                  <WallpaperIcon fontSize="small" color="primary" />
+                </IconButton>
 
                 <Typography
                   variant="subtitle1"
@@ -378,6 +355,7 @@ function GallerySettings() {
               <div>
                 <Typography
                   variant="subtitle1"
+                  color="primary"
                   className={classes.infoText}
                 >
                   NB: Maximum Image allowed in gallery database is 32 images,
@@ -387,49 +365,25 @@ function GallerySettings() {
               </div>
             </Paper>
           </Paper>
-          {/* <Paper elevation={3} className={classes.ImageCard}></Paper>
-           */}
 
-          <TableContainer
-            component={Paper}
-            className={classes.tableContainer}
-          >
-            <Table
-              className={classes.table}
-              aria-label="simple table"
-            >
+          <TableContainer component={Paper} className={classes.tableContainer}>
+            <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell
-                    align="center"
-                    variant="head"
-                    size="medium"
-                  >
-                    <StyledBadge
-                      color="primary"
-                      badgeContent={Images?.length}
-                    >
-                      <Typography
-                        variant="h5"
-                        color="primary"
-                      >
+                  <TableCell align="center" variant="head" size="medium">
+                    <StyledBadge color="primary" badgeContent={Images?.length}>
+                      <Typography variant="h5" color="primary">
                         Images
                       </Typography>
                     </StyledBadge>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography
-                      variant="h5"
-                      color="primary"
-                    >
+                    <Typography variant="h5" color="primary">
                       Captions
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography
-                      variant="h5"
-                      color="primary"
-                    >
+                    <Typography variant="h5" color="primary">
                       Delete
                     </Typography>
                   </TableCell>
@@ -439,10 +393,7 @@ function GallerySettings() {
                 {Images?.map(({ _id, image, caption }, i) => (
                   <TableRow key={_id}>
                     <TableCell align="center">
-                      <Badge
-                        color="primary"
-                        badgeContent={i + 1}
-                      >
+                      <Badge color="primary" badgeContent={i + 1}>
                         <Avatar
                           alt={`image ${i}`}
                           src={image?.url}
@@ -456,10 +407,7 @@ function GallerySettings() {
                       </Badge>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography
-                        variant="h5"
-                        color="primary"
-                      >
+                      <Typography variant="h5" color="primary">
                         {caption !== "" ? caption : `Nil`}
                       </Typography>
                     </TableCell>

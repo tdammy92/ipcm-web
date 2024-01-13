@@ -148,7 +148,7 @@ function Admin() {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg" mx="auto">
+      <Container maxWidth="md" mx="auto">
         <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
           <Grid container spacing={2}>
             <DashItem
@@ -311,7 +311,7 @@ function Admin() {
                 </Table>
               </TableContainer>
 
-              <TablePagination
+              {/* <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
                 count={recentStudents?.length}
@@ -319,7 +319,7 @@ function Admin() {
                 page={page}
                 onPageChange={handleChangePage}
                 onRowsPerPageChange={handleChangeRowsPerPage}
-              />
+              /> */}
             </Paper>
           </Box>
         </Box>

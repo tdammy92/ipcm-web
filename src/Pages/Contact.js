@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../components/partials/Footer/Footer";
 import { Container, Paper } from "@material-ui/core";
 
 import Grid from "@material-ui/core/Grid";
@@ -550,7 +549,6 @@ function Contact() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }

@@ -4,7 +4,6 @@ import { PDFDownloadLink } from "@react-pdf/renderer";
 import { Button, Paper, Container } from "@material-ui/core";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import TextField from "@material-ui/core/TextField";
-import Footer from "../components/partials/Footer/Footer";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
@@ -70,13 +69,7 @@ import Documents from "../components/partials/uploadDocuments";
 import PrintForm from "./printForm";
 
 const Transition = forwardRef(function Transition(props, ref) {
-  return (
-    <Slide
-      direction="up"
-      ref={ref}
-      {...props}
-    />
-  );
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const fontControlStyles = {
@@ -496,11 +489,7 @@ function Register() {
       </div>
 
       <div className="base__page">
-        <Container
-          fixed
-          maxWidth="md"
-          mx="auto"
-        >
+        <Container fixed maxWidth="md" mx="auto">
           <div className="About__container">
             <h3 className="page__title">Registration Portal</h3>
 
@@ -513,11 +502,7 @@ function Register() {
                   justifyContent: "center",
                 }}
               >
-                <form
-                  action=""
-                  className="regForm"
-                  onSubmit={handleSubmit}
-                >
+                <form action="" className="regForm" onSubmit={handleSubmit}>
                   <div className="form__list">
                     <h3>Personal Details</h3>
                     <div className="form__inner__section">
@@ -530,11 +515,7 @@ function Register() {
                           className={classes.passport}
                         />
 
-                        <Typography
-                          variant="h6"
-                          component="h2"
-                          color="primary"
-                        >
+                        <Typography variant="h6" component="h2" color="primary">
                           Passport Upload
                         </Typography>
 
@@ -576,10 +557,7 @@ function Register() {
                           autoWidth={false}
                         >
                           {titleArray?.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -656,10 +634,7 @@ function Register() {
                           autoWidth={false}
                         >
                           {genderArray.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -743,10 +718,7 @@ function Register() {
                           autoWidth={false}
                         >
                           {qualificationArray.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -772,10 +744,7 @@ function Register() {
                           label="Country"
                           autoWidth={false}
                         >
-                          <option
-                            aria-label="None"
-                            value=""
-                          />
+                          <option aria-label="None" value="" />
                           {AllCountry.map((ctry) => (
                             <option
                               value={[ctry?.iso2, ctry?.name]}
@@ -810,16 +779,10 @@ function Register() {
                           autoWidth={false}
                           disabled={selectedCountry === ""}
                         >
-                          <option
-                            aria-label="None"
-                            value=""
-                          />
+                          <option aria-label="None" value="" />
 
                           {AllState.map((state) => (
-                            <option
-                              value={state.name}
-                              key={state?.id}
-                            >
+                            <option value={state.name} key={state?.id}>
                               {state?.name}
                             </option>
                           ))}
@@ -906,10 +869,7 @@ function Register() {
                           autoWidth={false}
                         >
                           {yearsExperienceArray.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -962,10 +922,7 @@ function Register() {
                           color="primary"
                         >
                           {membershipArray.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -995,10 +952,7 @@ function Register() {
                           color="primary"
                         >
                           {memberShipRouteArray?.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -1028,10 +982,7 @@ function Register() {
                           color="primary"
                         >
                           {applicationFeeArray?.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -1062,10 +1013,7 @@ function Register() {
                           color="primary"
                         >
                           {paymentArray?.map((value, i) => (
-                            <option
-                              key={i}
-                              value={value}
-                            >
+                            <option key={i} value={value}>
                               {value}
                             </option>
                           ))}
@@ -1193,15 +1141,9 @@ function Register() {
                               autoWidth={false}
                               color="primary"
                             >
-                              <option
-                                aria-label="None"
-                                value=""
-                              />
+                              <option aria-label="None" value="" />
                               {qualificationArray.map((value, i) => (
-                                <option
-                                  key={i}
-                                  value={value}
-                                >
+                                <option key={i} value={value}>
                                   {value}
                                 </option>
                               ))}
@@ -1293,23 +1235,14 @@ function Register() {
                           >
                             Bank Details
                           </Typography>
-                          <Typography
-                            variant="h6"
-                            component="h4"
-                          >
+                          <Typography variant="h6" component="h4">
                             Account Name : Institute of Global Peace and
                             Conflict Management
                           </Typography>
-                          <Typography
-                            variant="h6"
-                            component="h4"
-                          >
+                          <Typography variant="h6" component="h4">
                             Bank : Guaranty Trust Bank
                           </Typography>
-                          <Typography
-                            variant="h6"
-                            component="h4"
-                          >
+                          <Typography variant="h6" component="h4">
                             Account Number : 0645754697
                           </Typography>
                         </CardContent>
@@ -1386,10 +1319,7 @@ function Register() {
                 keepMounted
                 onClose={handleClose}
               >
-                <DialogTitle
-                  id="alert-dialog-slide-title"
-                  color="primary"
-                >
+                <DialogTitle id="alert-dialog-slide-title" color="primary">
                   successful
                 </DialogTitle>
                 <DialogContent>
@@ -1410,10 +1340,7 @@ function Register() {
                   >
                     {({ loading }) =>
                       loading ? (
-                        <Button
-                          disabled={true}
-                          color="primary"
-                        >
+                        <Button disabled={true} color="primary">
                           Getting Pdf
                         </Button>
                       ) : (
@@ -1438,18 +1365,12 @@ function Register() {
                   </Button>
                 </DialogActions>
               </Dialog>
-
-              <hr className="Hr__style" />
             </div>
           </div>
         </Container>
-        <Footer />
       </div>
 
-      <Backdrop
-        className={classes.backdrop}
-        open={FormLoading}
-      >
+      <Backdrop className={classes.backdrop} open={FormLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

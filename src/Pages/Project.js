@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../components/partials/Footer/Footer";
 import { Container } from "@material-ui/core";
 function Project() {
   return (
@@ -50,7 +49,6 @@ function Project() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }

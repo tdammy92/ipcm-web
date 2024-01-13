@@ -28,6 +28,7 @@ import Students from "./Pages/admin/Students";
 import Student from "./Pages/admin/Student";
 import Gallery from "./Pages/Gallery";
 import GallerySettings from "./Pages/admin/GallerySettings";
+import Footer from "./components/partials/Footer/Footer";
 
 import NotFound from "./Pages/NotFound";
 
@@ -45,13 +46,16 @@ const defualtTheme = createMuiTheme({
   palette: {
     primary: {
       main: "#01996D",
+      // main: "#f44336",
     },
     secondary: {
       main: "#fff",
       light: "#Eeefff",
     },
     error: {
-      main: "#f50057",
+      main: "#f44336",
+      // light: "#e57373",
+      // dark: "#d32f2f",
     },
   },
 });
@@ -194,7 +198,7 @@ function App() {
               <NotFound />
             </Route>
           </Switch>
-          {/* <Footer/> */}
+          <Footer />
         </Router>
       </div>
     </ThemeProvider>

@@ -102,7 +102,7 @@ function SerialNumber() {
   };
 
   const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(+event.target.value);
+    setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
   };
 
@@ -277,12 +277,15 @@ function SerialNumber() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {AllSerial.length < 1 ? (
+                    {AllSerial?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      AllSerial?.map((item, i) => {
+                      AllSerial?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      ).map((item, i) => {
                         const { id, serial, dateGenerated, isValid, dateUsed } =
                           item;
                         return (
@@ -290,7 +293,7 @@ function SerialNumber() {
                             hover
                             role="checkbox"
                             tabIndex={-1}
-                            key={id}
+                            key={serial}
                             // component={Link}
                             // to={`/portal/${id}`}
                             style={{ textDecoration: "none" }}
@@ -376,8 +379,8 @@ function SerialNumber() {
                 count={AllSerial?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Paper>
           </div>

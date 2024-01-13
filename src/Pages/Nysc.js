@@ -5,7 +5,6 @@ import { Button, Paper, Container } from "@material-ui/core";
 import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 
 import { makeStyles } from "@material-ui/core/styles";
-import Footer from "../components/partials/Footer/Footer";
 import Corper1 from "../assets/images/corper1.jpg";
 import Corper2 from "../assets/images/Corper2.jpg";
 import Corper3 from "../assets/images/Corper3.png";
@@ -142,7 +141,6 @@ function Nysc() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }

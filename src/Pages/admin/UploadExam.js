@@ -370,7 +370,7 @@ function UploadExam() {
   return (
     <div>
       <CssBaseline />
-      <Container maxWidth="lg" mx="auto">
+      <Container maxWidth="md" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
         <Box my={4}>

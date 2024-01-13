@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../components/partials/Footer/Footer";
 import QuestionMan from "../assets/images/Thinking Man.png";
 import { Container } from "@material-ui/core";
 function License() {
@@ -96,7 +95,6 @@ function License() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }

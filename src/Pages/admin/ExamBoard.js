@@ -108,7 +108,7 @@ function ExamBoard() {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg" mx="auto">
+      <Container maxWidth="md" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
         <Typography
@@ -208,7 +208,10 @@ function ExamBoard() {
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      ExamList?.map((item) => {
+                      ExamList?.slice(
+                        page * rowsPerPage,
+                        page * rowsPerPage + rowsPerPage
+                      ).map((item) => {
                         const {
                           exam_uuid,
                           name,
@@ -262,8 +265,8 @@ function ExamBoard() {
                 count={ExamList?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Paper>
           </div>

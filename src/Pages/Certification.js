@@ -1,5 +1,4 @@
 import React from "react";
-import Footer from "../components/partials/Footer/Footer";
 import { Container, Paper } from "@material-ui/core";
 
 import Table from "@material-ui/core/Table";
@@ -870,7 +869,6 @@ function Certification() {
           </div>
         </div>
       </Container>
-      <Footer />
     </div>
   );
 }
