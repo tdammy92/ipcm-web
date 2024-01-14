@@ -243,7 +243,7 @@ function Home() {
           </Container>
           <Container>
             <h3 className="value__title">CORE VALUES (T-A-L-E-N-T) </h3>
-            <ul className="values__list" data-aos="flip-right">
+            <ul className="values__list" data-aos="zoom-out-up">
               <li>
                 <b>TOLERANCE:</b> We believe people should be given the
                 opportunity to express their feelings and such expressions,

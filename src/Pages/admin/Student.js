@@ -7,8 +7,10 @@ import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
+import Paper from "@material-ui/core/Paper";
 
 import Card from "@material-ui/core/Card";
+import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
@@ -20,7 +22,7 @@ import ListItemText from "@material-ui/core/ListItemText";
 import PrintIcon from "@material-ui/icons/Print";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-
+import { FaUserCircle } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
 import { iSLoading } from "../../Store/feature";
@@ -31,13 +33,36 @@ import { Avatar } from "@material-ui/core";
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    margin: "10px",
+    marginTop: 30,
   },
-  valueColum: {},
+  divider: {
+    backgroundColor: "#01996D",
+  },
+  gridContainer: {
+    marginBottom: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    alignItems: "center",
+  },
+  subHeading: {
+    textTransform: "uppercase",
+  },
+
+  passport: {
+    borderRadius: 4,
+    height: 180,
+    width: 200,
+    objectFit: "cover",
+  },
+  valueColum: {
+    marginTop: 7,
+  },
   title: {
     marginRight: 5,
   },
-  value: {},
+  value: {
+    fontWeight: 500,
+  },
 });
 
 function Student() {
@@ -121,6 +146,7 @@ function Student() {
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    copyStyles: true,
   });
 
   useEffect(() => {
@@ -132,21 +158,39 @@ function Student() {
   return (
     <div>
       <Container maxWidth="md" mx="auto">
-        <Typography
+        {/* <Typography
           style={{ marginLeft: 10, marginTop: 40, marginBottom: 10 }}
           text-center
           variant="h6"
           color="primary"
         >
           Student Details
-        </Typography>
+        </Typography> */}
         <Card className={classes.root} variant="outlined" elevation={3}>
           <CardContent ref={componentRef}>
-            <Typography variant="h6" align="center" color="primary">
+            <Box style={{ marginBottom: 10 }}>
+              <Typography color="primary" align="center" variant="subtitle1">
+                INSTITUTE OF GLOBAL PEACE AND CONFLICT MANAGEMENT
+              </Typography>
+              <Typography align="center">
+                Head office:Suite 311 a&b, 2nd floor, Beta foundation plaza
+                No:359, Ebitu Ukiwe str, Jabi, abuja
+              </Typography>
+              <Typography align="center">
+                igpcminfo@gmail.com || +2347033458730 || RC:1787595
+              </Typography>
+            </Box>
+            <Divider className={classes.divider} />
+            <Typography
+              variant="subtitle1"
+              align="center"
+              color="primary"
+              className={classes.subHeading}
+            >
               Basic details
             </Typography>
-            <Grid container>
-              <Grid item>
+            <Grid container className={classes.gridContainer}>
+              <Grid item sm={12} md={6}>
                 <Box
                   display="flex"
                   alignItems="center"
@@ -292,14 +336,36 @@ function Student() {
                   </Typography>
                 </Box>
               </Grid>
-              <Grid item>
-                <Box></Box>
+              <Grid
+                item
+                sm={12}
+                md={6}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box roundeds style={{ maxWidth: 150 }}>
+                  {Details?.passport ? (
+                    <img
+                      alt={`${Details.firstName} ${Details.surname}`}
+                      src={Details?.passport?.url}
+                      className={classes.passport}
+                    />
+                  ) : (
+                    <FaUserCircle size={180} color="#01996D" />
+                  )}
+                </Box>
               </Grid>
             </Grid>
-            <Typography variant="h6" align="center" color="primary">
+            <Divider className={classes.divider} />
+            <Typography
+              className={classes.subHeading}
+              variant="subtitle1"
+              align="center"
+              color="primary"
+            >
               Employment details
             </Typography>
-            <Grid container>
+            <Grid container className={classes.gridContainer}>
               <Grid item sm={12} md={6}>
                 <Box
                   display="flex"
@@ -394,10 +460,16 @@ function Student() {
                 </Box>
               </Grid>
             </Grid>
-            <Typography variant="h6" align="center" color="primary">
+            <Divider className={classes.divider} />
+            <Typography
+              className={classes.subHeading}
+              variant="subtitle1"
+              align="center"
+              color="primary"
+            >
               Course Application Details
             </Typography>
-            <Grid container>
+            <Grid container className={classes.gridContainer}>
               <Grid item sm={12} md={6}>
                 <Box
                   display="flex"
