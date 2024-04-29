@@ -34,9 +34,14 @@ const data = [
     name: "Consultancy",
     path: "/consultancy",
   },
+  {
+    id: 3,
+    name: "Policy",
+    path: "/policy",
+  },
 
   {
-    id: 7,
+    id: 8,
     name: "Admin",
     path: "/admin",
   },

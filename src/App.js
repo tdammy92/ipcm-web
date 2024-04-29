@@ -27,6 +27,7 @@ import SerialNumber from "./Pages/admin/SerialNumber";
 import Students from "./Pages/admin/Students";
 import Student from "./Pages/admin/Student";
 import Gallery from "./Pages/Gallery";
+import Policy from "./Pages/Policy";
 import GallerySettings from "./Pages/admin/GallerySettings";
 import Footer from "./components/partials/Footer/Footer";
 
@@ -41,6 +42,7 @@ import UploadExam from "./Pages/admin/UploadExam";
 import StudentResults from "./Pages/admin/StudentResults";
 
 import "react-toastify/dist/ReactToastify.css";
+
 
 const defualtTheme = createMuiTheme({
   palette: {
@@ -123,6 +125,9 @@ function App() {
             </Route>
             <Route exact path="/license">
               <License />
+            </Route>
+            <Route exact path="/policy">
+              <Policy />
             </Route>
             {/* <Route
               exact

@@ -1015,6 +1015,10 @@ body {
   color: #01996d;
   font-size: 18px;
 }
+.project__item > h5 {
+  color: #01996d;
+  font-size: 16px;
+}
 
 .project__item > p {
   text-align: justify;
