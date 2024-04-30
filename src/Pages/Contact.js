@@ -255,7 +255,9 @@ function Contact() {
                       Suite 311 a&b, 2nd floor, Beta foundation plaza, no:359,
                       Ebitu Ukiwe street, Jabi, abuja
                     </p>
-                    <p className="address__body">igpcminfo@gmail.com</p>
+                    <p className="address__body">
+                      
+                    +234814 156 9400, igpcminfo@gmail.com</p>
                   </Grid>
                   <Grid item xs={12} md={6} className="address__items">
                     <div className="address__heading">
