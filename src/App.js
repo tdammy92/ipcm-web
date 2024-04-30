@@ -28,6 +28,7 @@ import Students from "./Pages/admin/Students";
 import Student from "./Pages/admin/Student";
 import Gallery from "./Pages/Gallery";
 import Policy from "./Pages/Policy";
+import TermsC from "./Pages/TermsC";
 import GallerySettings from "./Pages/admin/GallerySettings";
 import Footer from "./components/partials/Footer/Footer";
 
@@ -42,6 +43,7 @@ import UploadExam from "./Pages/admin/UploadExam";
 import StudentResults from "./Pages/admin/StudentResults";
 
 import "react-toastify/dist/ReactToastify.css";
+import MoneyLaundry from "./Pages/MoneyLaundry";
 
 
 const defualtTheme = createMuiTheme({
@@ -128,6 +130,12 @@ function App() {
             </Route>
             <Route exact path="/policy">
               <Policy />
+            </Route>
+            <Route exact path="/t&c">
+              <TermsC />
+            </Route>
+            <Route exact path="/money-laundry">
+          <MoneyLaundry/>
             </Route>
             {/* <Route
               exact

@@ -35,13 +35,23 @@ const data = [
     path: "/consultancy",
   },
   {
-    id: 3,
+    id: 9,
     name: "Policy",
     path: "/policy",
   },
+  {
+    id: 10,
+    name: "Terms & Condition",
+    path: "/t&c",
+  },
+  {
+    id: 11,
+    name: "Money Laundry Policy",
+    path: "/money-laundry",
+  },
 
   {
-    id: 8,
+    id: 7,
     name: "Admin",
     path: "/admin",
   },

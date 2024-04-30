@@ -196,7 +196,7 @@ function Policy() {
 
             <div  style={{display:'flex',flexDirection:'column',alignItems:'start'}}>
 
-              <img src={directSig} alt="director signature" width={200} height={160}/>
+              <img src={directSig} alt="director signature" width={180} height={140}/>
               <strong>Tarhule Joshua Teryila</strong>
               <strong  style={{}}>
                 <i >Director </i>
