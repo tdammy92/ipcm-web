@@ -36,7 +36,7 @@ const data = [
   },
   {
     id: 9,
-    name: "Policy",
+    name: "Privacy Policy",
     path: "/policy",
   },
   {
@@ -46,7 +46,7 @@ const data = [
   },
   {
     id: 11,
-    name: "Money Laundry Policy",
+    name: "Anti-Money Laundry Policy",
     path: "/money-laundry",
   },
 

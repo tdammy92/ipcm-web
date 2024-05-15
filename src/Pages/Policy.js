@@ -7,7 +7,7 @@ function Policy() {
       <Container mx="auto">
         <div className="About__container">
           <div className="about__body">
-            <h3 className="page__title">POLICY</h3>
+            <h3 className="page__title">PRIVACY POLICY</h3>
 
             <div className="Project__container">
               <div className="project__item">
