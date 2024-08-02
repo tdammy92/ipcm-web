@@ -27,7 +27,6 @@ import WallpaperIcon from "@material-ui/icons/Wallpaper";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { iSLoading } from "../../Store/feature";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
 const StyledBadge = withStyles((theme) => ({
@@ -181,7 +180,7 @@ function GallerySettings() {
     // console.log("User detail", JSON.stringify(details?.token, null, 2));
     if (image?.imageUrl === "") return;
 
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     const payload = {
       imageFile: image?.imageUrl,
       caption: image?.caption,
@@ -206,12 +205,12 @@ function GallerySettings() {
       }
     } catch (error) {
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   };
 
   const handleDelete = useCallback(async (Id, publicId) => {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
 
     const payload = {
       mongoDbId: Id,
@@ -235,12 +234,12 @@ function GallerySettings() {
       // );
     } catch (error) {
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }, []);
 
   const getGalleryImages = async () => {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}gallery`, {
         headers: {
@@ -253,7 +252,7 @@ function GallerySettings() {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   };
 

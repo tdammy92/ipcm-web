@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading, saveUser, LogOutUser } from "../../Store/feature";
+import {  saveUser, LogOutUser } from "../../Store/feature";
 
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
@@ -59,7 +59,7 @@ function SignUp() {
 	const dispatch = useDispatch();
 
 	async function HandleLogin(values) {
-		dispatch(iSLoading(true));
+		// dispatch(iSLoading(true));
 		axios
 			.post(`${BaseUrl}auth/register`, values, {
 				headers: {
@@ -75,7 +75,7 @@ function SignUp() {
 			.catch((err) => {
 				console.log(err);
 
-				dispatch(iSLoading(false));
+				// dispatch(iSLoading(false));
 			});
 	}
 

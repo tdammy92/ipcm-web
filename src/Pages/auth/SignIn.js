@@ -7,7 +7,7 @@ import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import { useMediaQuery } from "react-responsive";
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading, saveUser, LogOutUser } from "../../Store/feature";
+import {  saveUser, LogOutUser } from "../../Store/feature";
 import { ScreenSize } from "../../Config";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
@@ -15,6 +15,7 @@ import * as yup from "yup";
 import { Formik, Field } from "formik";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 import "./style.css";
+import { useLogin } from "../../Services/mutations/auth-mutation";
 
 const signInValidation = yup.object().shape({
   email: yup
@@ -47,31 +48,33 @@ function SignIn() {
 
   const location = useLocation();
 
+  const{mutate,iSLoading}  = useLogin()
+
   const { from } = location.state || { from: { pathname: "/" } };
 
   const dispatch = useDispatch();
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
-  async function HandleLogin(values) {
-    dispatch(iSLoading(true));
-    axios
-      .post(`${BaseUrl}auth/login`, values, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        const admin = { token: res?.data?.token, admin: res?.data?.data?._doc };
+  // async function HandleLogin(values) {
 
-        dispatch(saveUser(admin));
-        history.replace(from);
-      })
-      .catch((err) => {
-        console.log(err);
+  //   axios
+  //     .post(`${BaseUrl}auth/login`, values, {
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //     })
+  //     .then((res) => {
+  //       const admin = { token: res?.data?.token, admin: res?.data?.data?._doc };
 
-        dispatch(iSLoading(false));
-      });
-  }
+  //       dispatch(saveUser(admin));
+  //       history.replace(from);
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+
+  //       dispatch(iSLoading(false));
+  //     });
+  // }
 
   return (
     <div className="login__page">
@@ -98,7 +101,7 @@ function SignIn() {
             <Formik
               validationSchema={signInValidation}
               initialValues={{ email: "", password: "" }}
-              onSubmit={(values) => HandleLogin(values)}
+              onSubmit={(values) => mutate(values)}
             >
               {({
                 values,
@@ -150,7 +153,7 @@ function SignIn() {
                       color="primary"
                       className={classes.button}
                       endIcon={<SendIcon />}
-                      disabled={isSubmitting}
+                      disabled={iSLoading}
                     >
                       Sign In
                     </Button>

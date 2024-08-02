@@ -25,7 +25,7 @@ import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { FaUserCircle } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
 import PrintForm from "../printForm";
 import Pdf from "react-to-pdf";
 import { Avatar } from "@material-ui/core";
@@ -80,7 +80,7 @@ function Student() {
   const [studentDetails, setStudentDetails] = useState({});
 
   async function getStudent() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}student/${id}`, {
         headers: {
@@ -102,16 +102,16 @@ function Student() {
               : res?.data?.passport?.url,
         },
       });
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     } catch (error) {
       console.log(error);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
 
   //function to delete student
   async function DeleteStudent() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
 
     const documentIds = Details?.documents?.map((doc) => doc?.file?.public_id);
 
@@ -138,7 +138,7 @@ function Student() {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
 

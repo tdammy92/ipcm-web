@@ -345,7 +345,7 @@ function UploadExam() {
         }
       );
 
-      if (responds.status === 200) {
+      if (responds?.status === 200) {
         setExamList(responds?.data);
       }
     } catch (error) {
@@ -505,7 +505,7 @@ function UploadExam() {
                         exam_uuid,
                         name,
                         duration,
-                        uploadedBy: { username },
+                        uploadedBy,
                         questions,
                         createdAt,
                       } = item;
@@ -524,10 +524,10 @@ function UploadExam() {
                           <TableCell align="center">
                             {questions?.length}
                           </TableCell>
-                          <TableCell align="center">{username}</TableCell>
+                          <TableCell align="center">{uploadedBy?.username}</TableCell>
 
                           <TableCell align="center">
-                            {new Date(createdAt).toLocaleDateString()}
+                            {new Date(createdAt)?.toLocaleDateString()}
                           </TableCell>
                           <TableCell align="center">
                             <Button

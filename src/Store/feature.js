@@ -3,19 +3,13 @@ import { createSlice} from '@reduxjs/toolkit'
 const usersSlice = createSlice({
 	name: "users",
 	initialState: {
-		loading: false,
 		details: {},
         isLoggedin:false
 	},
 	reducers: {
-		iSLoading(state, action) {
-			// Use a "state machine" approach for loading state instead of booleans
-			state.loading = action.payload;
-		},
 		saveUser(state, action) {
 			state.details = action.payload;
             state.isLoggedin=true;
-			state.loading = false;
 		},
 		LogOutUser(state, action) {
 			state.details = {};
@@ -25,6 +19,6 @@ const usersSlice = createSlice({
 });
 
 // Destructure and export the plain action creators
-export const { iSLoading, saveUser ,LogOutUser} = usersSlice.actions;
+export const {  saveUser ,LogOutUser} = usersSlice.actions;
 
 export default usersSlice.reducer;

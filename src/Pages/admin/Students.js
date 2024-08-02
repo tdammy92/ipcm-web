@@ -47,7 +47,7 @@ import TableRow from "@material-ui/core/TableRow";
 
 import { useReactToPrint } from "react-to-print";
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
 
 import Pdf from "react-to-pdf";
 
@@ -165,7 +165,7 @@ function Students() {
   }
 
   async function getAllStudents() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}student`, {
         headers: {
@@ -175,10 +175,10 @@ function Students() {
       });
 
       setStudents(res?.data);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     } catch (error) {
       console.log(error);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
 

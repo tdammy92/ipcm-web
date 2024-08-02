@@ -83,7 +83,7 @@ function ExamBoard() {
         }
       );
 
-      if (responds.status === 200) {
+      if (responds?.status === 200) {
         setExamList(responds?.data);
       }
     } catch (error) {
@@ -216,7 +216,7 @@ function ExamBoard() {
                           exam_uuid,
                           name,
                           duration,
-                          uploadedBy: { username },
+                          uploadedBy,
                           questions,
                           createdAt,
                         } = item;
@@ -235,7 +235,7 @@ function ExamBoard() {
                             <TableCell align="center">
                               {questions?.length}
                             </TableCell>
-                            <TableCell align="center">{username}</TableCell>
+                            <TableCell align="center">{uploadedBy?.username}</TableCell>
 
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}

@@ -45,7 +45,7 @@ import TextField from "@material-ui/core/TextField";
 
 import { BaseUrl } from "../../Services/api/BaseUrl";
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -109,7 +109,7 @@ function SerialNumber() {
   //generate serial number
 
   async function generateSerial() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.post(
         `${BaseUrl}serial/generate`,
@@ -125,7 +125,7 @@ function SerialNumber() {
       // console.log(res?.data?.data?.serial);
 
       setSerial(res?.data?.data?.serial);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     } catch (error) {
       console.log(error);
       dispatch(iSLoading(false));

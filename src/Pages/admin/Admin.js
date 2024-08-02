@@ -27,7 +27,7 @@ import Button from "@material-ui/core/Button";
 import { Link, Redirect, useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
 
 import DashItem from "../../components/partials/dashcardItem";
 
@@ -83,7 +83,7 @@ function Admin() {
   };
 
   async function getRecentStudents() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}student/recent`, {
         headers: {
@@ -93,15 +93,15 @@ function Admin() {
       });
 
       setrecentStudents(res?.data);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     } catch (error) {
       console.log(error);
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
 
   async function getStudentsCount() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}student/count`, {
         headers: {
@@ -116,11 +116,11 @@ function Admin() {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
   async function getSerialNumbersCount() {
-    dispatch(iSLoading(true));
+    // dispatch(iSLoading(true));
     try {
       const res = await axios.get(`${BaseUrl}serial/count`, {
         headers: {
@@ -135,7 +135,7 @@ function Admin() {
     } catch (error) {
       console.log(error);
     } finally {
-      dispatch(iSLoading(false));
+      // dispatch(iSLoading(false));
     }
   }
 
