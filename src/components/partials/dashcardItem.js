@@ -1,12 +1,10 @@
-import React from "react";
-import Avatar from "@material-ui/core/Avatar";
-import Paper from "@material-ui/core/Paper";
-import IconButton from "@material-ui/core/IconButton";
-import Grid from "@material-ui/core/Grid";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
-import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import Grid from "@material-ui/core/Grid";
+import IconButton from "@material-ui/core/IconButton";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
+import { Link } from "react-router-dom";
 
 import { makeStyles } from "@material-ui/core/styles";
 const useStyles = makeStyles((theme) => ({

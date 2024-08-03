@@ -1,9 +1,8 @@
-import React, { useState, useEffect } from "react";
-import Footer from "../components/partials/Footer/Footer";
 import { Container } from "@material-ui/core";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import ImageCard from "../components/partials/ImageCard";
-import axios from "axios";
 import { BaseUrl } from "../Services/api/BaseUrl";
 
 function Gallery() {

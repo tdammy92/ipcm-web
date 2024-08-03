@@ -1,17 +1,17 @@
-import React from "react";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Grid from "@material-ui/core/Grid";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import React from "react";
 
 
+import VisibilityIcon from "@material-ui/icons/Visibility";
 import { FaBookReader } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
 import { HiUserGroup } from "react-icons/hi2";
 import { LiaBarcodeSolid } from "react-icons/lia";
-import VisibilityIcon from "@material-ui/icons/Visibility";
 
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
@@ -20,17 +20,16 @@ import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
-import TablePagination from "@material-ui/core/TablePagination";
 
 import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 
 import DashItem from "../../components/partials/dashcardItem";
-import {useRecentStudents, useSerialNumberCounts, useStudentsCounts} from '../../Services/queries/user-query'
 import { ROLES } from "../../constants";
+import { useRecentStudents, useSerialNumberCounts, useStudentsCounts } from '../../Services/queries/user-query';
 
 const useStyles = makeStyles((theme) => ({
   root: {

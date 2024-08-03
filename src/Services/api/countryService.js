@@ -1,4 +1,3 @@
-import { BaseUrl } from "./BaseUrl";
 import axios from "axios";
 
 

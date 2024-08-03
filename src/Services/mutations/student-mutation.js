@@ -8,7 +8,7 @@ const deleteStudents = async (id,payload) => {
 
 export const useDeleteStudent = () => {
   return useMutation({
-    mutationFn:(id,payload) =>deleteStudents(id,payload),
+    mutationFn:({id,payload}) =>deleteStudents(id,payload),
     onMutate: () => {},
     onSuccess: () => {},
     onError: (error, variables, context) => {},

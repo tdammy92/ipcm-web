@@ -96,7 +96,7 @@ const DeleteStudent  = async() =>{
     };
 
     try {
-      const res = await mutateAsync(id,payload)
+      const res = await mutateAsync({id,payload})
 
 
       if (res.status) {
