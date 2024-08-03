@@ -6,15 +6,15 @@ import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import { useMediaQuery } from "react-responsive";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading, saveUser, LogOutUser } from "../../Store/feature";
+import { useDispatch } from "react-redux";
+import { saveUser } from "../../Store/feature";
 import { ScreenSize } from "../../Config";
-import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import * as yup from "yup";
-import { Formik, Field } from "formik";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import { Formik} from "formik";
+
 import "./style.css";
+import { useLogin } from "../../Services/mutations/auth-mutation";
 
 const signInValidation = yup.object().shape({
   email: yup
@@ -47,30 +47,22 @@ function SignIn() {
 
   const location = useLocation();
 
-  const { from } = location.state || { from: { pathname: "/" } };
+  const { from } = location.state ?? { from: { pathname: "/" } };
 
   const dispatch = useDispatch();
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
+  const { mutateAsync, isLoading } = useLogin();
+
   async function HandleLogin(values) {
-    dispatch(iSLoading(true));
-    axios
-      .post(`${BaseUrl}auth/login`, values, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then((res) => {
-        const admin = { token: res?.data?.token, admin: res?.data?.data?._doc };
+    try {
+      const response = await mutateAsync(values);
 
-        dispatch(saveUser(admin));
+      if (response?.status === 200) {
+        dispatch(saveUser(response?.data));
         history.replace(from);
-      })
-      .catch((err) => {
-        console.log(err);
-
-        dispatch(iSLoading(false));
-      });
+      }
+    } catch (error) {}
   }
 
   return (
@@ -81,7 +73,6 @@ function SignIn() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          //   background: "red",
           height: isMobile ? "90%" : "80%",
         }}
       >
@@ -107,7 +98,6 @@ function SignIn() {
                 handleChange,
                 handleBlur,
                 handleSubmit,
-                isSubmitting,
                 /* and other goodies */
               }) => (
                 <form onSubmit={handleSubmit}>
@@ -150,7 +140,7 @@ function SignIn() {
                       color="primary"
                       className={classes.button}
                       endIcon={<SendIcon />}
-                      disabled={isSubmitting}
+                      disabled={isLoading}
                     >
                       Sign In
                     </Button>

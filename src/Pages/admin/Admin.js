@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
+import React from "react";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+
 
 import { FaBookReader } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
@@ -27,9 +26,10 @@ import Button from "@material-ui/core/Button";
 import { Link, Redirect, useHistory } from "react-router-dom";
 
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
 
 import DashItem from "../../components/partials/dashcardItem";
+import {useRecentStudents, useSerialNumberCounts, useStudentsCounts} from '../../Services/queries/user-query'
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -67,11 +67,22 @@ function Admin() {
   const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
 
-  const [recentStudents, setrecentStudents] = useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const [studentCount, setStudentCount] = useState(0);
-  const [serialNumberCount, setSerialNumberCount] = useState(0);
+
+
+
+
+
+ const {data:recentStudentsData,isLoading:isLoadingRecentStudents} = useRecentStudents();
+ const {data:studentsCountData,isLoading:isLoadingStudentsCounts} = useStudentsCounts();
+ const {data:serialNumberCountData,isLoading:isLoadingSerialNumberCounts} = useSerialNumberCounts();
+
+
+
+
+
+
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -82,68 +93,9 @@ function Admin() {
     setPage(0);
   };
 
-  async function getRecentStudents() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/recent`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      setrecentStudents(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
 
-  async function getStudentsCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/count`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      if (typeof res?.data?.count === "number") {
-        setStudentCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-  async function getSerialNumbersCount() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}serial/count`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      if (typeof res?.data?.count === "number") {
-        setSerialNumberCount(res.data?.count);
-      }
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }
-
-  useEffect(() => {
-    getRecentStudents();
-    getStudentsCount();
-    getSerialNumbersCount();
-  }, []);
 
   return (
     <>
@@ -154,7 +106,7 @@ function Admin() {
             <DashItem
               title="STUDENTS"
               description="Total Students: "
-              count={studentCount ?? 0}
+              count={studentsCountData?.count?? 0}
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
               url={"/students"}
             />
@@ -167,7 +119,7 @@ function Admin() {
             <DashItem
               title="SERIAL NUMBER"
               description="Total Generated serial: "
-              count={serialNumberCount ?? 0}
+              count={serialNumberCountData?.count ?? 0}
               Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
               url={"/serial-number"}
             />
@@ -255,12 +207,12 @@ function Admin() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {recentStudents.length < 1 ? (
+                    {recentStudentsData?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      recentStudents?.map((item) => {
+                      recentStudentsData?.map((item) => {
                         const {
                           _id,
                           surname,
@@ -314,7 +266,7 @@ function Admin() {
               {/* <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={recentStudents?.length}
+                count={recentStudentsData?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onPageChange={handleChangePage}

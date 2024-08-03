@@ -16,7 +16,7 @@ function NavBar() {
   const dispatch = useDispatch();
   const history = useHistory();
   const {
-    details: { admin },
+    details
   } = useSelector((state) => state.users);
 
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
@@ -54,7 +54,7 @@ function NavBar() {
             {protectedRoute.includes(location) && (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p style={{ marginRight: "5px", color: "#01996D" }}>
-                  {admin?.email.split("@")[0].toUpperCase()}
+                  {details?.email.split("@")[0].toUpperCase()}
                 </p>
                 ||
                 <span
