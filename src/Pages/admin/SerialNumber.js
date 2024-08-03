@@ -101,7 +101,7 @@ function SerialNumber() {
     try {
       const response = await mutateAsync();
 
-      if (response.status===200) {
+      if (response.status===201) {
         setSerial(response?.data?.serial)
       }
 
