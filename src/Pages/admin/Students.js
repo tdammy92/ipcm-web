@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState,  useRef } from "react";
 
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,10 +8,12 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
 // import { DownloadTableExcel } from "react-export-table-to-excel";
-import { useDownloadExcel, downloadExcel } from "react-export-table-to-excel";
+import {
+  //  useDownloadExcel,
+    downloadExcel } from "react-export-table-to-excel";
 
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import BlurLinearIcon from "@material-ui/icons/BlurLinear";
+// import GroupAddIcon from "@material-ui/icons/GroupAdd";
+// import BlurLinearIcon from "@material-ui/icons/BlurLinear";
 
 import GridOnIcon from "@material-ui/icons/GridOn";
 import PrintIcon from "@material-ui/icons/Print";
@@ -19,23 +21,22 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import SearchIcon from "@material-ui/icons/Search";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-import axios from "axios";
-import { BaseUrl } from "../../Services/api/BaseUrl";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+
+import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
+// import ButtonGroup from "@material-ui/core/ButtonGroup";
 
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
+// import IconButton from "@material-ui/core/IconButton";
+// import Input from "@material-ui/core/Input";
+// import FilledInput from "@material-ui/core/FilledInput";
+// import OutlinedInput from "@material-ui/core/OutlinedInput";
+// import InputLabel from "@material-ui/core/InputLabel";
+// import FormHelperText from "@material-ui/core/FormHelperText";
+// import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -46,10 +47,11 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 import { useReactToPrint } from "react-to-print";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
+
 
 import Pdf from "react-to-pdf";
+import { useStudents } from "../../Services/queries/student-query";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -93,12 +95,16 @@ function Students() {
   const fileName = new Date(date).toLocaleDateString().toString();
 
   const classes = useStyles();
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
+
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [Search, setSearch] = useState("");
-  const [Students, setStudents] = useState([]);
+
+
+  const {data:studentsData,isLoading:isLoadingStudents} = useStudents();
+
+
 
   const componentRef = useRef();
   // const ExcelRef = useRef(null);
@@ -124,7 +130,7 @@ function Students() {
       tablePayload: {
         header,
         // accept two different data structures
-        body: Students?.map((item, index) => {
+        body: studentsData?.map((item, index) => {
           return {
             index: `${index + 1}`,
             Title: `${item?.title}`,
@@ -164,27 +170,7 @@ function Students() {
     setSearch(serachValue);
   }
 
-  async function getAllStudents() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      setStudents(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
-
-  useEffect(() => {
-    getAllStudents();
-  }, []);
 
   return (
     <>
@@ -346,12 +332,12 @@ function Students() {
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {Students?.length < 1 ? (
+                    {studentsData?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      Students?.slice(
+                      studentsData?.slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
                       )
@@ -397,7 +383,7 @@ function Students() {
                               <TableCell align="center">{country}</TableCell>
                               <TableCell align="center">{state}</TableCell>
                               <TableCell align="center">
-                                {new Date(createdAt).toLocaleDateString()}
+                                {new Date(createdAt)?.toLocaleDateString()}
                               </TableCell>
                               <TableCell align="center">
                                 <Button
@@ -421,7 +407,7 @@ function Students() {
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={Students?.length}
+                count={studentsData?.length || 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}

@@ -25,3 +25,6 @@ export const ROLES = {
     GALLERY_SETTINGS: "/gallery-settings",
   };
   
+
+
+  export const userAvater = `https://res.cloudinary.com/bilektechnologies/image/upload/v1687963208/samples/f19cjtmikb6r7geqrpkf.jpg`

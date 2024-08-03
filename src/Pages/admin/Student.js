@@ -1,34 +1,32 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Redirect, useParams, useHistory } from "react-router-dom";
-import axios from "axios";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import React, {  useRef } from "react";
+import { 
+  // Redirect,
+   useParams, useHistory } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
-import Paper from "@material-ui/core/Paper";
 
 import Card from "@material-ui/core/Card";
-import CardMedia from "@material-ui/core/CardMedia";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+
 import PrintIcon from "@material-ui/icons/Print";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { FaUserCircle } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
+
 import PrintForm from "../printForm";
-import Pdf from "react-to-pdf";
-import { Avatar } from "@material-ui/core";
+// import Pdf from "react-to-pdf";
+import { useStudent } from "../../Services/queries/student-query";
+import { userAvater } from "../../constants";
+import { useDeleteStudent } from "../../Services/mutations/student-mutation";
 
 const useStyles = makeStyles({
   root: {
@@ -71,53 +69,24 @@ function Student() {
   const history = useHistory();
 
   const classes = useStyles();
-  const theme = useTheme();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
 
-  const [Details, setDetails] = useState({});
-  const [studentDetails, setStudentDetails] = useState({});
+  const {data:studentDetails,isLoading:isLoadingStudent} = useStudent({id,enabled:!!id});
+  const {mutateAsync,isLoading:isDeleteing}  = useDeleteStudent()
 
-  async function getStudent() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/${id}`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      // console.log(res?.data);
 
-      setDetails(res?.data);
 
-      setStudentDetails({
-        ...res?.data,
-        passport: {
-          url:
-            res.data.passport === undefined
-              ? `https://res.cloudinary.com/bilektechnologies/image/upload/v1687963208/samples/f19cjtmikb6r7geqrpkf.jpg`
-              : res?.data?.passport?.url,
-        },
-      });
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
 
   //function to delete student
-  async function DeleteStudent() {
-    dispatch(iSLoading(true));
+const DeleteStudent  = async() =>{
 
-    const documentIds = Details?.documents?.map((doc) => doc?.file?.public_id);
 
-    const mongoStudentId = Details?._id;
+    const documentIds = studentDetails?.documents?.map((doc) => doc?.file?.public_id);
+
+    const mongoStudentId = studentDetails?._id;
     const cloudinaryPublicIds = [
-      ...(Details?.passport?.public_id ? [Details?.passport?.public_id] : []),
+      ...(studentDetails?.passport?.public_id ? [studentDetails?.passport?.public_id] : []),
       ...(documentIds.length > 0 ? [...documentIds] : []),
     ];
 
@@ -127,19 +96,17 @@ function Student() {
     };
 
     try {
-      const res = await axios.delete(`${BaseUrl}student/${id}`, {
-        data: payload,
-        headers: {
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
+      const res = await mutateAsync(id,payload)
 
-      history.replace("/students");
+
+      if (res.status) {
+        history.replace("/students");
+        
+      }
+
     } catch (error) {
       console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
+    } 
   }
 
   const componentRef = useRef();
@@ -149,23 +116,14 @@ function Student() {
     copyStyles: true,
   });
 
-  useEffect(() => {
-    getStudent();
-  }, [id]);
 
-  console.log(JSON.stringify(studentDetails, null, 2));
-  console.log({ theme });
+
+  // console.log(JSON.stringify(studentDetails, null, 2));
+
   return (
-    <div>
+    <>
+ {!isLoadingStudent &&   <div>
       <Container maxWidth="md" mx="auto">
-        {/* <Typography
-          style={{ marginLeft: 10, marginTop: 40, marginBottom: 10 }}
-          text-center
-          variant="h6"
-          color="primary"
-        >
-          Student Details
-        </Typography> */}
         <Card className={classes.root} variant="outlined" elevation={3}>
           <CardContent ref={componentRef}>
             <Box style={{ marginBottom: 10 }}>
@@ -204,7 +162,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details.title}
+                    {studentDetails.title}
                   </Typography>
                 </Box>
                 <Box
@@ -220,7 +178,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details.surname} {Details.firstName} {Details.middleName}
+                    {studentDetails.surname} {studentDetails.firstName} {studentDetails.middleName}
                   </Typography>
                 </Box>
                 <Box
@@ -236,7 +194,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.phoneNumber}
+                    {studentDetails?.phoneNumber}
                   </Typography>
                 </Box>
                 <Box
@@ -252,7 +210,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.email}
+                    {studentDetails?.email}
                   </Typography>
                 </Box>
                 <Box
@@ -268,7 +226,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {new Date(Details?.dob).toLocaleDateString()}
+                    {new Date(studentDetails?.dob).toLocaleDateString()}
                   </Typography>
                 </Box>
                 <Box
@@ -284,7 +242,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.gender}
+                    {studentDetails?.gender}
                   </Typography>
                 </Box>
                 <Box
@@ -300,7 +258,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.country}
+                    {studentDetails?.country}
                   </Typography>
                 </Box>
                 <Box
@@ -316,7 +274,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.state}
+                    {studentDetails?.state}
                   </Typography>
                 </Box>
                 <Box
@@ -332,7 +290,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.eduQualification}
+                    {studentDetails?.eduQualification}
                   </Typography>
                 </Box>
               </Grid>
@@ -344,10 +302,10 @@ function Student() {
                 justifyContent="center"
               >
                 <Box roundeds style={{ maxWidth: 150 }}>
-                  {Details?.passport ? (
+                  {studentDetails?.passport ? (
                     <img
-                      alt={`${Details.firstName} ${Details.surname}`}
-                      src={Details?.passport?.url}
+                      alt={`${studentDetails.firstName} ${studentDetails.surname}`}
+                      src={studentDetails?.passport?.url ?? userAvater}
                       className={classes.passport}
                     />
                   ) : (
@@ -380,7 +338,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.currentEmploymet?.organization}
+                    {studentDetails?.currentEmploymet?.organization}
                   </Typography>
                 </Box>
               </Grid>
@@ -399,7 +357,7 @@ function Student() {
                     className={classes.value}
                   >
                     {" "}
-                    {Details?.currentEmploymet?.position}
+                    {studentDetails?.currentEmploymet?.position}
                   </Typography>
                 </Box>
               </Grid>
@@ -417,7 +375,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.currentEmploymet?.yearsExperience}
+                    {studentDetails?.currentEmploymet?.yearsExperience}
                   </Typography>
                 </Box>
               </Grid>
@@ -436,7 +394,7 @@ function Student() {
                     className={classes.value}
                   >
                     {new Date(
-                      Details?.currentEmploymet?.startDate
+                      studentDetails?.currentEmploymet?.startDate
                     ).toLocaleDateString()}
                   </Typography>
                 </Box>
@@ -455,7 +413,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.currentEmploymet?.location}
+                    {studentDetails?.currentEmploymet?.location}
                   </Typography>
                 </Box>
               </Grid>
@@ -484,7 +442,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.applicationFee}
+                    {studentDetails?.applicationFee}
                   </Typography>
                 </Box>
               </Grid>
@@ -503,7 +461,7 @@ function Student() {
                     className={classes.value}
                   >
                     {" "}
-                    Payment Method: {Details?.paymentMethods}
+                    Payment Method: {studentDetails?.paymentMethods}
                   </Typography>
                 </Box>
               </Grid>
@@ -521,7 +479,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.membershipCadre}
+                    {studentDetails?.membershipCadre}
                   </Typography>
                 </Box>
               </Grid>
@@ -539,7 +497,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.membershipRoute}
+                    {studentDetails?.membershipRoute}
                   </Typography>
                 </Box>
               </Grid>
@@ -557,7 +515,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.pgdCourses}
+                    {studentDetails?.pgdCourses}
                   </Typography>
                 </Box>
               </Grid>
@@ -575,7 +533,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.membershipType?.join()}
+                    {studentDetails?.membershipType?.join()}
                   </Typography>
                 </Box>
               </Grid>
@@ -593,7 +551,7 @@ function Student() {
                     color="primary"
                     className={classes.value}
                   >
-                    {Details?.academicPrograms?.join()}
+                    {studentDetails?.academicPrograms?.join()}
                   </Typography>
                 </Box>
               </Grid>
@@ -621,7 +579,7 @@ function Student() {
 
             <PDFDownloadLink
               document={<PrintForm studentDetails={studentDetails} />}
-              fileName={`IGPCM_FORM_REPRINT_${Details?.surname}`}
+              fileName={`IGPCM_FORM_REPRINT_${studentDetails?.surname}`}
             >
               {({ loading }) =>
                 loading ? (
@@ -673,7 +631,9 @@ function Student() {
           </CardActions>
         </Card>
       </Container>
-    </div>
+    </div>}
+    
+    </>
   );
 }
 

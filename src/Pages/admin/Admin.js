@@ -30,6 +30,7 @@ import { useSelector, useDispatch } from "react-redux";
 
 import DashItem from "../../components/partials/dashcardItem";
 import {useRecentStudents, useSerialNumberCounts, useStudentsCounts} from '../../Services/queries/user-query'
+import { ROLES } from "../../constants";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -110,12 +111,12 @@ function Admin() {
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
               url={"/students"}
             />
-            <DashItem
+           {details?.role === ROLES?.SUPER_ADMIN && <DashItem
               title="EXAMS"
               description=" Exam Dashboard"
               Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
               url={"/exam-board"}
-            />
+            />}
             <DashItem
               title="SERIAL NUMBER"
               description="Total Generated serial: "

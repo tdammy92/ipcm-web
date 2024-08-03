@@ -54,13 +54,14 @@ function SignIn() {
 
   const { mutateAsync, isLoading } = useLogin();
 
+
   async function HandleLogin(values) {
     try {
       const response = await mutateAsync(values);
 
       if (response?.status === 200) {
         dispatch(saveUser(response?.data));
-        history.replace(from);
+        history.replace(from?.pathname);
       }
     } catch (error) {}
   }

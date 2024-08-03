@@ -15,9 +15,7 @@ import { protectedRoute, unProtectedRoute } from "../../Data/common";
 function NavBar() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {
-    details
-  } = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users);
 
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
@@ -54,7 +52,7 @@ function NavBar() {
             {protectedRoute.includes(location) && (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p style={{ marginRight: "5px", color: "#01996D" }}>
-                  {details?.email.split("@")[0].toUpperCase()}
+                  {user?.details?.username?.toUpperCase()}
                 </p>
                 ||
                 <span

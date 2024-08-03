@@ -11,7 +11,7 @@ import store from "./Store/Store";
 import "aos/dist/aos.css";
 import "react-toastify/dist/ReactToastify.css";
 import Root from "./Navigation";
-
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 
 const defualtTheme = createMuiTheme({
@@ -33,7 +33,9 @@ const defualtTheme = createMuiTheme({
 });
 
 let persist = persistStore(store);
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {queries: {retry: 3, retryDelay: 500}},
+});
 
 function App() {
 
@@ -59,6 +61,7 @@ function App() {
       <Root />
     </ThemeProvider>
     </PersistGate>
+    <ReactQueryDevtools initialIsOpen={true} />
   </QueryClientProvider>
 </Provider>
   );

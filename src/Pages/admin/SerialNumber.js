@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import axios from "axios";
+import React, { useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import BlurLinearIcon from "@material-ui/icons/BlurLinear";
-
-import GridOnIcon from "@material-ui/icons/GridOn";
-import PrintIcon from "@material-ui/icons/Print";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import SearchIcon from "@material-ui/icons/Search";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import {  makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,27 +16,19 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
-
 import Tooltip from "@material-ui/core/Tooltip";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 
-import { BaseUrl } from "../../Services/api/BaseUrl";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
+
+import { useSerialNumber } from "../../Services/queries/serialNumber-query";
+import { useGenerateSerial } from "../../Services/mutations/serialNumber-mutation";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -87,13 +70,16 @@ const useStyles = makeStyles((theme) => ({
 function SerialNumber() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
+
+  const {data:AllSerial,isLoading:isLoadingAllSerial} = useSerialNumber();
+ const {mutateAsync,isLoading:isGeneratingSerial} = useGenerateSerial()
+
+
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [Serial, setSerial] = useState("XXXX-XXXX-XXXX-XXXX");
-  const [AllSerial, setAllSerial] = useState([]);
+
 
   const [openToolTip, setOpenToolTip] = useState(false);
 
@@ -106,62 +92,32 @@ function SerialNumber() {
     setPage(0);
   };
 
+
+
   //generate serial number
 
   async function generateSerial() {
-    dispatch(iSLoading(true));
+
     try {
-      const res = await axios.post(
-        `${BaseUrl}serial/generate`,
-        {},
-        {
-          headers: {
-            "Content-Type": "aplication/json",
-            Authorization: `Bearer ${details?.token}`,
-          },
-        }
-      );
+      const response = await mutateAsync();
 
-      // console.log(res?.data?.data?.serial);
+      if (response.status===200) {
+        setSerial(response?.data?.serial)
+      }
 
-      setSerial(res?.data?.data?.serial);
-      dispatch(iSLoading(false));
     } catch (error) {
       console.log(error);
-      dispatch(iSLoading(false));
+
     }
   }
 
-  //get all serial number
-  async function getAllSerial() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}serial`, {
-        headers: {
-          "Content-Type": "aplication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-      // console.log(res?.data);
-      setAllSerial(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
+
 
   function copySerial(serial) {
     navigator.clipboard.writeText(serial);
   }
 
-  useEffect(() => {
-    getAllSerial();
 
-    return () => {
-      //  setSerial('')
-    };
-  }, [Serial]);
 
   return (
     <>
@@ -188,6 +144,8 @@ function SerialNumber() {
 
             <div>
               <Button
+
+              disabled={isGeneratingSerial}
                 onClick={generateSerial}
                 variant="contained"
                 color="primary"
@@ -195,7 +153,7 @@ function SerialNumber() {
                 className={classes.button}
                 startIcon={<PlaylistAddIcon />}
               >
-                Generate Serial
+               {isGeneratingSerial ? 'Generating...': 'Generate Serial'}
               </Button>
               <Button
                 variant="outlined"
@@ -285,7 +243,7 @@ function SerialNumber() {
                       AllSerial?.slice(
                         page * rowsPerPage,
                         page * rowsPerPage + rowsPerPage
-                      ).map((item, i) => {
+                      )?.map((item, i) => {
                         const { id, serial, dateGenerated, isValid, dateUsed } =
                           item;
                         return (
@@ -376,7 +334,7 @@ function SerialNumber() {
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={AllSerial?.length}
+                count={AllSerial?.length || 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}
