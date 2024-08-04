@@ -11,6 +11,7 @@ import { iSLoading, saveUser, LogOutUser } from "../../Store/feature";
 import { ScreenSize } from "../../Config";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
+import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, Field } from "formik";
 
@@ -88,7 +89,7 @@ function StartExam() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          //   background: "red",
+
           height: isMobile ? "90%" : "80%",
         }}
       >
@@ -155,6 +156,8 @@ function StartExam() {
                   <div className="form__Btn">
                     <Button
                       variant="contained"
+                      component={Link}
+                      to="/start-exam"
                       type="submit"
                       color="primary"
                       className={classes.button}
@@ -162,6 +165,18 @@ function StartExam() {
                       disabled={isSubmitting}
                     >
                       Exam
+                    </Button>
+                  </div>
+                  <div className="form__Btn">
+                    <Button
+                      mt={5}
+                      component={Link}
+                      to="/exam-info"
+                      variant="contained"
+                      color="primary"
+                      size="small"
+                    >
+                      Back To Examination !
                     </Button>
                   </div>
                 </form>
