@@ -1,8 +1,7 @@
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React from "react";
 
 import Container from "@material-ui/core/Container";
 import Grid from "@material-ui/core/Grid";
@@ -16,13 +15,12 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { GrScorecard } from "react-icons/gr";
-import { toast } from "react-toastify";
 import DashItem from "../../components/partials/dashcardItem";
-import { BaseUrl } from "../../Services/api/BaseUrl";
-
+import Skeleton from "react-loading-skeleton";
 import Button from "@material-ui/core/Button";
 
-import { useDispatch, useSelector } from "react-redux";
+import { useExams } from "../../Services/queries/exam-query";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -53,9 +51,8 @@ const useStyles = makeStyles((theme) => ({
 function ExamBoard() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
-  const [ExamList, setExamList] = useState([]);
+  const { data: ExamList, isLoading } = useExams({ params: { type: "full" } });
+
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
@@ -68,47 +65,10 @@ function ExamBoard() {
     setPage(0);
   };
 
-  const getExams = async () => {
-    try {
-      const responds = await axios.get(
-        `${BaseUrl}exams`,
-        { params: { type: "full" } },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${details?.token}`,
-          },
-        }
-      );
-
-      if (responds.status === 200) {
-        setExamList(responds?.data);
-      }
-    } catch (error) {
-      toast.error(`${typeof error === "string" ? error : error?.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        // pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
-
-  useEffect(() => {
-    getExams();
-    return () => {};
-  }, []);
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
-
         <Typography
           variant="h5"
           component="h4"
@@ -200,60 +160,66 @@ function ExamBoard() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-                    {ExamList?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      ExamList?.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      ).map((item) => {
-                        const {
-                          exam_uuid,
-                          name,
-                          duration,
-                          uploadedBy: { username },
-                          questions,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={exam_uuid}
-                            // component={Link}
-                            // to={`/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">{name}</TableCell>
-                            <TableCell align="center">{duration} Min</TableCell>
-                            <TableCell align="center">
-                              {questions?.length}
-                            </TableCell>
-                            <TableCell align="center">{username}</TableCell>
+                  {isLoading ? (
+                      <TableLoader rows={5} colums={6} />
+                  ) : (
+                    <TableBody>
+                      {ExamList?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        ExamList?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        ).map((item) => {
+                          const {
+                            exam_uuid,
+                            name,
+                            duration,
+                            uploadedBy: { username },
+                            questions,
+                            createdAt,
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={exam_uuid}
+                              // component={Link}
+                              // to={`/students/${_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <TableCell align="center">{name}</TableCell>
+                              <TableCell align="center">
+                                {duration} Min
+                              </TableCell>
+                              <TableCell align="center">
+                                {questions?.length}
+                              </TableCell>
+                              <TableCell align="center">{username}</TableCell>
 
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                // endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
+                              <TableCell align="center">
+                                {new Date(createdAt).toLocaleDateString()}
+                              </TableCell>
+                              <TableCell align="center">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  size="small"
+                                  className={classes.button}
+                                  // endIcon={<VisibilityIcon />}
+                                >
+                                  View
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 

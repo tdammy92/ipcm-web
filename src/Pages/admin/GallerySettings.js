@@ -28,6 +28,7 @@ import DeleteIcon from "@material-ui/icons/Delete";
 
 import { useGallery } from "../../Services/queries/gallery-query";
 import { useDeleteGallery, useUploadGallery } from "../../Services/mutations/gallery-mutation";
+import GalleryLoader from "../../components/Loaders/GalleryLoader";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -352,7 +353,7 @@ function GallerySettings() {
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
+              {isLoadingGallery ? <GalleryLoader/> :<TableBody>
                 {galleryData?.map(({ _id, image, caption }, i) => (
                   <TableRow key={_id}>
                     <TableCell align="center">
@@ -387,7 +388,7 @@ function GallerySettings() {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
+              </TableBody>}
             </Table>
           </TableContainer>
         </Box>

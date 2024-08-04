@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ApiClient } from "../api/ApiClient";
 
 const getStudents = async () => {
@@ -6,10 +6,10 @@ const getStudents = async () => {
   return response?.data;
 };
 
-export const useStudents = () => {
-  return useQuery({
-    queryKey: ["students"],
-    queryFn: getStudents,
+export const useStudents = ({currentPage}) => {
+  return useInfiniteQuery({
+    queryKey: ["students",currentPage],
+    queryFn:({})=> getStudents(),
   });
 };
 

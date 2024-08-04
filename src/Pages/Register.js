@@ -1,16 +1,15 @@
-import React, { useState, forwardRef, useEffect, useRef } from "react";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import React, { forwardRef, useEffect, useRef, useState } from "react";
 
-import { Button, Paper, Container } from "@material-ui/core";
-import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
-import TextField from "@material-ui/core/TextField";
+import { Button, Container, Paper } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
-import axios from "axios";
+import TextField from "@material-ui/core/TextField";
+import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 
 import Accordion from "@material-ui/core/Accordion";
-import AccordionSummary from "@material-ui/core/AccordionSummary";
 import AccordionDetails from "@material-ui/core/AccordionDetails";
+import AccordionSummary from "@material-ui/core/AccordionSummary";
 import Checkbox from "@material-ui/core/Checkbox";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Typography from "@material-ui/core/Typography";
@@ -30,8 +29,8 @@ import CardContent from "@material-ui/core/CardContent";
 
 import FormLabel from "@material-ui/core/FormLabel";
 
-import FormGroup from "@material-ui/core/FormGroup";
 import Avatar from "@material-ui/core/Avatar";
+import FormGroup from "@material-ui/core/FormGroup";
 // import FormHelperText from "@material-ui/core/FormHelperText";
 // import OutlinedInput from "@material-ui/core/OutlinedInput";
 // import Input from "@material-ui/core/Input";
@@ -43,29 +42,31 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import Divider from "@material-ui/core/Divider";
 import Slide from "@material-ui/core/Slide";
-import BarLoader from "react-spinners/BarLoader";
-import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
 import CloseIcon from "@material-ui/icons/Close";
-import { BaseUrl } from "../Services/api/BaseUrl";
+import CloudDownloadIcon from "@material-ui/icons/CloudDownload";
+import BarLoader from "react-spinners/BarLoader";
 // import PdfForm from "../assets/document/IGPCM__REGForm.pdf";
 // import { DatePicker, KeyboardDatePicker } from "@material-ui/pickers";
 
+import { avatar } from "../components/Data/common";
 import {
   accordionData,
-  titleArray,
+  applicationFeeArray,
   genderArray,
-  qualificationArray,
-  yearsExperienceArray,
   membershipArray,
   memberShipRouteArray,
-  AcademicProgramsArray,
-  applicationFeeArray,
   paymentArray,
+  qualificationArray,
+  titleArray,
+  yearsExperienceArray,
 } from "../components/Data/formData";
-import { getState, getCountry } from "../Services/api/countryService";
-import { avatar } from "../components/Data/common";
 
 import Documents from "../components/partials/uploadDocuments";
+import { useRgeisterStudent } from "../Services/mutations/register-mutations";
+import {
+  useCountries,
+  useStatesCountry,
+} from "../Services/queries/register-query";
 import PrintForm from "./printForm";
 
 const Transition = forwardRef(function Transition(props, ref) {
@@ -143,20 +144,23 @@ function Register() {
   const jambDocRef = useRef(null);
   const AnyDocRef = useRef(null);
 
-  const [AllCountry, setAllCountry] = useState([]);
-  const [selectedCountry, setselectedCountry] = useState("");
-  const [AllState, setSAlltate] = useState([]);
+  const { mutateAsync, isLoading: isRegistering } = useRgeisterStudent();
+
+  const [selectedCountry, setSelectedCountry] = useState("");
 
   const [acccordionDaata, setacccordionDaata] = useState(() => accordionData);
+
+  const { data: AllCountry, isLoading: isLoadingCountries } = useCountries();
+  const { data: AllState, isLoading: isLoadingState } = useStatesCountry({
+    stateCode: selectedCountry,
+    enabled: !!selectedCountry,
+  });
 
   // const [academicProgramList, setacademicProgramList] = useState([]);
 
   //passed pyaload
   const [myCountry, setmyCountry] = useState("");
   const [selectedState, setslectedState] = useState("");
-
-  const [Loading, setLoading] = useState(false);
-  const [FormLoading, setFormLoading] = useState(false);
 
   const [employmentDetails, setemploymentDetails] = useState({
     organization: "",
@@ -293,14 +297,13 @@ function Register() {
   }
 
   async function handleSubmit(e) {
+    e.preventDefault();
+
     if (passport === "") return;
     if (basicDetails?.firstName === "") return;
     if (basicDetails?.surname === "") return;
     if (basicDetails?.surname === "") return;
     if (serialNumber === "") return;
-
-    setFormLoading(true);
-    e.preventDefault();
 
     const payload = JSON.stringify({
       image_data: passport,
@@ -325,61 +328,16 @@ function Register() {
       documents: documents,
     });
 
-    // const res = await axios.post(`${BaseUrl}student/register`, payload, {
-    //   headers: { "Content-Type": "application/json" },
-    // });
-
-    // const data = await res.json();
-
-    // if (res.status !== 201) throw Error("Registration not successful");
-
-    axios
-      .post(`${BaseUrl}student/register`, payload, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .then((res) => {
-        if (res.status === 201) {
-          // ResetForm();
-          // console.log("responsee", res?.data);
-          setStudentDetails(res?.data);
-
-          setOpenModal(true);
-        }
-      })
-      .catch((err) => {
-        console.log(err?.response?.data?.message);
-      })
-      .finally(() => {
-        setFormLoading(false);
-      });
-  }
-
-  // get country api call
-  async function Country() {
-    setLoading(true);
     try {
-      const res = await getCountry();
-      setAllCountry(res?.data);
-      // console.log(res?.data)
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+      const response = await mutateAsync({ payload });
 
-  //get state api call
-  async function State() {
-    setLoading(true);
+      if (response.status === 201) {
+        setStudentDetails(response?.data);
 
-    try {
-      const res = await getState(selectedCountry);
-      setSAlltate(res?.data);
-      // console.log(res?.data)
-      setLoading(false);
+        setOpenModal(true);
+      }
     } catch (error) {
-      setLoading(false);
-      console.log(error);
+      console.log(error?.response?.data?.message);
     }
   }
 
@@ -412,7 +370,6 @@ function Register() {
 
   useEffect(() => {
     document.title = "IGPCM | Register";
-    Country();
   }, []);
 
   //fires to get base64 for  passport
@@ -472,15 +429,11 @@ function Register() {
     }
   }, [jambFile]);
 
-  useEffect(() => {
-    selectedCountry !== "" && State();
-  }, [selectedCountry]);
-
   return (
     <>
       <div className="Loader">
         <BarLoader
-          loading={Loading}
+          loading={isLoadingCountries}
           speedMultiplier={2}
           color={"#01996D"}
           size={"100%"}
@@ -738,19 +691,19 @@ function Register() {
                           onChange={(e) => {
                             const code = e.target.value.split(/[,.\s]/)[0];
                             const country = e.target.value.split(/[,.\s]/)[1];
-                            setselectedCountry(code);
+                            setSelectedCountry(code);
                             setmyCountry(country);
                           }}
                           label="Country"
                           autoWidth={false}
                         >
                           <option aria-label="None" value="" />
-                          {AllCountry.map((ctry) => (
+                          {AllCountry?.map((ctry) => (
                             <option
                               value={[ctry?.iso2, ctry?.name]}
                               key={ctry?.id}
                             >
-                              {ctry?.name}
+                              {ctry?.emoji} {ctry?.name} ({ctry?.iso2})
                             </option>
                           ))}
                         </Select>
@@ -781,7 +734,7 @@ function Register() {
                         >
                           <option aria-label="None" value="" />
 
-                          {AllState.map((state) => (
+                          {AllState?.map((state) => (
                             <option value={state.name} key={state?.id}>
                               {state?.name}
                             </option>
@@ -1370,7 +1323,7 @@ function Register() {
         </Container>
       </div>
 
-      <Backdrop className={classes.backdrop} open={FormLoading}>
+      <Backdrop className={classes.backdrop} open={isRegistering}>
         <CircularProgress color="inherit" />
       </Backdrop>
     </>

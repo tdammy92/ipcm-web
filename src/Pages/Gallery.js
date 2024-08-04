@@ -4,29 +4,14 @@ import React, { useEffect, useState } from "react";
 import Masonry, { ResponsiveMasonry } from "react-responsive-masonry";
 import ImageCard from "../components/partials/ImageCard";
 import { BaseUrl } from "../Services/api/BaseUrl";
+import { useGallery } from "../Services/queries/gallery-query";
 
 function Gallery() {
-  const [isLoadimng, setisLoadimng] = useState(false);
-  const [Images, setImages] = useState([]);
 
-  const getGalleryImages = async () => {
-    setisLoadimng(true);
-    try {
-      const res = await axios.get(`${BaseUrl}gallery`, {});
 
-      setImages(res?.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setisLoadimng(false);
-    }
-  };
+  const {data:Images,isLoading:loadingGalary} = useGallery()
 
-  useEffect(() => {
-    getGalleryImages();
 
-    return () => {};
-  }, []);
 
   return (
     <div className="base__page">
@@ -42,7 +27,6 @@ function Gallery() {
                 <ImageCard
                   key={i}
                   image_url={image?.image?.url}
-                  //   caption={`image number of series testing testing your image length ${i}`}
                   caption={image?.caption}
                 />
               ))}

@@ -30,6 +30,7 @@ import { useDispatch, useSelector } from "react-redux";
 import DashItem from "../../components/partials/dashcardItem";
 import { ROLES } from "../../constants";
 import { useRecentStudents, useSerialNumberCounts, useStudentsCounts } from '../../Services/queries/user-query';
+import TableLoader from "../../components/Loaders/TableLoader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -206,7 +207,7 @@ function Admin() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                 {isLoadingRecentStudents ? <TableLoader rows={5} colums={7} /> :<TableBody>
                     {recentStudentsData?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -259,7 +260,7 @@ function Admin() {
                         );
                       })
                     )}
-                  </TableBody>
+                  </TableBody>}
                 </Table>
               </TableContainer>
 

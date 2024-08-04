@@ -1,38 +1,38 @@
-import React, { useEffect, useRef, useState } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import TextField from "@material-ui/core/TextField";
-import { BaseUrl } from "../../Services/api/BaseUrl";
-import { toast } from "react-toastify";
-import { ImUpload } from "react-icons/im";
-import { MdDownloadForOffline } from "react-icons/md";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
+import TextField from "@material-ui/core/TextField";
+import Typography from "@material-ui/core/Typography";
+import React, { useRef, useState } from "react";
+import { ImUpload } from "react-icons/im";
+import { MdDownloadForOffline } from "react-icons/md";
+import { toast } from "react-toastify";
 
-import CloudUploadIcon from "@material-ui/icons/CloudUpload";
-import Slide from "@material-ui/core/Slide";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import Slide from "@material-ui/core/Slide";
+import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+import { useSelector } from "react-redux";
 import { read, utils } from "xlsx";
 import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
+import TableLoader from "../../components/Loaders/TableLoader";
+import { useUploadExam } from "../../Services/mutations/exam-mutation";
+import { useExams } from "../../Services/queries/exam-query";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -143,8 +143,11 @@ function UploadExam() {
   const docRef = useRef(null);
   const { details } = useSelector((state) => state.users);
 
+  const { data: ExamList, isLoading:isLoadingExams } = useExams({ params: { type: "full" } });
+  const { mutateAsync:uploadMutation, isLoading:isUploadingExams } = useUploadExam();
+
   const [Exam, setExam] = useState(() => InitialExam);
-  const [ExamList, setExamList] = useState([]);
+
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -296,18 +299,13 @@ function UploadExam() {
     const payload = {
       ...Exam,
       totalQuestions: Exam.questions?.length,
-      uploadedBy: details?.admin?._id,
+      uploadedBy: details?._id,
     };
 
-    // console.log(payload);
 
     try {
-      const postExam = await axios.post(`${BaseUrl}exams/upload`, payload, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
+      const postExam = await uploadMutation({payload})
+    
 
       if (postExam.status === 201) {
         setExam({ ...InitialExam });
@@ -326,46 +324,11 @@ function UploadExam() {
       });
     }
 
-    // setOpen(false);
   };
 
-  // console.log(JSON.stringify(details, null, 2));
-  // console.log(JSON.stringify(Exam, null, 2));
 
-  const getExams = async () => {
-    try {
-      const responds = await axios.get(
-        `${BaseUrl}exams`,
-        { params: { type: "full" } },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${details?.token}`,
-          },
-        }
-      );
 
-      if (responds.status === 200) {
-        setExamList(responds?.data);
-      }
-    } catch (error) {
-      toast.error(`${typeof error === "string" ? error : error?.message}`, {
-        position: "top-center",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        // pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-      });
-    }
-  };
 
-  useEffect(() => {
-    getExams();
-    return () => {};
-  }, []);
 
   return (
     <div>
@@ -494,7 +457,7 @@ function UploadExam() {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-                <TableBody>
+               {isLoadingExams ? <TableLoader rows={5} colums={6} /> : <TableBody>
                   {ExamList?.length < 1 ? (
                     <TableRow>
                       <TableCell>No Result Found</TableCell>
@@ -505,7 +468,7 @@ function UploadExam() {
                         exam_uuid,
                         name,
                         duration,
-                        uploadedBy: { username },
+                        uploadedBy,
                         questions,
                         createdAt,
                       } = item;
@@ -524,7 +487,7 @@ function UploadExam() {
                           <TableCell align="center">
                             {questions?.length}
                           </TableCell>
-                          <TableCell align="center">{username}</TableCell>
+                          <TableCell align="center">{uploadedBy?.username}</TableCell>
 
                           <TableCell align="center">
                             {new Date(createdAt).toLocaleDateString()}
@@ -544,7 +507,7 @@ function UploadExam() {
                       );
                     })
                   )}
-                </TableBody>
+                </TableBody>}
               </Table>
             </TableContainer>
 

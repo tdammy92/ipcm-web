@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
 import { ApiClient } from "../api/ApiClient";
 
 const getSerialNumber = async () => {
@@ -6,9 +6,10 @@ const getSerialNumber = async () => {
     return response?.data;
   };
   
-  export const useSerialNumber = () => {
-    return useQuery({
+  export const useSerialNumber = ({currentPage}) => {
+    return useInfiniteQuery({
       queryKey: ["serial-number"],
-      queryFn: getSerialNumber,
+      queryFn:({pageParam=currentPage})=> getSerialNumber(pageParam),
+      
     });
   };

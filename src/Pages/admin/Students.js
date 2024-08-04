@@ -1,4 +1,4 @@
-import React, { useState,  useRef } from "react";
+import React, { useState,  useRef, useMemo } from "react";
 
 import { Link } from "react-router-dom";
 
@@ -52,6 +52,9 @@ import { useReactToPrint } from "react-to-print";
 
 import Pdf from "react-to-pdf";
 import { useStudents } from "../../Services/queries/student-query";
+import TableLoader from "../../components/Loaders/TableLoader";
+import { useSelector } from "react-redux";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -95,16 +98,21 @@ function Students() {
   const fileName = new Date(date).toLocaleDateString().toString();
 
   const classes = useStyles();
-
+  const { details } = useSelector((state) => state.users);
 
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [Search, setSearch] = useState("");
 
 
-  const {data:studentsData,isLoading:isLoadingStudents} = useStudents();
+  const {data:studentsDat,isLoading:isLoadingStudents} = useStudents({currentPage:1});
 
 
+  // console.log("details===>",JSON.stringify(details,null,3))
+  // console.log("studentsData===>",JSON.stringify(studentsDat,null,3))
+
+
+  const studentsData = useMemo(() => studentsDat?.pages?.flatMap(students => students?.page) || [], [studentsDat])
 
   const componentRef = useRef();
   // const ExcelRef = useRef(null);
@@ -331,7 +339,7 @@ function Students() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                 {isLoadingStudents ?  <TableLoader rows={5} colums={8} /> : <TableBody>
                     {studentsData?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -400,7 +408,7 @@ function Students() {
                           );
                         })
                     )}
-                  </TableBody>
+                  </TableBody>}
                 </Table>
               </TableContainer>
 

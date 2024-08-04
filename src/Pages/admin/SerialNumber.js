@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
@@ -28,6 +28,7 @@ import TextField from "@material-ui/core/TextField";
 
 import { useSerialNumber } from "../../Services/queries/serialNumber-query";
 import { useGenerateSerial } from "../../Services/mutations/serialNumber-mutation";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -71,7 +72,7 @@ function SerialNumber() {
   const classes = useStyles();
 
 
-  const {data:AllSerial,isLoading:isLoadingAllSerial} = useSerialNumber();
+  const {data:serialData,isLoading:isLoadingAllSerial} = useSerialNumber({currentPage:1});
  const {mutateAsync,isLoading:isGeneratingSerial} = useGenerateSerial()
 
 
@@ -82,6 +83,10 @@ function SerialNumber() {
 
 
   const [openToolTip, setOpenToolTip] = useState(false);
+
+
+
+  const AllSerial = useMemo(() => serialData?.pages?.flatMap(serial => serial?.page) || [], [serialData])
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -234,7 +239,7 @@ function SerialNumber() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
+                  {isLoadingAllSerial ?   <TableLoader rows={5} colums={6} />  : <TableBody>
                     {AllSerial?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -327,7 +332,7 @@ function SerialNumber() {
                         );
                       })
                     )}
-                  </TableBody>
+                  </TableBody>}
                 </Table>
               </TableContainer>
 

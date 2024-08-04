@@ -12,7 +12,7 @@ import "aos/dist/aos.css";
 import "react-toastify/dist/ReactToastify.css";
 import Root from "./Navigation";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-
+import 'react-loading-skeleton/dist/skeleton.css'
 
 const defualtTheme = createMuiTheme({
   palette: {
