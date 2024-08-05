@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import NavBar from "../components/partials/NavBar/NavBar";
 import Home from "../Pages/Home";
@@ -25,6 +25,7 @@ import TermsC from "../Pages/TermsC";
 import GallerySettings from "../Pages/admin/GallerySettings";
 import Footer from "../components/partials/Footer/Footer";
 
+
 import NotFound from "../Pages/NotFound";
 
 import ProtectedRoute from "../Pages/auth/ProtectedRoute";
@@ -34,134 +35,124 @@ import ExamBoard from "../Pages/admin/ExamBoard";
 import UploadExam from "../Pages/admin/UploadExam";
 import StudentResults from "../Pages/admin/StudentResults";
 import MoneyLaundry from "../Pages/MoneyLaundry";
-
-
-
+import ExamResult from "../Pages/exam/ExamResult";
+import OnlineExam from "../Pages/exam/OnlineExam";
+import StartExam from "../Pages/exam/StartExam";
+import SelectExam from "../Pages/exam/SelectExam";
 
 function Root() {
-
-
-
   return (
     <div className="index">
-    <Router>
-      <NavBar />
+      <Router>
+        <NavBar />
 
-      <Switch>
-        <Route exact path="/">
-          <Home />
-        </Route>
-        <Route exact path="/about">
-          <About />
-        </Route>
-        <Route exact path="/contact">
-          <Contact />
-        </Route>
-        <Route exact path="/member">
-          <Member />
-        </Route>
-        <Route exact path="/nysc">
-          <Nysc />
-        </Route>
-        <Route exact path="/exam-info">
-          <ExamInfo />
-        </Route>
-        <Route exact path="/certification">
-          <Certification />
-        </Route>
-        <Route exact path="/register">
-          <Register />
-        </Route>
-        <Route exact path="/projects">
-          <Project />
-        </Route>
-        <Route exact path="/gallery">
-          <Gallery />
-        </Route>
-        <Route exact path="/career">
-          <Career />
-        </Route>
-        <Route exact path="/consultancy">
-          <Consult />
-        </Route>
-        <Route exact path="/license">
-          <License />
-        </Route>
-        <Route exact path="/policy">
-          <Policy />
-        </Route>
-        <Route exact path="/t&c">
-          <TermsC />
-        </Route>
-        <Route exact path="/money-laundry">
-      <MoneyLaundry/>
-        </Route>
-        {/* <Route
+        <Switch>
+          <Route exact path="/">
+            <Home />
+          </Route>
+          <Route exact path="/about">
+            <About />
+          </Route>
+          <Route exact path="/contact">
+            <Contact />
+          </Route>
+          <Route exact path="/member">
+            <Member />
+          </Route>
+          <Route exact path="/nysc">
+            <Nysc />
+          </Route>
+          <Route exact path="/exam-info">
+            <ExamInfo />
+          </Route>
+          <Route exact path="/certification">
+            <Certification />
+          </Route>
+          <Route exact path="/register">
+            <Register />
+          </Route>
+          <Route exact path="/projects">
+            <Project />
+          </Route>
+          <Route exact path="/gallery">
+            <Gallery />
+          </Route>
+          <Route exact path="/career">
+            <Career />
+          </Route>
+          <Route exact path="/consultancy">
+            <Consult />
+          </Route>
+          <Route exact path="/license">
+            <License />
+          </Route>
+          <Route exact path="/policy">
+            <Policy />
+          </Route>
+          <Route exact path="/t&c">
+            <TermsC />
+          </Route>
+          <Route exact path="/money-laundry">
+            <MoneyLaundry />
+          </Route>
+          <Route exact path="/start-exam">
+            <StartExam />
+          </Route>
+          <Route exact path="/select-exam">
+            <SelectExam/>
+          </Route>
+          <Route exact path="/online-exam">
+            <OnlineExam />
+          </Route>
+          <Route exact path="/exam-result">
+            <ExamResult />
+          </Route>
+          {/* <Route
           exact
           path="/form"
         >
           <PrintForm />
         </Route> */}
-       
-        <Route exact path="/signup">
-          <SignUp />
-        </Route>
-        <Route exact path="/signin">
-          <SignIn />
-        </Route>
 
-        <ProtectedRoute
-          exact
-          path="/admin"
-          Component={Admin}
-        />
+          <Route exact path="/signup">
+            <SignUp />
+          </Route>
+          <Route exact path="/signin">
+            <SignIn />
+          </Route>
 
-        <ProtectedRoute
-          exact
-          path="/students"
-          Component={Students}
-        />
-        <ProtectedRoute
-          exact
-          path="/exam-board"
-          Component={ExamBoard}
-        />
-        <ProtectedRoute
-          exact
-          path="/exam-upload"
-          Component={UploadExam}
-        />
-        <ProtectedRoute
-          exact
-          path="/student-result"
-          Component={StudentResults}
-        />
-        <ProtectedRoute
-          exact
-          path="/gallery-settings"
-          Component={GallerySettings}
-        />
+          <ProtectedRoute exact path="/admin" Component={Admin} />
 
-        <ProtectedRoute
-          exact
-          path="/students/:id"
-          Component={Student}
-        />
+          <ProtectedRoute exact path="/students" Component={Students} />
+          <ProtectedRoute exact path="/exam-board" Component={ExamBoard} />
+          <ProtectedRoute exact path="/exam-upload" Component={UploadExam} />
+          <ProtectedRoute
+            exact
+            path="/student-result"
+            Component={StudentResults}
+          />
+          <ProtectedRoute
+            exact
+            path="/gallery-settings"
+            Component={GallerySettings}
+          />
 
-        <ProtectedRoute
-          exact
-          path="/serial-number"
-          Component={SerialNumber}
-        />
+          <ProtectedRoute exact path="/students/:id" Component={Student} />
 
-        <Route exact path="*">
-          <NotFound />
-        </Route>
-      </Switch>
-      <Footer />
-    </Router>
-  </div>
-  )
+          <ProtectedRoute
+            exact
+            path="/serial-number"
+            Component={SerialNumber}
+          />
+
+          <Route exact path="*">
+            <NotFound />
+          </Route>
+        </Switch>
+        <Footer />
+      </Router>
+    </div>
+  );
 }
 
-export default Root
+export default Root;

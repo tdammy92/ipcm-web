@@ -30,7 +30,7 @@ function ExamInfo() {
                 <Button
                   mt={5}
                   component={Link}
-                  to="/online-exam"
+                  to="/start-exam"
                   variant="contained"
                   color="primary"
                   size="small"

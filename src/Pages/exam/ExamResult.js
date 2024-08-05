@@ -4,7 +4,7 @@ import Paper from "@material-ui/core/Paper";
 import { Container } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 
-function Result() {
+function ExamResult() {
   return (
     <div className="startExam">
       <Container
@@ -43,4 +43,4 @@ function Result() {
   );
 }
 
-export default Result;
+export default ExamResult;
