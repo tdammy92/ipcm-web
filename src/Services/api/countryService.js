@@ -1,4 +1,3 @@
-import { BaseUrl } from "./BaseUrl";
 import axios from "axios";
 
 
@@ -11,15 +10,14 @@ const headers = {
 
 
 
-export const getCountry = async()=>{
+export const getCountries = async()=>{
 const res = await axios.get(`${process.env.REACT_APP_COUNTRY_API}`,{headers:headers});
-return res
+return res?.data
 }
 
 
-export const getState = async(stateCode)=>{
-
+export const getStates = async(stateCode)=>{
 const res =await  axios.get(`${process.env.REACT_APP_COUNTRY_API}/${stateCode}/states`,{headers:headers});
-return res
+return res?.data
 }
 

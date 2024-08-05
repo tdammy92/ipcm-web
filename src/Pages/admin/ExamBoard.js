@@ -1,29 +1,26 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
+import React from "react";
+
 import Container from "@material-ui/core/Container";
-import { BaseUrl } from "../../Services/api/BaseUrl";
-
-import { GrScorecard } from "react-icons/gr";
-import { FaCloudUploadAlt } from "react-icons/fa";
-
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import Grid from "@material-ui/core/Grid";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
-
+import TableRow from "@material-ui/core/TableRow";
+import { FaCloudUploadAlt } from "react-icons/fa";
+import { GrScorecard } from "react-icons/gr";
+import DashItem from "../../components/partials/dashcardItem";
+import Skeleton from "react-loading-skeleton";
 import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+import { useExams } from "../../Services/queries/exam-query";
+import TableLoader from "../../components/Loaders/TableLoader";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,51 +33,17 @@ const useStyles = makeStyles((theme) => ({
       height: theme.spacing(16),
     },
   },
-  root2: {
-    width: "100%",
-  },
 
-  tableContainer: {
-    maxHeight: 550,
-  },
-
-  headerCard: {
-    display: "flex",
-    width: "auto",
-    alignItems: "center",
-    justifyContent: "space-evenly",
-    // height: "100px",
-    marginTop: theme.spacing(3),
-    marginBottom: theme.spacing(4),
-    flexWrap: "wrap",
-
-    // border: "1px solid  red",
-  },
-  cards: {
+  dashContainer: {
     display: "flex",
     flexDirection: "column",
-    justifyContent: "center",
     alignItems: "center",
-    height: "90px",
-    width: "45%",
-    // minWidth: "80px",
-    textDecoration: "none",
-    borderRadius: 2,
-    margin: "8px",
-
-    // border: "1px solid  blue",
+    marginTop: 20,
+    marginBottom: 10,
   },
-
-  cardsInfoBox: {},
 
   cardsInfoIcon: {
-    fontSize: "50px",
-  },
-
-  cardsInfoDetails: {
-    fontFamily: "10px",
-    margin: 0,
-    padding: 0,
+    fontSize: "35px",
     color: "#01996D",
   },
 }));
@@ -88,8 +51,7 @@ const useStyles = makeStyles((theme) => ({
 function ExamBoard() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
+  const { data: ExamList, isLoading } = useExams({ params: { type: "full" } });
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -106,63 +68,33 @@ function ExamBoard() {
   return (
     <>
       <CssBaseline />
-      <Container maxWidth="lg" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
-
+      <Container maxWidth="md" mx="auto">
         <Typography
           variant="h5"
           component="h4"
-          mt={20}
           align="center"
           color="primary"
-          style={{ marginTop: 20 }}
+          style={{ marginTop: 10 }}
         >
           Exam Dashboard
         </Typography>
 
-        <Box spacing={3} className={classes.headerCard} mx="auto">
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/exam-upload"
-          >
-            <FaCloudUploadAlt style={{ fontSize: "30px", color: "#01996D" }} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Upload Exam
-              </h4>
-              {/* <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Total Students: {studentCount ?? 0}
-              </Typography> */}
-            </Box>
-          </Paper>
-          <Paper
-            elevation={1}
-            className={classes.cards}
-            component={Link}
-            to="/student-result"
-          >
-            <GrScorecard style={{ fontSize: "30px", color: "#01996D" }} />
-            <Box className={classes.cardsInfoBox}>
-              <h4 style={{ margin: 0, padding: 0, color: "#01996D" }}>
-                Results
-              </h4>
-              {/* <Typography
-                variant="body2"
-                component="P"
-                className={classes.cardsInfoDetails}
-              >
-                Exam Management
-              </Typography> */}
-            </Box>
-          </Paper>
-        </Box>
-        {/* </Paper> */}
+        <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
+          <Grid container spacing={2}>
+            <DashItem
+              title="UPLOAD EXAMS"
+              Icon={() => (
+                <FaCloudUploadAlt className={classes.cardsInfoIcon} />
+              )}
+              url={"/exam-upload"}
+            />
+            <DashItem
+              title="RESULTS"
+              Icon={() => <GrScorecard className={classes.cardsInfoIcon} />}
+              url={"/student-result"}
+            />
+          </Grid>
+        </Container>
 
         <div>
           <h3 style={{ color: "#01996D" }}>Available Exams</h3>
@@ -207,6 +139,14 @@ function ExamBoard() {
                           minWidth: 70,
                         }}
                       >
+                        Uploaded by
+                      </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
                         Uploaded On
                       </TableCell>
 
@@ -220,71 +160,77 @@ function ExamBoard() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {/* <TableBody>
-                    {recentStudents.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      recentStudents?.map((item) => {
-                        const {
-                          _id,
-                          surname,
-                          firstName,
+                  {isLoading ? (
+                      <TableLoader rows={5} colums={6} />
+                  ) : (
+                    <TableBody>
+                      {ExamList?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        ExamList?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        ).map((item) => {
+                          const {
+                            exam_uuid,
+                            name,
+                            duration,
+                            uploadedBy: { username },
+                            questions,
+                            createdAt,
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={exam_uuid}
+                              // component={Link}
+                              // to={`/students/${_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <TableCell align="center">{name}</TableCell>
+                              <TableCell align="center">
+                                {duration} Min
+                              </TableCell>
+                              <TableCell align="center">
+                                {questions?.length}
+                              </TableCell>
+                              <TableCell align="center">{username}</TableCell>
 
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={_id}
-                            component={Link}
-                            to={`/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">
-                              {surname} {firstName}
-                            </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody> */}
+                              <TableCell align="center">
+                                {new Date(createdAt).toLocaleDateString()}
+                              </TableCell>
+                              <TableCell align="center">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  size="small"
+                                  className={classes.button}
+                                  // endIcon={<VisibilityIcon />}
+                                >
+                                  View
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                // count={recentStudents?.length}
+                count={ExamList?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Paper>
           </div>

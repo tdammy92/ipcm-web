@@ -454,7 +454,7 @@ body {
   display: flex;
   flex-wrap: wrap;
   list-style-type: none;
-  border-left: 3px solid #01996d;
+  /* border-left: 3px solid #01996d; */
   margin-bottom: 20px;
 }
 
@@ -1014,6 +1014,10 @@ body {
 .project__item > h4 {
   color: #01996d;
   font-size: 18px;
+}
+.project__item > h5 {
+  color: #01996d;
+  font-size: 16px;
 }
 
 .project__item > p {

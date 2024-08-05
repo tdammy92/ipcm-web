@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Container from "@material-ui/core/Container";
 import Box from "@material-ui/core/Box";
 import { makeStyles } from "@material-ui/core/styles";
@@ -7,10 +7,9 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
-import axios from "axios";
 import Avatar from "@material-ui/core/Avatar";
 
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 //table  importss
 import Table from "@material-ui/core/Table";
@@ -21,14 +20,15 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Badge from "@material-ui/core/Badge";
 import { withStyles } from "@material-ui/core/styles";
-
+import IconButton from "@material-ui/core/IconButton";
 //icons
 import WallpaperIcon from "@material-ui/icons/Wallpaper";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 import DeleteIcon from "@material-ui/icons/Delete";
 
-import { iSLoading } from "../../Store/feature";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import { useGallery } from "../../Services/queries/gallery-query";
+import { useDeleteGallery, useUploadGallery } from "../../Services/mutations/gallery-mutation";
+import GalleryLoader from "../../components/Loaders/GalleryLoader";
 
 const StyledBadge = withStyles((theme) => ({
   badge: {
@@ -101,16 +101,7 @@ const useStyles = makeStyles((theme) => ({
     // border: "1px dotted  red",
     border: "1px dotted  #01996d",
   },
-  imageIcon: {
-    // flex: 1,
-    height: theme.spacing(5),
-    width: theme.spacing(5),
-    backgroundColor: "rgba(1, 153, 109, 0.6)",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    borderRadius: "0.5rem",
-  },
+
   uploadText: {
     // flex: 1,
     marginRight: theme.spacing(2),
@@ -161,14 +152,21 @@ const InitialValue = {
   fileName: "",
   caption: "",
 };
+
+
 function GallerySettings() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
+
 
   const imgRef = useRef(null);
 
   const { details } = useSelector((state) => state.users);
+
+
+  const {data:galleryData,isLoading:isLoadingGallery} = useGallery();
+  const {mutateAsync:uploadMutation,isLoading:isUploadingGalleryImage} = useUploadGallery();
+  const {mutateAsync:deleteMutation,isLoading:isDeletingGalleryImage} = useDeleteGallery();
 
   const [file, setFile] = useState();
 
@@ -176,7 +174,6 @@ function GallerySettings() {
     ...InitialValue,
   }));
 
-  const [Images, setImages] = useState([]);
 
   //handle Uploads
   const selectImage = (e) => {
@@ -187,10 +184,9 @@ function GallerySettings() {
   };
 
   const uploadImage = async () => {
-    // console.log("User detail", JSON.stringify(details?.token, null, 2));
+
     if (image?.imageUrl === "") return;
 
-    dispatch(iSLoading(true));
     const payload = {
       imageFile: image?.imageUrl,
       caption: image?.caption,
@@ -198,79 +194,38 @@ function GallerySettings() {
     };
 
     try {
-      const newImageResponse = await axios.post(
-        `${BaseUrl}gallery/upload`,
-        payload,
-        {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${details?.token}`,
-          },
-        }
-      );
+      const newImageResponse = await uploadMutation(payload);
 
       if (newImageResponse.status === 201) {
+        setFile(null)
         setImage({ ...InitialValue });
-        getGalleryImages();
+        // getGalleryImages();
       }
     } catch (error) {
-    } finally {
-      dispatch(iSLoading(false));
-    }
+    } 
   };
 
-  const handleDelete = useCallback(async (Id, publicId) => {
-    dispatch(iSLoading(true));
+  const handleDelete = async (id, publicId) => {
 
-    const payload = {
-      mongoDbId: Id,
-      cloudinaryPublic: publicId,
-    };
-
+    
     try {
-      const deleteRes = await axios.delete(`${BaseUrl}gallery/${Id}`, {
-        data: payload,
-        headers: {
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      if (deleteRes.status === 200) {
-        getGalleryImages();
-      }
-      // console.log(
-      // 	"response from delete response",
-      // 	JSON.stringify(deleteRes, null, 2)
-      // );
+      const payload = {
+        mongoDbId: id,
+        cloudinaryPublic: publicId,
+      };
+
+      const deleteRes = await deleteMutation({id,payload});
+
+      // if (deleteRes.status === 201) {
+    
+      // }
+
     } catch (error) {
-    } finally {
-      dispatch(iSLoading(false));
-    }
-  }, []);
-
-  const getGalleryImages = async () => {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}gallery`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      setImages(res?.data);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
+    } 
   };
 
-  useEffect(() => {
-    getGalleryImages();
 
-    return () => {};
-  }, []);
 
   //fires to get base64 for  Image
   useEffect(() => {
@@ -287,15 +242,10 @@ function GallerySettings() {
     }
   }, [file]);
 
-  // console.log("Image file", image);
-
   return (
     <div>
       <CssBaseline />
-      <Container
-        maxWidth="lg"
-        mt={5}
-      >
+      <Container maxWidth="md" mt={5}>
         <Typography
           variant="h5"
           color="primary"
@@ -305,26 +255,17 @@ function GallerySettings() {
           Gallery Dashboard
         </Typography>
 
-        <Box
-          component="span"
-          mt={4}
-        >
+        <Box component="span" mt={4}>
           <Paper
             variant="outlined"
             elevation={3}
             className={classes.headerCard}
           >
-            <Paper
-              elevation={0}
-              className={classes.OptionContainer}
-            >
-              <div
-                className={classes.imageIconWrapper}
-                onClick={selectImage}
-              >
-                <div className={classes.imageIcon}>
-                  <WallpaperIcon fontSize="small" />
-                </div>
+            <Paper elevation={0} className={classes.OptionContainer}>
+              <div className={classes.imageIconWrapper} onClick={selectImage}>
+                <IconButton>
+                  <WallpaperIcon fontSize="small" color="primary" />
+                </IconButton>
 
                 <Typography
                   variant="subtitle1"
@@ -378,6 +319,7 @@ function GallerySettings() {
               <div>
                 <Typography
                   variant="subtitle1"
+                  color="primary"
                   className={classes.infoText}
                 >
                   NB: Maximum Image allowed in gallery database is 32 images,
@@ -387,62 +329,35 @@ function GallerySettings() {
               </div>
             </Paper>
           </Paper>
-          {/* <Paper elevation={3} className={classes.ImageCard}></Paper>
-           */}
 
-          <TableContainer
-            component={Paper}
-            className={classes.tableContainer}
-          >
-            <Table
-              className={classes.table}
-              aria-label="simple table"
-            >
+          <TableContainer component={Paper} className={classes.tableContainer}>
+            <Table className={classes.table} aria-label="simple table">
               <TableHead>
                 <TableRow>
-                  <TableCell
-                    align="center"
-                    variant="head"
-                    size="medium"
-                  >
-                    <StyledBadge
-                      color="primary"
-                      badgeContent={Images?.length}
-                    >
-                      <Typography
-                        variant="h5"
-                        color="primary"
-                      >
+                  <TableCell align="center" variant="head" size="medium">
+                    <StyledBadge color="primary" badgeContent={galleryData?.length}>
+                      <Typography variant="h5" color="primary">
                         Images
                       </Typography>
                     </StyledBadge>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography
-                      variant="h5"
-                      color="primary"
-                    >
+                    <Typography variant="h5" color="primary">
                       Captions
                     </Typography>
                   </TableCell>
                   <TableCell align="center">
-                    <Typography
-                      variant="h5"
-                      color="primary"
-                    >
+                    <Typography variant="h5" color="primary">
                       Delete
                     </Typography>
                   </TableCell>
                 </TableRow>
               </TableHead>
-              <TableBody>
-                {Images?.map(({ _id, image, caption }, i) => (
+              {isLoadingGallery ? <GalleryLoader/> :<TableBody>
+                {galleryData?.map(({ _id, image, caption }, i) => (
                   <TableRow key={_id}>
                     <TableCell align="center">
-                      <Badge
-                        color="primary"
-                        badgeContent={i + 1}
-                      >
+                      <Badge color="primary" badgeContent={i + 1}>
                         <Avatar
                           alt={`image ${i}`}
                           src={image?.url}
@@ -456,10 +371,7 @@ function GallerySettings() {
                       </Badge>
                     </TableCell>
                     <TableCell align="center">
-                      <Typography
-                        variant="h5"
-                        color="primary"
-                      >
+                      <Typography variant="h5" color="primary">
                         {caption !== "" ? caption : `Nil`}
                       </Typography>
                     </TableCell>
@@ -476,7 +388,7 @@ function GallerySettings() {
                     </TableCell>
                   </TableRow>
                 ))}
-              </TableBody>
+              </TableBody>}
             </Table>
           </TableContainer>
         </Box>

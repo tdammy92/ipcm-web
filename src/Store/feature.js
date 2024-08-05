@@ -9,7 +9,6 @@ const usersSlice = createSlice({
 	},
 	reducers: {
 		iSLoading(state, action) {
-			// Use a "state machine" approach for loading state instead of booleans
 			state.loading = action.payload;
 		},
 		saveUser(state, action) {

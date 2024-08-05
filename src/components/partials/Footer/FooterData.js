@@ -34,6 +34,21 @@ const data = [
     name: "Consultancy",
     path: "/consultancy",
   },
+  {
+    id: 9,
+    name: "Privacy Policy",
+    path: "/policy",
+  },
+  {
+    id: 10,
+    name: "Terms & Condition",
+    path: "/t&c",
+  },
+  {
+    id: 11,
+    name: "Anti-Money Laundry Policy",
+    path: "/money-laundry",
+  },
 
   {
     id: 7,

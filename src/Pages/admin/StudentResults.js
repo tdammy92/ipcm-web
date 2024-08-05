@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { toast } from "react-toastify";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
-import { GrScorecard } from "react-icons/gr";
-import { FaCloudUploadAlt } from "react-icons/fa";
-
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 
 import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -89,8 +84,9 @@ function StudentResults() {
   const classes = useStyles();
   const { details } = useSelector((state) => state.users);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [studentResults, setStudentResults] = useState([]);
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -100,10 +96,48 @@ function StudentResults() {
     setRowsPerPage(+event.target.value);
     setPage(0);
   };
+
+  const getStudentResults = async () => {
+    try {
+      const responds = await axios.get(
+        `${BaseUrl}result`,
+        // { params: { type: "full" } },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${details?.token}`,
+          },
+        }
+      );
+
+      if (responds.status === 200) {
+        setStudentResults(responds?.data);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+
+  useEffect(() => {
+    getStudentResults();
+    return () => {};
+  }, []);
+
+  // console.log(JSON.stringify(studentResults, null, 3));
+
   return (
     <div>
       <CssBaseline />
-      <Container maxWidth="lg" mx="auto">
+      <Container maxWidth="md" mx="auto">
         {/* <Paper elevation={2} className={classes.headerCard}> */}
 
         {/* <Typography
@@ -151,6 +185,14 @@ function StudentResults() {
                       >
                         Exam Title
                       </TableCell>
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
+                        Passed
+                      </TableCell>
 
                       <TableCell
                         align="center"
@@ -180,71 +222,80 @@ function StudentResults() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  {/* <TableBody>
-                    {recentStudents.length < 1 ? (
+                  <TableBody>
+                    {studentResults?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      recentStudents?.map((item) => {
-                        const {
-                          _id,
-                          surname,
-                          firstName,
-
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={_id}
-                            component={Link}
-                            to={`/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">
-                              {surname} {firstName}
-                            </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                endIcon={<VisibilityIcon />}
+                      studentResults
+                        ?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )
+                        .map((item) => {
+                          const {
+                            _id,
+                            total_score,
+                            pass,
+                            createdAt,
+                            exam: { examName },
+                            student: { surname, firstName, middleName, gender },
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={_id}
+                              // component={Link}
+                              // to={`/students/${_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <TableCell align="center">
+                                {surname} {firstName}
+                              </TableCell>
+                              <TableCell align="center">{examName}</TableCell>
+                              <TableCell
+                                align="center"
+                                style={{ color: pass ? "green" : "red" }}
                               >
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
+                                {pass ? "Pass" : "Fail"}
+                              </TableCell>
+                              <TableCell align="center">
+                                {total_score}
+                              </TableCell>
+
+                              <TableCell align="center">
+                                {new Date(createdAt).toLocaleDateString()}
+                              </TableCell>
+                              <TableCell align="center">
+                                <Button
+                                  variant="contained"
+                                  color="primary"
+                                  size="small"
+                                  className={classes.button}
+                                  // endIcon={<VisibilityIcon />}
+                                >
+                                  View
+                                </Button>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
                     )}
-                  </TableBody> */}
+                  </TableBody>{" "}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                // count={recentStudents?.length}
+                count={studentResults?.length}
                 rowsPerPage={rowsPerPage}
                 page={page}
-                onPageChange={handleChangePage}
-                onRowsPerPageChange={handleChangeRowsPerPage}
+                onChangePage={handleChangePage}
+                onChangeRowsPerPage={handleChangeRowsPerPage}
               />
             </Paper>
           </div>

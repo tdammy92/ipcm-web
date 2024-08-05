@@ -1,71 +1,53 @@
-import React, { useEffect, useState } from "react";
-
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React from "react";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { createMuiTheme } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
-import { useSelector, useDispatch } from "react-redux";
-// import { ToastContainer, toast } from "react-toastify";
+import { ToastContainer } from "react-toastify";
 import AOS from "aos";
+import { PersistGate } from "redux-persist/integration/react";
+import { persistStore } from "redux-persist";
+import { Provider } from "react-redux";
+import store from "./Store/Store";
 import "aos/dist/aos.css";
-import NavBar from "./components/partials/NavBar/NavBar";
-import Home from "./Pages/Home";
-import About from "./Pages/About";
-import Contact from "./Pages/Contact";
-import Member from "./Pages/Member";
-import Nysc from "./Pages/Nysc";
+import "react-toastify/dist/ReactToastify.css";
+import Root from "./Navigation";
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import 'react-loading-skeleton/dist/skeleton.css'
 
-import Certification from "./Pages/Certification";
-import Register from "./Pages/Register";
-import Project from "./Pages/Project";
-import Career from "./Pages/Career";
-import Consult from "./Pages/Consult";
-import License from "./Pages/License";
-import Admin from "./Pages/admin/Admin";
-import SignUp from "./Pages/auth/SIgnUp";
-import SignIn from "./Pages/auth/SignIn";
-import SerialNumber from "./Pages/admin/SerialNumber";
-import Students from "./Pages/admin/Students";
-import Student from "./Pages/admin/Student";
-import Gallery from "./Pages/Gallery";
-import GallerySettings from "./Pages/admin/GallerySettings";
-import PrintForm from "./Pages/printForm";
-import NotFound from "./Pages/NotFound";
-
-import ProtectedRoute from "./Pages/auth/ProtectedRoute";
-import Loader from "./components/partials/Loader";
-
-import { PDFDownloadLink, PDFViewer } from "@react-pdf/renderer";
-import ExamInfo from "./Pages/exam/ExamInfo";
-import ExamBoard from "./Pages/admin/ExamBoard";
-import UploadExam from "./Pages/admin/UploadExam";
-import StudentResults from "./Pages/admin/StudentResults";
-import StartExam from "./Pages/exam/StartExam";
-import OnlineExam from "./Pages/exam/OnlineExam";
-import Result from "./Pages/exam/Result";
 
 const defualtTheme = createMuiTheme({
   palette: {
     primary: {
       main: "#01996D",
+      // main: "#f44336",
     },
     secondary: {
       main: "#fff",
-      danger: "#f50057",
+      light: "#Eeefff",
     },
-    // error: {
-    // },
+    error: {
+      main: "#f44336",
+      // light: "#e57373",
+      // dark: "#d32f2f",
+    },
   },
 });
 
+let persist = persistStore(store);
+const queryClient = new QueryClient({
+  defaultOptions: {queries: {retry: 3, retryDelay: 500}},
+});
+
 function App() {
-  const user = useSelector((state) => state.users);
-  const isLoggedin = user.isLoggedin;
 
   AOS.init();
 
   return (
+    <Provider store={store}>
+  <QueryClientProvider client={queryClient}>
+    <PersistGate loading={null} persistor={persist}>
     <ThemeProvider theme={defualtTheme}>
-      {/* <ToastContainer
+      <ToastContainer
         position="top-left"
         autoClose={5000}
         hideProgressBar={false}
@@ -75,139 +57,15 @@ function App() {
         pauseOnFocusLoss
         draggable
         pauseOnHover
-      /> */}
-      <Loader />
-      <div className="index">
-        <Router>
-          <NavBar />
 
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-            <Route exact path="/about">
-              <About />
-            </Route>
-            <Route exact path="/contact">
-              <Contact />
-            </Route>
-            <Route exact path="/member">
-              <Member />
-            </Route>
-            <Route exact path="/nysc">
-              <Nysc />
-            </Route>
-            <Route exact path="/exam-info">
-              <ExamInfo />
-            </Route>
-            <Route exact path="/certification">
-              <Certification />
-            </Route>
-            <Route exact path="/register">
-              <Register />
-            </Route>
-            <Route exact path="/projects">
-              <Project />
-            </Route>
-            <Route exact path="/gallery">
-              <Gallery />
-            </Route>
-            <Route exact path="/career">
-              <Career />
-            </Route>
-            <Route exact path="/consultancy">
-              <Consult />
-            </Route>
-            <Route exact path="/license">
-              <License />
-            </Route>
-            <Route exact path="/start-exam">
-              <StartExam />
-            </Route>
-            <Route exact path="/result">
-              <Result />
-            </Route>
-            <Route exact path="/online-exam">
-              <OnlineExam />
-            </Route>
-            {/* <Route
-              exact
-              path="/form"
-            >
-              <PrintForm />
-            </Route> */}
-            {/* <Route exact path='/admin'>
-
-                      <Admin/>
-
-                  </Route> */}
-            <Route exact path="/signup">
-              <SignUp />
-            </Route>
-            <Route exact path="/signin">
-              <SignIn />
-            </Route>
-
-            <ProtectedRoute
-              exact
-              path="/admin"
-              IsLoggedin={isLoggedin}
-              Component={Admin}
-            />
-
-            <ProtectedRoute
-              exact
-              path="/students"
-              IsLoggedin={isLoggedin}
-              Component={Students}
-            />
-            <ProtectedRoute
-              exact
-              path="/exam-board"
-              IsLoggedin={isLoggedin}
-              Component={ExamBoard}
-            />
-            <ProtectedRoute
-              exact
-              path="/exam-upload"
-              IsLoggedin={isLoggedin}
-              Component={UploadExam}
-            />
-            <ProtectedRoute
-              exact
-              path="/student-result"
-              IsLoggedin={isLoggedin}
-              Component={StudentResults}
-            />
-            <ProtectedRoute
-              exact
-              path="/gallery-settings"
-              IsLoggedin={isLoggedin}
-              Component={GallerySettings}
-            />
-
-            <ProtectedRoute
-              exact
-              path="/students/:id"
-              IsLoggedin={isLoggedin}
-              Component={Student}
-            />
-
-            <ProtectedRoute
-              exact
-              path="/serial-number"
-              IsLoggedin={isLoggedin}
-              Component={SerialNumber}
-            />
-
-            <Route exact path="*">
-              <NotFound />
-            </Route>
-          </Switch>
-          {/* <Footer/> */}
-        </Router>
-      </div>
+      />
+      {/* <Loader /> */}
+      <Root />
     </ThemeProvider>
+    </PersistGate>
+    <ReactQueryDevtools initialIsOpen={true} />
+  </QueryClientProvider>
+</Provider>
   );
 }
 

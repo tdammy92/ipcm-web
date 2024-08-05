@@ -1,50 +1,65 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link, Redirect, useParams, useHistory } from "react-router-dom";
-import axios from "axios";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import React, {  useRef } from "react";
+import { 
+  // Redirect,
+   useParams, useHistory } from "react-router-dom";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import { makeStyles } from "@material-ui/core/styles";
+import Container from "@material-ui/core/Container";
+import Grid from "@material-ui/core/Grid";
+import Box from "@material-ui/core/Box";
+
 import Card from "@material-ui/core/Card";
 import CardActions from "@material-ui/core/CardActions";
 import CardContent from "@material-ui/core/CardContent";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
-import List from "@material-ui/core/List";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemText from "@material-ui/core/ListItemText";
+
 import PrintIcon from "@material-ui/icons/Print";
 import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
-
+import { FaUserCircle } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+
+
 import PrintForm from "../printForm";
-import Pdf from "react-to-pdf";
-import { Avatar } from "@material-ui/core";
+// import Pdf from "react-to-pdf";
+import { useStudent } from "../../Services/queries/student-query";
+import { userAvater } from "../../constants";
+import { useDeleteStudent } from "../../Services/mutations/student-mutation";
 
 const useStyles = makeStyles({
   root: {
     minWidth: 275,
-    margin: "10px",
+    marginTop: 30,
   },
-  bullet: {
-    display: "inline-block",
-    margin: "0 2px",
-    transform: "scale(0.8)",
+  divider: {
+    backgroundColor: "#01996D",
+  },
+  gridContainer: {
+    marginBottom: 30,
+    marginLeft: 20,
+    marginRight: 20,
+    alignItems: "center",
+  },
+  subHeading: {
+    textTransform: "uppercase",
+  },
+
+  passport: {
+    borderRadius: 4,
+    height: 180,
+    width: 200,
+    objectFit: "cover",
+  },
+  valueColum: {
+    marginTop: 7,
   },
   title: {
-    fontSize: 14,
+    marginRight: 5,
   },
-  pos: {
-    marginBottom: 12,
-  },
-  List: {
-    width: "100%",
-    // maxHeight:'50px',
-    maxWidth: 360,
-    // backgroundColor: theme.palette.background.paper,
+  value: {
+    fontWeight: 500,
   },
 });
 
@@ -55,51 +70,23 @@ function Student() {
 
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
 
-  const [Details, setDetails] = useState({});
-  const [studentDetails, setStudentDetails] = useState({});
+  const {data:studentDetails,isLoading:isLoadingStudent} = useStudent({id,enabled:!!id});
+  const {mutateAsync,isLoading:isDeleteing}  = useDeleteStudent()
 
-  async function getStudent() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student/${id}`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
 
-      // console.log(res?.data);
 
-      setDetails(res?.data);
 
-      setStudentDetails({
-        ...res?.data,
-        passport: {
-          url:
-            res.data.passport === undefined
-              ? `https://res.cloudinary.com/bilektechnologies/image/upload/v1687963208/samples/f19cjtmikb6r7geqrpkf.jpg`
-              : res?.data?.passport?.url,
-        },
-      });
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
 
   //function to delete student
-  async function DeleteStudent() {
-    dispatch(iSLoading(true));
+const DeleteStudent  = async() =>{
 
-    const documentIds = Details?.documents?.map((doc) => doc?.file?.public_id);
 
-    const mongoStudentId = Details?._id;
+    const documentIds = studentDetails?.documents?.map((doc) => doc?.file?.public_id);
+
+    const mongoStudentId = studentDetails?._id;
     const cloudinaryPublicIds = [
-      ...(Details?.passport?.public_id ? [Details?.passport?.public_id] : []),
+      ...(studentDetails?.passport?.public_id ? [studentDetails?.passport?.public_id] : []),
       ...(documentIds.length > 0 ? [...documentIds] : []),
     ];
 
@@ -109,204 +96,511 @@ function Student() {
     };
 
     try {
-      const res = await axios.delete(`${BaseUrl}student/${id}`, {
-        data: payload,
-        headers: {
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
+      const res = await mutateAsync({id,payload})
 
-      history.replace("/students");
+
+      if (res.status) {
+        history.replace("/students");
+        
+      }
+
     } catch (error) {
       console.log(error);
-    } finally {
-      dispatch(iSLoading(false));
-    }
+    } 
   }
 
   const componentRef = useRef();
 
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
+    copyStyles: true,
   });
 
-  useEffect(() => {
-    getStudent();
-  }, [id]);
+
+
+  // console.log(JSON.stringify(studentDetails, null, 2));
 
   return (
-    <div>
-      <Card
-        className={classes.root}
-        variant="outlined"
-        elevation={3}
-      >
-        <CardContent ref={componentRef}>
-          <Typography
-            variant="h4"
-            color="primary"
-          >
-            {Details.title} {Details.surname} {Details.firstName}{" "}
-            {Details.middleName}
-          </Typography>
-
-          <Divider />
-
-          <List
-            component="nav"
-            className={classes.List}
-            aria-label="mailbox folders"
-          >
-            <ListItem button>Email : {Details?.email}</ListItem>
-            <Divider />
-            <ListItem
-              button
-              divider
+    <>
+ {!isLoadingStudent &&   <div>
+      <Container maxWidth="md" mx="auto">
+        <Card className={classes.root} variant="outlined" elevation={3}>
+          <CardContent ref={componentRef}>
+            <Box style={{ marginBottom: 10 }}>
+              <Typography color="primary" align="center" variant="subtitle1">
+                INSTITUTE OF GLOBAL PEACE AND CONFLICT MANAGEMENT
+              </Typography>
+              <Typography align="center">
+                Head office:Suite 311 a&b, 2nd floor, Beta foundation plaza
+                No:359, Ebitu Ukiwe str, Jabi, abuja
+              </Typography>
+              <Typography align="center">
+                igpcminfo@gmail.com || +2347033458730 || RC:1787595
+              </Typography>
+            </Box>
+            <Divider className={classes.divider} />
+            <Typography
+              variant="subtitle1"
+              align="center"
+              color="primary"
+              className={classes.subHeading}
             >
-              Phone: {Details?.phoneNumber}
-            </ListItem>
-            <ListItem button>Phone: {Details?.phoneNumber}</ListItem>
-            <Divider light />
-            <ListItem button>
-              Date of Birth: {new Date(Details?.dob).toLocaleDateString()}
-            </ListItem>
-            <Divider light />
-            <ListItem button>Country: {Details?.country}</ListItem>
-            <Divider light />
-            <ListItem button>State: {Details?.state}</ListItem>
-            <Divider light />
-            <ListItem button>
-              Qualification : {Details?.eduQualification}
-            </ListItem>
-            <Divider light />
-          </List>
-
-          <Typography variant="h6">Employment Details</Typography>
-
-          <List
-            component="nav"
-            className={classes.List}
-            aria-label="mailbox folders"
-          >
-            <ListItem button>
-              Organisation : {Details?.currentEmploymet?.organization}
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              divider
-            >
-              Role/Postion: {Details?.currentEmploymet?.position}
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              divider
-            >
-              Total Years of Career Experience:{" "}
-              {Details?.currentEmploymet?.yearsExperience}
-            </ListItem>
-
-            <Divider light />
-            <ListItem button>
-              Date Joined:{" "}
-              {new Date(
-                Details?.currentEmploymet?.startDate
-              ).toLocaleDateString()}
-            </ListItem>
-            <Divider light />
-
-            <ListItem button>
-              Address: {Details?.currentEmploymet?.location}
-            </ListItem>
-            <Divider light />
-          </List>
-          <Typography variant="h6">Course Application Details</Typography>
-
-          <List
-            component="nav"
-            className={classes.List}
-            aria-label="mailbox folders"
-          >
-            <ListItem button>
-              Application Fee : {Details?.applicationFee}
-            </ListItem>
-            <Divider />
-            <ListItem button>
-              Payment Method: {Details?.paymentMethods}
-            </ListItem>
-            <Divider />
-            <ListItem
-              button
-              divider
-            >
-              MemberShip Cader: {Details?.membershipCadre}
-            </ListItem>
-            <Divider light />
-            <ListItem button>
-              Membership Route: {Details?.membershipRoute}
-            </ListItem>
-
-            <Divider light />
-            <ListItem button>PGD Course: {Details?.pgdCourses}</ListItem>
-            <Divider light />
-
-            <ListItem button>
-              Membership Type: {Details?.membershipType?.join()}
-            </ListItem>
-            <Divider light />
-            <ListItem button>
-              Academic Programs : {Details?.academicPrograms?.join()}
-            </ListItem>
-            <Divider light />
-            {/* Academic Programs :  */}
-          </List>
-        </CardContent>
-        <CardActions
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <Button
-            onClick={handlePrint}
-            variant="contained"
-            color="primary"
-            size="small"
-            className={classes.button}
-            startIcon={<PrintIcon />}
-          >
-            Print
-          </Button>
-
-          <PDFDownloadLink
-            document={<PrintForm studentDetails={studentDetails} />}
-            fileName={`IGPCM_FORM_REPRINT_${Details?.surname}`}
-          >
-            {({ loading }) =>
-              loading ? (
-                <Button
-                  disabled={true}
-                  color="primary"
+              Basic details
+            </Typography>
+            <Grid container className={classes.gridContainer}>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
                 >
-                  Getting Pdf
-                </Button>
-              ) : (
-                <Button
-                  variant="outlined"
-                  size="small"
-                  color="primary"
-                  className={classes.button}
-                  startIcon={<PictureAsPdfIcon />}
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Title:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails.title}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
                 >
-                  Pdf
-                </Button>
-              )
-            }
-          </PDFDownloadLink>
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Name:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails.surname} {studentDetails.firstName} {studentDetails.middleName}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Phone:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.phoneNumber}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Email:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.email}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Date of Birth:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {new Date(studentDetails?.dob).toLocaleDateString()}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Gender:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.gender}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Nationality:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.country}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    State/Province:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.state}
+                  </Typography>
+                </Box>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Qualification:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.eduQualification}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid
+                item
+                sm={12}
+                md={6}
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Box roundeds style={{ maxWidth: 150 }}>
+                  {studentDetails?.passport ? (
+                    <img
+                      alt={`${studentDetails.firstName} ${studentDetails.surname}`}
+                      src={studentDetails?.passport?.url ?? userAvater}
+                      className={classes.passport}
+                    />
+                  ) : (
+                    <FaUserCircle size={180} color="#01996D" />
+                  )}
+                </Box>
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+            <Typography
+              className={classes.subHeading}
+              variant="subtitle1"
+              align="center"
+              color="primary"
+            >
+              Employment details
+            </Typography>
+            <Grid container className={classes.gridContainer}>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Organisation:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.currentEmploymet?.organization}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Role/Postion:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {" "}
+                    {studentDetails?.currentEmploymet?.position}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Years of Experience:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.currentEmploymet?.yearsExperience}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Date Joined:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {new Date(
+                      studentDetails?.currentEmploymet?.startDate
+                    ).toLocaleDateString()}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Address:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.currentEmploymet?.location}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+            <Divider className={classes.divider} />
+            <Typography
+              className={classes.subHeading}
+              variant="subtitle1"
+              align="center"
+              color="primary"
+            >
+              Course Application Details
+            </Typography>
+            <Grid container className={classes.gridContainer}>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Application Fee:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.applicationFee}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Payment Method:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {" "}
+                    Payment Method: {studentDetails?.paymentMethods}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    MemberShip Cader:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.membershipCadre}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Membership Route:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.membershipRoute}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    PGD Course:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.pgdCourses}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Membership Type:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.membershipType?.join()}
+                  </Typography>
+                </Box>
+              </Grid>
+              <Grid item sm={12} md={6}>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  className={classes.valueColum}
+                >
+                  <Typography variant="subtitle1" className={classes.title}>
+                    Academic Programs:
+                  </Typography>
+                  <Typography
+                    variant="body1"
+                    color="primary"
+                    className={classes.value}
+                  >
+                    {studentDetails?.academicPrograms?.join()}
+                  </Typography>
+                </Box>
+              </Grid>
+            </Grid>
+          </CardContent>
+          <CardActions
+            gutterBottom
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              marginBottom: 20,
+            }}
+          >
+            <Button
+              onClick={handlePrint}
+              variant="contained"
+              color="primary"
+              size="small"
+              className={classes.button}
+              startIcon={<PrintIcon />}
+            >
+              Print
+            </Button>
 
-          {/* <Pdf
+            <PDFDownloadLink
+              document={<PrintForm studentDetails={studentDetails} />}
+              fileName={`IGPCM_FORM_REPRINT_${studentDetails?.surname}`}
+            >
+              {({ loading }) =>
+                loading ? (
+                  <Button disabled={true} color="primary">
+                    Getting Pdf
+                  </Button>
+                ) : (
+                  <Button
+                    variant="outlined"
+                    size="small"
+                    color="primary"
+                    className={classes.button}
+                    startIcon={<PictureAsPdfIcon />}
+                  >
+                    Pdf
+                  </Button>
+                )
+              }
+            </PDFDownloadLink>
+
+            {/* <Pdf
             targetRef={componentRef}
             filename={`${Details.surname}-${Details.firstName}`}
           >
@@ -324,19 +618,22 @@ function Student() {
             )}
           </Pdf> */}
 
-          <Button
-            variant="outlined"
-            size="small"
-            style={{ color: "red" }}
-            className={classes.button}
-            endIcon={<DeleteForeverIcon />}
-            onClick={DeleteStudent}
-          >
-            Remove
-          </Button>
-        </CardActions>
-      </Card>
-    </div>
+            <Button
+              variant="outlined"
+              size="small"
+              // color="error"
+              style={{ color: "red" }}
+              endIcon={<DeleteForeverIcon />}
+              onClick={DeleteStudent}
+            >
+              Remove
+            </Button>
+          </CardActions>
+        </Card>
+      </Container>
+    </div>}
+    
+    </>
   );
 }
 

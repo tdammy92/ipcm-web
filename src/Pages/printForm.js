@@ -14,19 +14,13 @@ const PrintForm = ({ studentDetails }) => {
   const LogoUrl =
     "https://res.cloudinary.com/bilektechnologies/image/upload/v1687889327/igpcm-document/o0zbfrdl7ovferixsaoj.png";
 
-  if (Object.keys(studentDetails).length === 0) {
+  if (Object.keys(studentDetails)?.length === 0) {
     return (
       <Document>
-        <Page
-          size="A4"
-          style={styles.page}
-        >
+        <Page size="A4" style={styles.page}>
           <View style={styles.headerContainer}>
             <View style={styles.logoContainer}>
-              <Image
-                style={styles.logoImage}
-                src={LogoUrl}
-              />
+              <Image style={styles.logoImage} src={LogoUrl} />
             </View>
             <View style={styles.textHeadingContainer}>
               <Text style={styles.mainHeadingText}>
@@ -65,16 +59,10 @@ const PrintForm = ({ studentDetails }) => {
 
   return (
     <Document>
-      <Page
-        size="A4"
-        style={styles.page}
-      >
+      <Page size="A4" style={styles.page}>
         <View style={styles.headerContainer}>
           <View style={styles.logoContainer}>
-            <Image
-              style={styles.logoImage}
-              src={LogoUrl}
-            />
+            <Image style={styles.logoImage} src={LogoUrl} />
           </View>
           <View style={styles.textHeadingContainer}>
             <Text style={styles.mainHeadingText}>
@@ -96,7 +84,7 @@ const PrintForm = ({ studentDetails }) => {
         </View>
 
         <View style={styles.bodyContainer}>
-          <Text style={styles.candidateText}>Candidate Details</Text>
+          <Text style={styles.candidateText}>Basic Details</Text>
           <View style={styles.basicDetailsContainer}>
             <View style={styles.basicDetailsLeft}>
               <View style={styles.itemWrapper}>
@@ -211,7 +199,7 @@ const PrintForm = ({ studentDetails }) => {
             </View>
           </View>
 
-          <Text style={styles.candidateText}>Program Selected</Text>
+          <Text style={styles.candidateText}>Course Application Details</Text>
 
           <View style={styles.sectionContainer}>
             <View style={styles.colunmWrapper}>
@@ -248,17 +236,11 @@ const PrintForm = ({ studentDetails }) => {
           <View style={styles.sectionContainer}>
             {studentDetails.academicPrograms.map((prog, index) => {
               return (
-                <View
-                  key={index}
-                  style={styles.selectedprograms}
-                >
+                <View key={index} style={styles.selectedprograms}>
                   <Text style={styles.selectedPrograms}>{prog.name}</Text>
                   {prog.options.map((opt, i) => {
                     return (
-                      <Text
-                        key={i}
-                        style={styles.selectedOption}
-                      >
+                      <Text key={i} style={styles.selectedOption}>
                         {opt},{" "}
                       </Text>
                     );
@@ -268,10 +250,7 @@ const PrintForm = ({ studentDetails }) => {
             })}
           </View>
         </View>
-        <View
-          style={styles.footerContainer}
-          fixed
-        >
+        <View style={styles.footerContainer} fixed>
           <View style={styles.printTextContainer}>
             <Text style={styles.printText}>Date Printed:</Text>
             <Text style={styles.dateText}>

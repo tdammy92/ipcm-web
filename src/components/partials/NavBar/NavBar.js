@@ -10,13 +10,12 @@ import ImgeUrl from "../../../assets/images/IGPCM_NewLogo.png";
 import DesktopNavBar from "./DesktopNavBar";
 import MobileNavBar from "./MobileNavBar";
 import { LogOutUser } from "../../../Store/feature";
+import { protectedRoute, unProtectedRoute } from "../../Data/common";
 
 function NavBar() {
   const dispatch = useDispatch();
   const history = useHistory();
-  const {
-    details: { admin },
-  } = useSelector((state) => state.users);
+  const user = useSelector((state) => state.users);
 
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
@@ -42,14 +41,7 @@ function NavBar() {
             </h2>
           </Link>
 
-          {location === "/" ||
-          location === "/about" ||
-          location === "/register" ||
-          location === "/contact" ||
-          location === "/member" ||
-          location === "/nysc" ||
-          location === "/exam-info" ||
-          location === "/certification" ? (
+          {unProtectedRoute.includes(location) ? (
             <>
               {!isMobile && <DesktopNavBar />}
               {isMobile && <MobileNavBar />}
@@ -57,14 +49,10 @@ function NavBar() {
           ) : null}
 
           <>
-            {(location === "/admin" ||
-              location === "/students/*" ||
-              location === "/students" ||
-              location === "/serial-number" ||
-              location === "/gallery-settings") && (
+            {protectedRoute.includes(location) && (
               <div style={{ display: "flex", alignItems: "center" }}>
                 <p style={{ marginRight: "5px", color: "#01996D" }}>
-                  {admin?.email.split("@")[0].toUpperCase()}
+                  {user?.details?.username?.toUpperCase()}
                 </p>
                 ||
                 <span

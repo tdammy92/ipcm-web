@@ -1,11 +1,10 @@
+import FacebookIcon from "@material-ui/icons/Facebook";
+import InstagramIcon from "@material-ui/icons/Instagram";
 import React from "react";
 import { Link } from "react-router-dom";
 import data from "./FooterData";
-import FacebookIcon from "@material-ui/icons/Facebook";
-import InstagramIcon from "@material-ui/icons/Instagram";
 // import TwitterIcon from '@material-ui/icons/Twitter';
 import EmailIcon from "@material-ui/icons/Email";
-import { Container } from "@material-ui/core";
 
 const Links = ({ name, path }) => {
 	return <Link to={path}>{name}</Link>;

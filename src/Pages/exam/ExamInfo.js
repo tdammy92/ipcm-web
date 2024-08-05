@@ -14,7 +14,6 @@ function ExamInfo() {
       <Container mx="auto">
         <div className="About__container">
           {/* <h3 className='page__title'>Examination</h3> */}
-
           <div style={{ marginTop: 50 }}>
             <Paper my={5} elevation={2}>
               <Box
@@ -197,9 +196,10 @@ function ExamInfo() {
               </p>
             </div>
           </div>
+
         </div>
       </Container>
-      <Footer />
+
     </div>
   );
 }
