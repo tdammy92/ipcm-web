@@ -109,14 +109,14 @@ function Admin() {
               description="Total Students: "
               count={studentsCountData?.count?? 0}
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
-              url={"/students"}
+              url={`/admin/students`}
             />
-           {details?.role === ROLES?.SUPER_ADMIN && <DashItem
+           {/* {details?.role === ROLES?.SUPER_ADMIN && <DashItem
               title="EXAMS"
               description=" Exam Dashboard"
               Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
               url={"/exam-board"}
-            />}
+            />} */}
             <DashItem
               title="SERIAL NUMBER"
               description="Total Generated serial: "
@@ -124,13 +124,13 @@ function Admin() {
               Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
               url={"/serial-number"}
             />
-            <DashItem
+            {/* <DashItem
               title="GALLERY"
               description="Upload and remove images"
               // count={serialNumberCount ?? 0}
               Icon={() => <GrGallery className={classes.cardsInfoIcon} />}
               url={"/gallery-settings"}
-            />
+            /> */}
           </Grid>
         </Container>
 
@@ -197,17 +197,17 @@ function Admin() {
                       >
                         DATE
                       </TableCell>
-                      <TableCell
+                      {/* <TableCell
                         align="center"
                         style={{
                           minWidth: 70,
                         }}
                       >
                         ACTION
-                      </TableCell>
+                      </TableCell> */}
                     </TableRow>
                   </TableHead>
-                 {isLoadingRecentStudents ? <TableLoader rows={5} colums={7} /> :<TableBody>
+                 {isLoadingRecentStudents ? <TableLoader rows={5} colums={6} /> :<TableBody>
                     {recentStudentsData?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
@@ -232,7 +232,7 @@ function Admin() {
                             tabIndex={-1}
                             key={_id}
                             component={Link}
-                            to={`/students/${_id}`}
+                            to={`/admin/students/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
                             <TableCell align="center">
@@ -245,7 +245,7 @@ function Admin() {
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
                             </TableCell>
-                            <TableCell align="center">
+                            {/* <TableCell align="center">
                               <Button
                                 variant="contained"
                                 color="primary"
@@ -255,7 +255,7 @@ function Admin() {
                               >
                                 View
                               </Button>
-                            </TableCell>
+                            </TableCell> */}
                           </TableRow>
                         );
                       })

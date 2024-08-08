@@ -34,18 +34,24 @@ import ExamBoard from "../Pages/admin/ExamBoard";
 import UploadExam from "../Pages/admin/UploadExam";
 import StudentResults from "../Pages/admin/StudentResults";
 import MoneyLaundry from "../Pages/MoneyLaundry";
+import MainSection from '../Pages/admin';
 
-
+import {
+  useLocation
+} from "react-router-dom";
 
 
 function Root() {
 
 
 
+
+
+
   return (
     <div className="index">
     <Router>
-      <NavBar />
+     <NavBar />
 
       <Switch>
         <Route exact path="/">
@@ -111,12 +117,12 @@ function Root() {
         </Route>
 
         <ProtectedRoute
-          exact
+          // exact
           path="/admin"
-          Component={Admin}
+          Component={MainSection}
         />
 
-        <ProtectedRoute
+        {/* <ProtectedRoute
           exact
           path="/students"
           Component={Students}
@@ -152,7 +158,7 @@ function Root() {
           exact
           path="/serial-number"
           Component={SerialNumber}
-        />
+        /> */}
 
         <Route exact path="*">
           <NotFound />
