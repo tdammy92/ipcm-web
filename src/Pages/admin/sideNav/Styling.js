@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
 
-const drawerWidth = 95;
+const drawerWidth = 155;
 const drawerHeight = '90%';
   const primaryColor = '#01996d'
 
@@ -49,24 +49,34 @@ drawerPaper: {
     },
     listItem: {
       padding: 0,
-      height: "5rem"
+      height: "5rem",
+      paddingLeft:15,
     },
     listItemTitle: {
       color: primaryColor,
-      fontSize: "0.8rem",
-      textAlign: "center",
+      fontSize: "1rem",
+    //   textAlign: "left",
+    paddingLeft:4,
       textDecoration:'none',
 
     },
     listItemIcon: {
-      minWidth: "fit-content",
-      color: primaryColor
+    //   minWidth: "fit-content",
+      color: primaryColor,
+
     },
     listItemContainer: {
-      width: "fit-content",
+    //   width: "fit-content",
       marginTop: 10,
       marginBottom: 10,
-      padding: 0
+      padding: 0,
+   display: "flex",
+      flexDirection:'row',
+      alignItems:'center',
+      justifyContent:'start'
+
+      
+
     },
     logo: {
       height: logoHeight
@@ -74,7 +84,7 @@ drawerPaper: {
     menuIcon: {
       color: primaryColor
     },
-    
+
     navBarItems: {
       height: `calc(65% - ${logoHeight}px)`,
       display: "flex",
@@ -86,9 +96,8 @@ drawerPaper: {
     // position:'absolute',
     // bottom:20,
     textAlign:'center',
-      display: "flex",
-      flexDirection: "column",
-      justifyContent: "center"
+   
+    
     }
   })
 );

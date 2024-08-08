@@ -55,32 +55,21 @@ const SideNav = () => {
           {data.menuItems.map((listItem, index) => {
             const IconTag = data.components[listItem.icon];
             return (
-        
-                <ListItem
-                  button
-                  to={`${url}${listItem.link}`} key={listItem.title}
-                  component={Link}
-                  classes={{ root: classes.listItem }}
-                  onMouseOver={() => setActiveItemId(index)}
-                  onMouseOut={() => setActiveItemId(defaultState)}
-                >
-                  <Container className={classes.listItemContainer}>
-                    <ListItemIcon
-                      className={itemId === index ? classes.hide : classes.show}
-                      classes={{ root: classes.listItemIcon }}
-                    >
-                      {<IconTag size={35} />}
-                    </ListItemIcon>
-                    <Typography
-                      className={`${classes.listItemTitle} ${
-                        itemId === index ? classes.show : classes.hide
-                      }`}
-                    >
-                      {listItem.title}
-                    </Typography>
-                  </Container>
-                </ListItem>
-       
+              <ListItem
+                button
+                to={`${url}${listItem.link}`}
+                key={listItem.title}
+                component={Link}
+                classes={{ root: classes.listItem }}
+                onMouseOver={() => setActiveItemId(index)}
+                onMouseOut={() => setActiveItemId(defaultState)}
+              >
+                {<IconTag size={25} />}
+
+                <Typography className={`${classes.listItemTitle}`}>
+                  {listItem.title}
+                </Typography>
+              </ListItem>
             );
           })}
         </List>
