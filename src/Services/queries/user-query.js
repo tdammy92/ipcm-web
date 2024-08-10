@@ -49,3 +49,17 @@ export const useSerialNumberCounts = ()  =>{
         queryFn: getSerialNumberCount,
     })
 }
+
+
+
+const getCounts = async () => {
+ const response = await ApiClient('admin/count',{});
+ return response?.data;
+};
+
+export const useCounts = ()  =>{
+    return useQuery({
+        queryKey: ["counts"],
+        queryFn: getCounts,
+    })
+}

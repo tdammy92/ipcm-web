@@ -5,7 +5,7 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { FaRegUserCircle } from "react-icons/fa";
 import List from "@material-ui/core/List";
 import UseStyles from "./Styling";
-import { useRouteMatch } from "react-router-dom";
+import { useRouteMatch,useHistory } from "react-router-dom";
 import {
   Container,
   Box,
@@ -14,21 +14,39 @@ import {
   Toolbar,
   Typography,
   Link,
+  ButtonBase,
 } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import MenuIcon from "@material-ui/icons/Menu";
 import NavBarData from "./NavData";
 import ImgeUrl from "../../../assets/images/IGPCM_NewLogo.png";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useCounts } from "../../../Services/queries/user-query";
+import { LogOutUser } from "../../../Store/feature";
 
 const SideNav = () => {
   let { path, url } = useRouteMatch();
+  let history = useHistory();
+ const {data:Counts} = useCounts();
   const classes = UseStyles();
   const data = NavBarData();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const defaultState = -1;
   const [itemId, setActiveItemId] = React.useState(defaultState);
   const user = useSelector((state) => state.users);
+
+
+  const dispatch = useDispatch();
+
+
+
+  const handleLogout = () => {
+   dispatch(LogOutUser)
+history.push('/')
+  };
+
+
+
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
@@ -43,7 +61,7 @@ const SideNav = () => {
     >
       <Box component="div" className={classes.logo}>
         <Container className={classes.listItemContainer}>
-          <IconButton classes={{ root: classes.listItemIcon }}>
+          <IconButton classes={{ root: classes.ItemIcon }}>
             <div className="Logo">
               <img src={ImgeUrl} alt="ipcm logo" />
             </div>
@@ -78,13 +96,19 @@ const SideNav = () => {
         <IconButton classes={{ root: classes.listItemIcon }}>
           <FaRegUserCircle />
         </IconButton>
-        <Typography className={`${classes.listItemTitle}`}>
+        <Typography className={`${classes.username}`} cursor-pointer>
           {user?.details?.username?.toUpperCase()}
         </Typography>
+        <ButtonBase className={`${classes.username}`} onClick={handleLogout}>
+          LogOut
+        </ButtonBase>
       </Box>
     </Drawer>
   );
 
+
+
+  console.log({Counts})
   return (
     <div>
       <Hidden smUp implementation="css">

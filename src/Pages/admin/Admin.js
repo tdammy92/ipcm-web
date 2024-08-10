@@ -6,7 +6,6 @@ import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-
 import VisibilityIcon from "@material-ui/icons/Visibility";
 import { FaBookReader } from "react-icons/fa";
 import { GrGallery } from "react-icons/gr";
@@ -26,10 +25,13 @@ import { Link } from "react-router-dom";
 
 import { useDispatch, useSelector } from "react-redux";
 
-
 import DashItem from "../../components/partials/dashcardItem";
 import { ROLES } from "../../constants";
-import { useRecentStudents, useSerialNumberCounts, useStudentsCounts } from '../../Services/queries/user-query';
+import {
+  useRecentStudents,
+  useSerialNumberCounts,
+  useStudentsCounts,
+} from "../../Services/queries/user-query";
 import TableLoader from "../../components/Loaders/TableLoader";
 
 const useStyles = makeStyles((theme) => ({
@@ -71,19 +73,14 @@ function Admin() {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-
-
-
-
- const {data:recentStudentsData,isLoading:isLoadingRecentStudents} = useRecentStudents();
- const {data:studentsCountData,isLoading:isLoadingStudentsCounts} = useStudentsCounts();
- const {data:serialNumberCountData,isLoading:isLoadingSerialNumberCounts} = useSerialNumberCounts();
-
-
-
-
-
-
+  const { data: recentStudentsData, isLoading: isLoadingRecentStudents } =
+    useRecentStudents();
+  const { data: studentsCountData, isLoading: isLoadingStudentsCounts } =
+    useStudentsCounts();
+  const {
+    data: serialNumberCountData,
+    isLoading: isLoadingSerialNumberCounts,
+  } = useSerialNumberCounts();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -94,24 +91,21 @@ function Admin() {
     setPage(0);
   };
 
-
-
-
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
         <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
+          <Typography capitalize color="primary" variant="h4" component="h3" gutterBottom>DASHBOARD</Typography>
           <Grid container spacing={2}>
             <DashItem
               title="STUDENTS"
               description="Total Students: "
-              count={studentsCountData?.count?? 0}
+              count={studentsCountData?.count ?? 0}
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
               url={`/admin/students`}
             />
-           {/* {details?.role === ROLES?.SUPER_ADMIN && <DashItem
+            {/* {details?.role === ROLES?.SUPER_ADMIN && <DashItem
               title="EXAMS"
               description=" Exam Dashboard"
               Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
@@ -207,45 +201,50 @@ function Admin() {
                       </TableCell> */}
                     </TableRow>
                   </TableHead>
-                 {isLoadingRecentStudents ? <TableLoader rows={5} colums={6} /> :<TableBody>
-                    {recentStudentsData?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      recentStudentsData?.map((item) => {
-                        const {
-                          _id,
-                          surname,
-                          firstName,
+                  {isLoadingRecentStudents ? (
+                    <TableLoader rows={5} colums={6} />
+                  ) : (
+                    <TableBody>
+                      {recentStudentsData?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        recentStudentsData?.map((item) => {
+                          const {
+                            _id,
+                            surname,
+                            firstName,
 
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={_id}
-                            component={Link}
-                            to={`/admin/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">
-                              {surname} {firstName}
-                            </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            {/* <TableCell align="center">
+                            state,
+                            phoneNumber,
+                            email,
+                            country,
+                            createdAt,
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={_id}
+                              component={Link}
+                              to={`/admin/students/${_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <TableCell align="center">
+                                {surname} {firstName}
+                              </TableCell>
+                              <TableCell align="center">
+                                {phoneNumber}
+                              </TableCell>
+                              <TableCell align="center">{email}</TableCell>
+                              <TableCell align="center">{country}</TableCell>
+                              <TableCell align="center">{state}</TableCell>
+                              <TableCell align="center">
+                                {new Date(createdAt).toLocaleDateString()}
+                              </TableCell>
+                              {/* <TableCell align="center">
                               <Button
                                 variant="contained"
                                 color="primary"
@@ -256,11 +255,12 @@ function Admin() {
                                 View
                               </Button>
                             </TableCell> */}
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>}
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 
