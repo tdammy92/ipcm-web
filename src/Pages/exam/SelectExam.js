@@ -89,7 +89,7 @@ const SelectExam = () => {
           <Button
             mt={15}
             component={Link}
-            to="/exam-result"
+            to="/online-exam"
             variant="contained"
             color="primary"
             size="small"
