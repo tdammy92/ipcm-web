@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
       // margin: theme.spacing(2),
       width: theme.spacing(16),
-      height: theme.spacing(7),
+      height: theme.spacing(12),
     },
   },
   root2: {
@@ -53,8 +53,19 @@ const useStyles = makeStyles((theme) => ({
   cards: {
     width: "100%",
     display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
+  },
+
+  serialInput: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: 10,
+      minWidth: 250,
+    },
+
+    minWidth: 350,
   },
   button: {
     margin: theme.spacing(1),
@@ -65,6 +76,9 @@ const useStyles = makeStyles((theme) => ({
 
     height: "30px",
     fontSize: "12px",
+  },
+  actionBtns: {
+    display: "flex",
   },
 }));
 
@@ -128,10 +142,13 @@ function SerialNumber() {
     <>
       <CssBaseline />
       <Container maxWidth="md">
+      <Typography variant="h5" component="h3"  align="center" color="primary">
+         SERIAL NUMBERS
+          </Typography>
         <div className={classes.root}>
           <Paper elevation={3} className={classes.cards}>
             <TextField
-              className={classes.margin}
+              className={classes.serialInput}
               id="input-with-icon-textfield"
               // label="Search"
               // placeholder="Search"
@@ -147,7 +164,7 @@ function SerialNumber() {
               }}
             />
 
-            <div>
+            <Box>
               <Button
 
               disabled={isGeneratingSerial}
@@ -169,16 +186,12 @@ function SerialNumber() {
               >
                 copy
               </Button>
-            </div>
+            </Box>
           </Paper>
         </div>
 
         <div>
-          <Box mt={3}>
-            <Typography variant="h6" color="primary" gutterBottom>
-              Serial Number
-            </Typography>
-          </Box>
+
           <div>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer

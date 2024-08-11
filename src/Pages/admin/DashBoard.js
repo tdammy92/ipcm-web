@@ -1,14 +1,10 @@
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import { FaBookReader } from "react-icons/fa";
-import { GrGallery } from "react-icons/gr";
 import { HiUserGroup } from "react-icons/hi2";
 import { LiaBarcodeSolid } from "react-icons/lia";
 
@@ -20,13 +16,13 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import Button from "@material-ui/core/Button";
+
 import { Link } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
+import {  useSelector } from "react-redux";
 
 import DashItem from "../../components/partials/dashcardItem";
-import { ROLES } from "../../constants";
+
 import {
   useRecentStudents,
   useSerialNumberCounts,
@@ -48,26 +44,30 @@ const useStyles = makeStyles((theme) => ({
 
   dashContainer: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent:'space-around',
+    flexWrap:'wrap',
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 30,
+    // backgroundColor:'red'
   },
+
 
   cardsInfoBox: {
     marginLeft: "10px",
   },
 
   cardsInfoIcon: {
-    fontSize: "35px",
-    color: "#01996D",
+    fontSize: "20px",
+    color: theme.palette.secondary.main,
   },
 }));
 
 function DashBoard() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
+
   const { details } = useSelector((state) => state.users);
 
   const [page, setPage] = React.useState(0);
@@ -95,37 +95,27 @@ function DashBoard() {
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
+          <Typography align="center" capitalize color="primary" variant="h5" component="h3" gutterBottom>DASHBOARD</Typography>
         <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
-          <Typography capitalize color="primary" variant="h4" component="h3" gutterBottom>DASHBOARD</Typography>
-          <Grid container spacing={2}>
+      
+
             <DashItem
               title="STUDENTS"
-              description="Total Students: "
+              description="Total Students"
               count={studentsCountData?.count ?? 0}
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
-              url={`/admin/students`}
+              // url={`/admin/students`}
             />
-            {/* {details?.role === ROLES?.SUPER_ADMIN && <DashItem
-              title="EXAMS"
-              description=" Exam Dashboard"
-              Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
-              url={"/exam-board"}
-            />} */}
+       
             <DashItem
               title="SERIAL NUMBER"
-              description="Total Generated serial: "
+              description="Total Generated serial"
               count={serialNumberCountData?.count ?? 0}
               Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
-              url={"/admin/serial-number"}
+              // url={"/admin/serial-number"}
             />
-            {/* <DashItem
-              title="GALLERY"
-              description="Upload and remove images"
-              // count={serialNumberCount ?? 0}
-              Icon={() => <GrGallery className={classes.cardsInfoIcon} />}
-              url={"/gallery-settings"}
-            /> */}
-          </Grid>
+    
+  
         </Container>
 
         <Box>
@@ -191,14 +181,7 @@ function DashBoard() {
                       >
                         DATE
                       </TableCell>
-                      {/* <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        ACTION
-                      </TableCell> */}
+               
                     </TableRow>
                   </TableHead>
                   {isLoadingRecentStudents ? (
@@ -244,17 +227,7 @@ function DashBoard() {
                               <TableCell align="center">
                                 {new Date(createdAt).toLocaleDateString()}
                               </TableCell>
-                              {/* <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
-                            </TableCell> */}
+                
                             </TableRow>
                           );
                         })

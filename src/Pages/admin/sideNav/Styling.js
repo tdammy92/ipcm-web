@@ -1,13 +1,9 @@
 import { makeStyles, Theme, createStyles } from "@material-ui/core";
+import { drawerWidth, logoHeight, drawerHeight } from "../../../constants";
 
-const drawerWidth = 185;
-const drawerHeight = "90%";
-const primaryColor = "#01996d";
-
-const logoHeight = 30;
-
-const UseStyles = makeStyles((theme) =>
-  createStyles({
+const UseStyles = makeStyles((theme) => {
+  let primaryColor = theme?.palette?.primary?.main;
+  return createStyles({
     hide: {
       display: "none",
     },
@@ -18,14 +14,15 @@ const UseStyles = makeStyles((theme) =>
       display: "flex",
     },
     appBar: {
-      [theme.breakpoints.up("sm")]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-        // backgroundColor: "red",
-      },
+      // [theme.breakpoints.up("sm")]: {
+      //   width: `calc(100% - ${drawerWidth}px)`,
+      //   marginLeft: drawerWidth,
+      //   // backgroundColor: "red",
+      // },
       // backgroundColor: "yellow",
-      backgroundColor: "transparent",
+      // backgroundColor: "transparent",
       boxShadow: "none",
+      height:"3rem"
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -72,7 +69,7 @@ const UseStyles = makeStyles((theme) =>
     },
     listItemCount: {
       justifySelf: "end",
-      marginLeft:20
+      marginLeft: 20,
     },
     listItemContainer: {
       //   width: "fit-content",
@@ -105,7 +102,7 @@ const UseStyles = makeStyles((theme) =>
       left: 0,
       textAlign: "center",
     },
-  })
-);
+  });
+});
 
 export default UseStyles;

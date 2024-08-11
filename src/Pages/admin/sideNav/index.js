@@ -2,7 +2,6 @@ import React, { useMemo } from "react";
 import Drawer from "@material-ui/core/Drawer";
 import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { FaRegUserCircle } from "react-icons/fa";
 import List from "@material-ui/core/List";
 import UseStyles from "./Styling";
@@ -12,14 +11,9 @@ import {
   Container,
   Box,
   IconButton,
-  Hidden,
-  Toolbar,
   Typography,
-  ButtonBase,
   Button,
 } from "@material-ui/core";
-import AppBar from "@material-ui/core/AppBar";
-import MenuIcon from "@material-ui/icons/Menu";
 import NavBarData from "./NavData";
 import ImgeUrl from "../../../assets/images/IGPCM_NewLogo.png";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,13 +21,14 @@ import { useCounts } from "../../../Services/queries/user-query";
 import { LogOutUser } from "../../../Store/feature";
 import { ROLES } from "../../../constants";
 
-const SideNav = () => {
+const SideNav = ({mobileOpen,handleDrawerToggle}) => {
   let { url } = useRouteMatch();
   let history = useHistory();
   const { data: Counts } = useCounts();
   const classes = UseStyles();
   const data = NavBarData();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  ;
   const defaultState = -1;
   const [itemId, setActiveItemId] = React.useState(defaultState);
   const user = useSelector((state) => state.users);
@@ -46,9 +41,7 @@ const SideNav = () => {
     history.replace("/");
   };
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+
 
   const accessNav = useMemo(() => {
     let newNav;
@@ -93,6 +86,7 @@ const SideNav = () => {
                 to={`${url}${listItem.link}`}
                 key={listItem.title}
                 component={Link}
+                onClick={handleDrawerToggle}
                 classes={{ root: classes.listItem }}
                 onMouseOver={() => setActiveItemId(index)}
                 onMouseOut={() => setActiveItemId(defaultState)}
@@ -138,22 +132,10 @@ const SideNav = () => {
 
   return (
     <div>
-      <Hidden smUp implementation="css">
-        <AppBar position="fixed" className={classes.appBar}>
-          <Toolbar>
-            <IconButton
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-            >
-              <MenuIcon className={classes.menuIcon} />
-            </IconButton>
-          </Toolbar>
-        </AppBar>
-      </Hidden>
+
 
       <nav className={classes.drawer}>
-        <Hidden smUp implementation="css">
+
           <Drawer
             variant="temporary"
             anchor="left"
@@ -168,18 +150,6 @@ const SideNav = () => {
           >
             {DrawerData}
           </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {DrawerData}
-          </Drawer>
-        </Hidden>
       </nav>
     </div>
   );

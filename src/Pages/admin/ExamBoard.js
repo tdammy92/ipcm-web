@@ -66,20 +66,12 @@ function ExamBoard() {
     setPage(0);
   };
 
-
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        <Typography
-          variant="h5"
-          component="h4"
-          align="center"
-          color="primary"
-          style={{ marginTop: 10 }}
-        >
-          Exam Dashboard
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          EXAMS
         </Typography>
 
         <div>
@@ -147,7 +139,7 @@ function ExamBoard() {
                     </TableRow>
                   </TableHead>
                   {isLoading ? (
-                      <TableLoader rows={5} colums={6} />
+                    <TableLoader rows={5} colums={6} />
                   ) : (
                     <TableBody>
                       {ExamList?.length < 1 ? (

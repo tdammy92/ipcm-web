@@ -16,7 +16,7 @@ import React, { useRef, useState } from "react";
 import { ImUpload } from "react-icons/im";
 import { MdDownloadForOffline } from "react-icons/md";
 import { toast } from "react-toastify";
-
+import StarIcon from "@material-ui/icons/Star";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -33,6 +33,7 @@ import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
 import TableLoader from "../../components/Loaders/TableLoader";
 import { useUploadExam } from "../../Services/mutations/exam-mutation";
 import { useExams } from "../../Services/queries/exam-query";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -111,20 +112,9 @@ const useStyles = makeStyles((theme) => ({
     marginTop: "10px",
     marginBottom: "15px",
     marginLeft: "15px",
-
-    // backgroundColor:"#f45"
   },
 
-  noticeUl: {
-    fontFamily: "8px",
-    margin: 0,
-    padding: 0,
-    color: "#01996D",
-    wordWrap: "wrap",
-    // listStyle: "none",
-    // marginTop: "3px",
-    // marginBottom: "5px",
-  },
+  noticeUl: {},
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -143,11 +133,13 @@ function UploadExam() {
   const docRef = useRef(null);
   const { details } = useSelector((state) => state.users);
 
-  const { data: ExamList, isLoading:isLoadingExams } = useExams({ params: { type: "full" } });
-  const { mutateAsync:uploadMutation, isLoading:isUploadingExams } = useUploadExam();
+  const { data: ExamList, isLoading: isLoadingExams } = useExams({
+    params: { type: "full" },
+  });
+  const { mutateAsync: uploadMutation, isLoading: isUploadingExams } =
+    useUploadExam();
 
   const [Exam, setExam] = useState(() => InitialExam);
-
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -302,10 +294,8 @@ function UploadExam() {
       uploadedBy: details?._id,
     };
 
-
     try {
-      const postExam = await uploadMutation({payload})
-    
+      const postExam = await uploadMutation({ payload });
 
       if (postExam.status === 201) {
         setExam({ ...InitialExam });
@@ -323,30 +313,15 @@ function UploadExam() {
         theme: "light",
       });
     }
-
   };
-
-
-
-
 
   return (
     <div>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
-
-        <Box my={4}>
-          <Typography
-            variant="h6"
-            component="h4"
-            mt={4}
-            align="center"
-            color="primary"
-          >
-            Exam Upload
-          </Typography>
-        </Box>
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          EXAM UPLOAD
+        </Typography>
 
         <Paper elevation={2} p={2} className={classes.headerCard}>
           <Box
@@ -382,17 +357,23 @@ function UploadExam() {
             Please take note of the following steps before uploading an exam
           </Typography>
 
-          <ul className={classes.noticeUl}>
-            <li>
-              Click on the download button on the right to download an excel
-              template.
-            </li>
-            <li>
-              fill the space ment for answer and questions, without modifing the
-              excel sheet in any way.
-            </li>
-            <li>When your done and has verified it, upload the form </li>
-          </ul>
+          <List className={classes.noticeUl}>
+            <ListItem>
+              <ListItemText
+                primary="Click on the download button on the right to download an excel
+              template."
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="fill the space ment for answer and questions, without modifing the
+              excel sheet in any way."
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="When your done and has verified it, upload the form" />
+            </ListItem>
+          </List>
         </Paper>
 
         <div>
@@ -457,57 +438,63 @@ function UploadExam() {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-               {isLoadingExams ? <TableLoader rows={5} colums={6} /> : <TableBody>
-                  {ExamList?.length < 1 ? (
-                    <TableRow>
-                      <TableCell>No Result Found</TableCell>
-                    </TableRow>
-                  ) : (
-                    ExamList?.map((item) => {
-                      const {
-                        exam_uuid,
-                        name,
-                        duration,
-                        uploadedBy,
-                        questions,
-                        createdAt,
-                      } = item;
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={exam_uuid}
-                          // component={Link}
-                          // to={`/students/${_id}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <TableCell align="center">{name}</TableCell>
-                          <TableCell align="center">{duration} Min</TableCell>
-                          <TableCell align="center">
-                            {questions?.length}
-                          </TableCell>
-                          <TableCell align="center">{uploadedBy?.username}</TableCell>
+                {isLoadingExams ? (
+                  <TableLoader rows={5} colums={6} />
+                ) : (
+                  <TableBody>
+                    {ExamList?.length < 1 ? (
+                      <TableRow>
+                        <TableCell>No Result Found</TableCell>
+                      </TableRow>
+                    ) : (
+                      ExamList?.map((item) => {
+                        const {
+                          exam_uuid,
+                          name,
+                          duration,
+                          uploadedBy,
+                          questions,
+                          createdAt,
+                        } = item;
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={exam_uuid}
+                            // component={Link}
+                            // to={`/students/${_id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">{duration} Min</TableCell>
+                            <TableCell align="center">
+                              {questions?.length}
+                            </TableCell>
+                            <TableCell align="center">
+                              {uploadedBy?.username}
+                            </TableCell>
 
-                          <TableCell align="center">
-                            {new Date(createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell align="center">
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              size="small"
-                              className={classes.button}
-                              // endIcon={<VisibilityIcon />}
-                            >
-                              View
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>}
+                            <TableCell align="center">
+                              {new Date(createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell align="center">
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                // endIcon={<VisibilityIcon />}
+                              >
+                                View
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                )}
               </Table>
             </TableContainer>
 

@@ -249,10 +249,11 @@ function GallerySettings() {
         <Typography
           variant="h5"
           color="primary"
+          align="center"
           gutterBottom
           className={classes.headerText}
         >
-          Gallery Dashboard
+          GALLERY DASHBOARD
         </Typography>
 
         <Box component="span" mt={4}>
