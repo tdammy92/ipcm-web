@@ -66,6 +66,8 @@ function ExamBoard() {
     setPage(0);
   };
 
+
+
   return (
     <>
       <CssBaseline />
@@ -128,14 +130,7 @@ function ExamBoard() {
                         Uploaded On
                       </TableCell>
 
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        ACTION
-                      </TableCell>
+                 
                     </TableRow>
                   </TableHead>
                   {isLoading ? (
@@ -181,17 +176,7 @@ function ExamBoard() {
                               <TableCell align="center">
                                 {new Date(createdAt).toLocaleDateString()}
                               </TableCell>
-                              <TableCell align="center">
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  size="small"
-                                  className={classes.button}
-                                  // endIcon={<VisibilityIcon />}
-                                >
-                                  View
-                                </Button>
-                              </TableCell>
+                              
                             </TableRow>
                           );
                         })

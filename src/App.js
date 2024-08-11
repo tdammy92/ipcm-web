@@ -47,7 +47,7 @@ function App() {
     <PersistGate loading={null} persistor={persist}>
     <ThemeProvider theme={defualtTheme}>
       <ToastContainer
-        position="top-left"
+        position="bottom-center"
         autoClose={5000}
         hideProgressBar={false}
         newestOnTop={false}
@@ -57,7 +57,6 @@ function App() {
         draggable
         pauseOnHover
       />
-      {/* <Loader /> */}
       <Root />
     </ThemeProvider>
     </PersistGate>

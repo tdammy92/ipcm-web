@@ -51,10 +51,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   form: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
+      [theme.breakpoints.down("sm")]: {
+// backgroundColor:'red'
+
+      },
+
+
+      maxWidth:500
   },
 
   tableContainer: {
@@ -95,26 +98,29 @@ const useStyles = makeStyles((theme) => ({
 
   cardsInfoIcon: {
     fontSize: "70px",
-    color: "#01996D",
+    color: theme.palette.primary.main,
     cursor: "pointer",
     marginLeft: "20px",
   },
   cardsInfoIcon2: {
     fontSize: "40px",
-    color: "#01996D",
+    color: theme.palette.primary.main,
     cursor: "pointer",
     marginLeft: "10px",
   },
 
   formItem: {
-    width: "80%",
-    minWidth: "300px",
-    marginTop: "10px",
+    width: "100%",
+    marginTop: "15px",
     marginBottom: "15px",
-    marginLeft: "15px",
+    // backgroundColor:'blue'
   },
 
-  noticeUl: {},
+  dialogoFooter: {
+    marginBottom:20,
+justifyContent:'space-around',
+
+  },
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -123,6 +129,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const InitialExam = {
   examName: "",
+  examCode: "",
   duration: 0,
   questions: [],
 };
@@ -190,7 +197,7 @@ function UploadExam() {
 
           if (!question) {
             toast.error(`Qst ${qstNumber} is not filled`, {
-              position: "top-center",
+              position: "bottom-center",
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -205,7 +212,7 @@ function UploadExam() {
 
           if (!answer) {
             toast.error(`Qst ${qstNumber} has no answer`, {
-              position: "top-center",
+              position: "bottom-center",
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -246,7 +253,7 @@ function UploadExam() {
   const handleUpload = async () => {
     if (Exam.examName === "") {
       toast.error(`Exam title can not be empty`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -260,7 +267,7 @@ function UploadExam() {
     }
     if (Exam.duration === "") {
       toast.error(`Exam duration can not be empty`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -275,7 +282,7 @@ function UploadExam() {
 
     if (Exam.questions?.length === 0) {
       toast.error(`Questions not uploaded`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -303,7 +310,7 @@ function UploadExam() {
       }
     } catch (error) {
       toast.error(`${typeof error === "string" ? error : error?.message}`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -517,14 +524,28 @@ function UploadExam() {
         keepMounted
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        style={{ height: "70%" }}
+        style={{ height: "75%",alignSelf:'center' }}
       >
-        <DialogTitle id="alert-dialog-title" align="center">
-          Upload
+        <DialogTitle color="primary" id="alert-dialog-title" align="center">
+         UPLOAD
         </DialogTitle>
         <DialogContent>
           <form className={classes.form} noValidate autoComplete="off">
-            <div className={classes.formItem}>
+            <Box className={classes.formItem}>
+              <TextField
+                id="outlined-basic"
+                size="small"
+                style={{ width: "100%" }}
+                required
+                label="Exam Code"
+                variant="outlined"
+                value={Exam.examName}
+                onChange={(e) =>
+                  setExam((prev) => ({ ...prev, examCode: e.target.value }))
+                }
+              />
+            </Box>
+            <Box className={classes.formItem}>
               <TextField
                 id="outlined-basic"
                 size="small"
@@ -537,17 +558,18 @@ function UploadExam() {
                   setExam((prev) => ({ ...prev, examName: e.target.value }))
                 }
               />
-            </div>
-            <div className={classes.formItem}>
+            </Box>
+            <Box className={classes.formItem}>
               <TextField
                 id="outlined-basic"
                 size="small"
                 style={{ width: "100%" }}
-                InputProps={{ inputProps: { min: 0, max: 10 } }}
+                InputProps={{ inputProps: { min: 30, max: 120 } }}
                 required
                 min="1"
                 max="5"
                 type="number"
+                helperText="The duration field is based on minutes e.g 30mins"
                 label="Exam duration"
                 variant="outlined"
                 value={Exam.duration}
@@ -558,8 +580,8 @@ function UploadExam() {
                   }))
                 }
               />
-            </div>
-            <div className={classes.formItem}>
+            </Box>
+            <Box className={classes.formItem}>
               <input
                 type="file"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -572,20 +594,20 @@ function UploadExam() {
                 onClick={OpenFilePicker}
                 style={{ width: "100%" }}
                 variant="contained"
-                color="default"
+                color="primary"
                 className={classes.button}
                 startIcon={<CloudUploadIcon />}
               >
                 Upload xlx sheet
               </Button>
-            </div>
+            </Box>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
+        <DialogActions className={classes.dialogoFooter}>
+          <Button onClick={handleClose} variant="outlined" color="primary">
             Cancle
           </Button>
-          <Button onClick={handleUpload} color="primary" autoFocus>
+          <Button onClick={handleUpload} color="primary" variant="contained" autoFocus>
             Upload
           </Button>
         </DialogActions>
