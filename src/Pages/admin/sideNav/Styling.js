@@ -24,7 +24,7 @@ const UseStyles = makeStyles((theme) =>
         // backgroundColor: "red",
       },
       // backgroundColor: "yellow",
-        backgroundColor: "transparent",
+      backgroundColor: "transparent",
       boxShadow: "none",
     },
     drawer: {
@@ -44,7 +44,7 @@ const UseStyles = makeStyles((theme) =>
     },
     listItem: {
       padding: 0,
-      height: "4rem",
+      height: "3.4rem",
       paddingLeft: 15,
     },
     listItemTitle: {
@@ -70,6 +70,10 @@ const UseStyles = makeStyles((theme) =>
       //   minWidth: "fit-content",
       color: primaryColor,
     },
+    listItemCount: {
+      justifySelf: "end",
+      marginLeft:20
+    },
     listItemContainer: {
       //   width: "fit-content",
       marginTop: 10,
@@ -88,17 +92,17 @@ const UseStyles = makeStyles((theme) =>
     },
 
     navBarItems: {
-      height: `calc(55% - ${logoHeight}px)`,
+      height: `calc(65% - ${logoHeight}px)`,
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
     },
     navBarFooter: {
       //   height: `calc(90% - ${logoHeight}px)`,
-      position:'absolute',
-      bottom:50,
-      right:0,
-      left:0,
+      position: "absolute",
+      bottom: 50,
+      right: 0,
+      left: 0,
       textAlign: "center",
     },
   })

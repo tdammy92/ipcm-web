@@ -1,6 +1,6 @@
 import React, { useState,  useRef, useMemo } from "react";
 
-import { Link } from "react-router-dom";
+import { Link,useRouteMatch } from "react-router-dom";
 
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -94,6 +94,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Students() {
+  let { url } = useRouteMatch()
   const date = Date.now();
   const fileName = new Date(date).toLocaleDateString().toString();
 
@@ -377,7 +378,7 @@ function Students() {
                               tabIndex={-1}
                               key={_id}
                               component={Link}
-                              to={`/students/${_id}`}
+                              to={`${url}/${_id}`}
                               style={{ textDecoration: "none" }}
                             >
                               <TableCell align="center">{i + 1}</TableCell>

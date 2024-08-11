@@ -13,7 +13,7 @@ import Project from "../Pages/Project";
 import Career from "../Pages/Career";
 import Consult from "../Pages/Consult";
 import License from "../Pages/License";
-import Admin from "../Pages/admin/Admin";
+
 import SignUp from "../Pages/auth/SIgnUp";
 import SignIn from "../Pages/auth/SignIn";
 import SerialNumber from "../Pages/admin/SerialNumber";

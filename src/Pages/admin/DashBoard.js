@@ -64,7 +64,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Admin() {
+function DashBoard() {
   const classes = useStyles();
 
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ function Admin() {
               description="Total Generated serial: "
               count={serialNumberCountData?.count ?? 0}
               Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
-              url={"/serial-number"}
+              url={"/admin/serial-number"}
             />
             {/* <DashItem
               title="GALLERY"
@@ -281,4 +281,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default DashBoard;

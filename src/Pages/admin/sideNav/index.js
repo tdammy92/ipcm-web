@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Drawer from "@material-ui/core/Drawer";
+import Badge from "@material-ui/core/Badge";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import { FaRegUserCircle } from "react-icons/fa";
 import List from "@material-ui/core/List";
 import UseStyles from "./Styling";
-import { useRouteMatch,useHistory } from "react-router-dom";
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { useRouteMatch, useHistory, Link } from "react-router-dom";
 import {
   Container,
   Box,
@@ -13,8 +15,8 @@ import {
   Hidden,
   Toolbar,
   Typography,
-  Link,
   ButtonBase,
+  Button,
 } from "@material-ui/core";
 import AppBar from "@material-ui/core/AppBar";
 import MenuIcon from "@material-ui/icons/Menu";
@@ -23,33 +25,46 @@ import ImgeUrl from "../../../assets/images/IGPCM_NewLogo.png";
 import { useDispatch, useSelector } from "react-redux";
 import { useCounts } from "../../../Services/queries/user-query";
 import { LogOutUser } from "../../../Store/feature";
+import { ROLES } from "../../../constants";
 
 const SideNav = () => {
-  let { path, url } = useRouteMatch();
+  let { url } = useRouteMatch();
   let history = useHistory();
- const {data:Counts} = useCounts();
+  const { data: Counts } = useCounts();
   const classes = UseStyles();
   const data = NavBarData();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const defaultState = -1;
   const [itemId, setActiveItemId] = React.useState(defaultState);
   const user = useSelector((state) => state.users);
-
+  const role = user?.details?.role;
 
   const dispatch = useDispatch();
 
-
-
   const handleLogout = () => {
-   dispatch(LogOutUser)
-history.push('/')
+    dispatch(LogOutUser());
+    history.replace("/");
   };
-
-
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const accessNav = useMemo(() => {
+    let newNav;
+
+    if (role === ROLES.SUPER_ADMIN) {
+      newNav = data?.menuItems;
+    } else if (role === ROLES.ADMIN) {
+      newNav = data?.menuItems?.filter((nav) =>{
+        return nav.title !=='Exams' && nav?.title !== 'Exam Upload' && nav?.title !== 'Students Result'
+      });
+    }else{
+      newNav = []
+    }
+
+    return newNav;
+  }, [user?.details?.role]);
 
   const DrawerData = (
     <Drawer
@@ -70,7 +85,7 @@ history.push('/')
       </Box>
       <Box component="div" className={classes.navBarItems}>
         <List>
-          {data.menuItems.map((listItem, index) => {
+          {accessNav?.map((listItem, index) => {
             const IconTag = data.components[listItem.icon];
             return (
               <ListItem
@@ -82,11 +97,21 @@ history.push('/')
                 onMouseOver={() => setActiveItemId(index)}
                 onMouseOut={() => setActiveItemId(defaultState)}
               >
-                {<IconTag size={25} />}
+                {<IconTag size={25} color="#01996d" />}
 
                 <Typography className={`${classes.listItemTitle}`}>
                   {listItem.title}
                 </Typography>
+                <Box className={`${classes.listItemCount}`}>
+                  <Badge
+                    badgeContent={Counts?.[listItem.title]}
+                    size=""
+                    color="primary"
+                    max={3000}
+                  >
+                    <Box />
+                  </Badge>
+                </Box>
               </ListItem>
             );
           })}
@@ -99,16 +124,18 @@ history.push('/')
         <Typography className={`${classes.username}`} cursor-pointer>
           {user?.details?.username?.toUpperCase()}
         </Typography>
-        <ButtonBase className={`${classes.username}`} onClick={handleLogout}>
+        <Typography className={`${classes.username}`} cursor-pointer>
+          {user?.details?.role}
+        </Typography>
+
+
+        <Button  size="small" variant="contained" color="primary"  onClick={handleLogout} startIcon={<ExitToAppIcon />}>
           LogOut
-        </ButtonBase>
+        </Button>
       </Box>
     </Drawer>
   );
 
-
-
-  console.log({Counts})
   return (
     <div>
       <Hidden smUp implementation="css">
