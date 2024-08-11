@@ -5,7 +5,7 @@ import { ScreenSize } from "../../../Config";
 import DesktopFooter from "./DesktopFooter";
 import MobileFooter from "./MobileFooter";
 import { Container } from "@material-ui/core";
-import { protectedRoute } from "../../Data/common";
+// import { protectedRoute } from "../../Data/common";
 function Footer() {
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
@@ -13,8 +13,8 @@ function Footer() {
 
   return (
     <>
-      {[...protectedRoute, "/signup", "/sigin", "/admin", "/register"].includes(
-        location
+      {location?.includes(
+        'admin'
       ) ? null : (
         <footer className="footerContainer">
           <Container>

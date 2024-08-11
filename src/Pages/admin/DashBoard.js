@@ -1,15 +1,10 @@
 import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Grid from "@material-ui/core/Grid";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
 
-
-import VisibilityIcon from "@material-ui/icons/Visibility";
-import { FaBookReader } from "react-icons/fa";
-import { GrGallery } from "react-icons/gr";
 import { HiUserGroup } from "react-icons/hi2";
 import { LiaBarcodeSolid } from "react-icons/lia";
 
@@ -21,15 +16,18 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 
-import Button from "@material-ui/core/Button";
+
 import { Link } from "react-router-dom";
 
-import { useDispatch, useSelector } from "react-redux";
-
+import {  useSelector } from "react-redux";
 
 import DashItem from "../../components/partials/dashcardItem";
-import { ROLES } from "../../constants";
-import { useRecentStudents, useSerialNumberCounts, useStudentsCounts } from '../../Services/queries/user-query';
+
+import {
+  useRecentStudents,
+  useSerialNumberCounts,
+  useStudentsCounts,
+} from "../../Services/queries/user-query";
 import TableLoader from "../../components/Loaders/TableLoader";
 
 const useStyles = makeStyles((theme) => ({
@@ -46,44 +44,43 @@ const useStyles = makeStyles((theme) => ({
 
   dashContainer: {
     display: "flex",
-    flexDirection: "column",
+    flexDirection: "row",
     alignItems: "center",
+    justifyContent:'space-around',
+    flexWrap:'wrap',
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 30,
+    // backgroundColor:'red'
   },
+
 
   cardsInfoBox: {
     marginLeft: "10px",
   },
 
   cardsInfoIcon: {
-    fontSize: "35px",
-    color: "#01996D",
+    fontSize: "20px",
+    color: theme.palette.secondary.main,
   },
 }));
 
-function Admin() {
+function DashBoard() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
+
   const { details } = useSelector((state) => state.users);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
 
-
-
-
-
- const {data:recentStudentsData,isLoading:isLoadingRecentStudents} = useRecentStudents();
- const {data:studentsCountData,isLoading:isLoadingStudentsCounts} = useStudentsCounts();
- const {data:serialNumberCountData,isLoading:isLoadingSerialNumberCounts} = useSerialNumberCounts();
-
-
-
-
-
-
+  const { data: recentStudentsData, isLoading: isLoadingRecentStudents } =
+    useRecentStudents();
+  const { data: studentsCountData, isLoading: isLoadingStudentsCounts } =
+    useStudentsCounts();
+  const {
+    data: serialNumberCountData,
+    isLoading: isLoadingSerialNumberCounts,
+  } = useSerialNumberCounts();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -94,44 +91,31 @@ function Admin() {
     setPage(0);
   };
 
-
-
-
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
+          <Typography align="center" capitalize color="primary" variant="h5" component="h3" gutterBottom>DASHBOARD</Typography>
         <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
-          <Grid container spacing={2}>
+      
+
             <DashItem
               title="STUDENTS"
-              description="Total Students: "
-              count={studentsCountData?.count?? 0}
+              description="Total Students"
+              count={studentsCountData?.count ?? 0}
               Icon={() => <HiUserGroup className={classes.cardsInfoIcon} />}
-              url={"/students"}
+              // url={`/admin/students`}
             />
-           {details?.role === ROLES?.SUPER_ADMIN && <DashItem
-              title="EXAMS"
-              description=" Exam Dashboard"
-              Icon={() => <FaBookReader className={classes.cardsInfoIcon} />}
-              url={"/exam-board"}
-            />}
+       
             <DashItem
               title="SERIAL NUMBER"
-              description="Total Generated serial: "
+              description="Total Generated serial"
               count={serialNumberCountData?.count ?? 0}
               Icon={() => <LiaBarcodeSolid className={classes.cardsInfoIcon} />}
-              url={"/serial-number"}
+              // url={"/admin/serial-number"}
             />
-            <DashItem
-              title="GALLERY"
-              description="Upload and remove images"
-              // count={serialNumberCount ?? 0}
-              Icon={() => <GrGallery className={classes.cardsInfoIcon} />}
-              url={"/gallery-settings"}
-            />
-          </Grid>
+    
+  
         </Container>
 
         <Box>
@@ -197,70 +181,59 @@ function Admin() {
                       >
                         DATE
                       </TableCell>
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        ACTION
-                      </TableCell>
+               
                     </TableRow>
                   </TableHead>
-                 {isLoadingRecentStudents ? <TableLoader rows={5} colums={7} /> :<TableBody>
-                    {recentStudentsData?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      recentStudentsData?.map((item) => {
-                        const {
-                          _id,
-                          surname,
-                          firstName,
+                  {isLoadingRecentStudents ? (
+                    <TableLoader rows={5} colums={6} />
+                  ) : (
+                    <TableBody>
+                      {recentStudentsData?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        recentStudentsData?.map((item) => {
+                          const {
+                            _id,
+                            surname,
+                            firstName,
 
-                          state,
-                          phoneNumber,
-                          email,
-                          country,
-                          createdAt,
-                        } = item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={_id}
-                            component={Link}
-                            to={`/students/${_id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">
-                              {surname} {firstName}
-                            </TableCell>
-                            <TableCell align="center">{phoneNumber}</TableCell>
-                            <TableCell align="center">{email}</TableCell>
-                            <TableCell align="center">{country}</TableCell>
-                            <TableCell align="center">{state}</TableCell>
-                            <TableCell align="center">
-                              {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>}
+                            state,
+                            phoneNumber,
+                            email,
+                            country,
+                            createdAt,
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={_id}
+                              component={Link}
+                              to={`/admin/students/${_id}`}
+                              style={{ textDecoration: "none" }}
+                            >
+                              <TableCell align="center">
+                                {surname} {firstName}
+                              </TableCell>
+                              <TableCell align="center">
+                                {phoneNumber}
+                              </TableCell>
+                              <TableCell align="center">{email}</TableCell>
+                              <TableCell align="center">{country}</TableCell>
+                              <TableCell align="center">{state}</TableCell>
+                              <TableCell align="center">
+                                {new Date(createdAt).toLocaleDateString()}
+                              </TableCell>
+                
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 
@@ -281,4 +254,4 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default DashBoard;

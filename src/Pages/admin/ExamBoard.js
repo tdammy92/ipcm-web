@@ -21,6 +21,7 @@ import Button from "@material-ui/core/Button";
 
 import { useExams } from "../../Services/queries/exam-query";
 import TableLoader from "../../components/Loaders/TableLoader";
+import { useRouteMatch } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,7 +51,7 @@ const useStyles = makeStyles((theme) => ({
 
 function ExamBoard() {
   const classes = useStyles();
-
+  let { url } = useRouteMatch();
   const { data: ExamList, isLoading } = useExams({ params: { type: "full" } });
 
   const [page, setPage] = React.useState(0);
@@ -65,39 +66,18 @@ function ExamBoard() {
     setPage(0);
   };
 
+
+
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        <Typography
-          variant="h5"
-          component="h4"
-          align="center"
-          color="primary"
-          style={{ marginTop: 10 }}
-        >
-          Exam Dashboard
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          EXAMS
         </Typography>
 
-        <Container maxWidth="md" mx="auto" className={classes.dashContainer}>
-          <Grid container spacing={2}>
-            <DashItem
-              title="UPLOAD EXAMS"
-              Icon={() => (
-                <FaCloudUploadAlt className={classes.cardsInfoIcon} />
-              )}
-              url={"/exam-upload"}
-            />
-            <DashItem
-              title="RESULTS"
-              Icon={() => <GrScorecard className={classes.cardsInfoIcon} />}
-              url={"/student-result"}
-            />
-          </Grid>
-        </Container>
-
         <div>
-          <h3 style={{ color: "#01996D" }}>Available Exams</h3>
+          <h3 style={{ color: "#01996D" }}>All Available Exams</h3>
           <div>
             <Paper className={classes.root2}>
               <TableContainer
@@ -150,18 +130,11 @@ function ExamBoard() {
                         Uploaded On
                       </TableCell>
 
-                      <TableCell
-                        align="center"
-                        style={{
-                          minWidth: 70,
-                        }}
-                      >
-                        ACTION
-                      </TableCell>
+                 
                     </TableRow>
                   </TableHead>
                   {isLoading ? (
-                      <TableLoader rows={5} colums={6} />
+                    <TableLoader rows={5} colums={6} />
                   ) : (
                     <TableBody>
                       {ExamList?.length < 1 ? (
@@ -203,17 +176,7 @@ function ExamBoard() {
                               <TableCell align="center">
                                 {new Date(createdAt).toLocaleDateString()}
                               </TableCell>
-                              <TableCell align="center">
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  size="small"
-                                  className={classes.button}
-                                  // endIcon={<VisibilityIcon />}
-                                >
-                                  View
-                                </Button>
-                              </TableCell>
+                              
                             </TableRow>
                           );
                         })

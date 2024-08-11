@@ -26,5 +26,11 @@ export const ROLES = {
   };
   
 
+  export const drawerWidth = 185;
+  export const drawerHeight = "90%";
+  export const primaryColor = "#01996d";
+  
+  export const logoHeight = 30;
+
 
   export const userAvater = `https://res.cloudinary.com/bilektechnologies/image/upload/v1687963208/samples/f19cjtmikb6r7geqrpkf.jpg`
