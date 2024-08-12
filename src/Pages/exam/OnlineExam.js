@@ -5,11 +5,58 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
-import { Box, Container, Typography } from "@material-ui/core";
+import { Box, Container, makeStyles, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 
+const useStyles = makeStyles((theme) => ({
+  radio: {
+    "&$checked": {},
+
+    color: theme.palette.primary.main,
+  },
+  radioBtn: {
+    "&$checked": {
+      color: "green",
+    },
+    "&:hover": {
+      backgroundColor: "#E6E6E6",
+    },
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 280,
+      justifySelf: "center",
+    },
+    width: "90%",
+    height: 40,
+    color: theme.palette.primary.main,
+    backgroundColor: "#f6f6f6",
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 8,
+    maxWidth: 550,
+  },
+  optionContainer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+    marginBottom: 15,
+    display: "flex",
+    flexDirection: "column",
+  },
+  optionWrapper: {
+    width: "90%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+    marginRight: 10,
+  },
+}));
+
 const OnlineExam = () => {
+  const classes = useStyles();
   const [value, setValue] = React.useState("");
 
   const handleChange = (event) => {
@@ -36,43 +83,44 @@ const OnlineExam = () => {
           }}
           className="paper__container"
         >
-          <Typography variant="h5" component="h5">
+          <Typography variant="subtitle1" component="h5">
             What is the gender of Isaac newton ?
           </Typography>
 
-          <Box>
-            <FormControl component="fieldset">
-              <FormLabel component="legend">Choose answer</FormLabel>
-              <RadioGroup
-                // aria-label="gender"
-                // name="gender1"
-                value={value}
-                onChange={handleChange}
-              >
-                <FormControlLabel
-                  value="female"
-                  control={<Radio />}
-                  label="Female"
-                />
+          <Box className={classes.optionContainer}>
+            <RadioGroup
+              value={value}
+              onChange={handleChange}
+              className={classes.optionWrapper}
+            >
+              <FormControlLabel
+                value="female"
+                color="primary"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Female"
+              />
 
-                <FormControlLabel
-                  value="male"
-                  control={<Radio />}
-                  label="Male"
-                />
+              <FormControlLabel
+                value="male"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Male"
+              />
 
-                <FormControlLabel
-                  value="other"
-                  control={<Radio />}
-                  label="Other"
-                />
-                <FormControlLabel
-                  value="disabled"
-                  control={<Radio />}
-                  label="Amaphrodite"
-                />
-              </RadioGroup>
-            </FormControl>
+              <FormControlLabel
+                value="other"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Other"
+              />
+              <FormControlLabel
+                value="disabled"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Amaphrodite"
+              />
+            </RadioGroup>
           </Box>
           <Button
             mt={15}
