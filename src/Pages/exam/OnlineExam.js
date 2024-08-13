@@ -5,10 +5,9 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
-import { Box, Container, Typography } from "@material-ui/core";
+import { Box, Container, makeStyles, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import { AccessTime, AccessTimeRounded } from "@material-ui/icons";
 
@@ -41,16 +40,65 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     // justifyContent: "space-around",
   },
+  radio: {
+    "&$checked": {},
+
+    color: theme.palette.primary.main,
+  },
+  radioBtn: {
+    "&$checked": {
+      color: "green",
+    },
+    "&:hover": {
+      backgroundColor: "#E6E6E6",
+    },
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: 280,
+      justifySelf: "center",
+    },
+    width: "90%",
+    height: 40,
+    color: theme.palette.primary.main,
+    backgroundColor: "#f6f6f6",
+    marginTop: 8,
+    marginBottom: 8,
+    borderRadius: 8,
+    maxWidth: 550,
+  },
+  optionContainer: {
+    width: "100%",
+    alignItems: "center",
+    justifyContent: "center",
+    marginTop: 15,
+    marginBottom: 15,
+    display: "flex",
+    flexDirection: "column",
+  },
+  buttonContainer: {
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-around",
+    width: "50%",
+  },
+  optionWrapper: {
+    width: "90%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    marginLeft: 10,
+    marginRight: 10,
+  },
 }));
 
 const OnlineExam = () => {
+  const classes = useStyles();
   const [value, setValue] = React.useState("");
 
   const handleChange = (event) => {
     setValue(event.target.value);
   };
-
-  const classes = useStyles();
 
   function valuetext(value) {
     return `${value}°C`;
@@ -92,62 +140,70 @@ const OnlineExam = () => {
             </Box>
           </Box>
 
-          <Typography variant="h5" component="h5">
-            What is the gender of Isaac newton ?
-          </Typography>
+          <Box pt={10}>
+            <Typography variant="subtitle1" component="h5">
+              What is the gender of Isaac newton ?
+            </Typography>
+          </Box>
 
-          <FormControl component="fieldset">
+          <Box className={classes.optionContainer}>
             <RadioGroup
-              aria-label="gender"
-              name="gender1"
               value={value}
               onChange={handleChange}
+              className={classes.optionWrapper}
             >
               <FormControlLabel
                 value="female"
-                control={<Radio />}
+                color="primary"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
                 label="Female"
               />
-              <FormControlLabel value="male" control={<Radio />} label="Male" />
+
+              <FormControlLabel
+                value="male"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Male"
+              />
 
               <FormControlLabel
                 value="other"
-                control={<Radio />}
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
                 label="Other"
               />
-
               <FormControlLabel
-                value="option"
-                control={<Radio />}
-                label="Option"
+                value="disabled"
+                className={classes.radioBtn}
+                control={<Radio color="primary" className={classes.radio} />}
+                label="Amaphrodite"
               />
             </RadioGroup>
-          </FormControl>
+          </Box>
 
-          <Box>
+          <Box mb={8} className={classes.buttonContainer}>
             <Button
-              style={{ marginRight: "60px" }}
+              mt={15}
+              component={Link}
+              to="/exam-result"
               variant="contained"
               color="primary"
+              size="small"
             >
-              Prevous
+              Previous
             </Button>
-
-            <Button variant="contained" color="primary">
+            <Button
+              mt={15}
+              component={Link}
+              to="/exam-result"
+              variant="contained"
+              color="primary"
+              size="small"
+            >
               Next
             </Button>
           </Box>
-
-          <Button
-            mt={15}
-            component={Link}
-            to="/exam-result"
-            variant="contained"
-            color="primary"
-            size="small"
-          >
-            Next To Result !
-          </Button>
         </Paper>
       </Container>
     </div>

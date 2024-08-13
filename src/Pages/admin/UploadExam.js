@@ -16,7 +16,7 @@ import React, { useRef, useState } from "react";
 import { ImUpload } from "react-icons/im";
 import { MdDownloadForOffline } from "react-icons/md";
 import { toast } from "react-toastify";
-
+import StarIcon from "@material-ui/icons/Star";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -33,6 +33,7 @@ import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
 import TableLoader from "../../components/Loaders/TableLoader";
 import { useUploadExam } from "../../Services/mutations/exam-mutation";
 import { useExams } from "../../Services/queries/exam-query";
+import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,10 +51,13 @@ const useStyles = makeStyles((theme) => ({
   },
 
   form: {
-    "& > *": {
-      margin: theme.spacing(1),
-      width: "25ch",
-    },
+      [theme.breakpoints.down("sm")]: {
+// backgroundColor:'red'
+
+      },
+
+
+      maxWidth:500
   },
 
   tableContainer: {
@@ -94,36 +98,28 @@ const useStyles = makeStyles((theme) => ({
 
   cardsInfoIcon: {
     fontSize: "70px",
-    color: "#01996D",
+    color: theme.palette.primary.main,
     cursor: "pointer",
     marginLeft: "20px",
   },
   cardsInfoIcon2: {
     fontSize: "40px",
-    color: "#01996D",
+    color: theme.palette.primary.main,
     cursor: "pointer",
     marginLeft: "10px",
   },
 
   formItem: {
-    width: "80%",
-    minWidth: "300px",
-    marginTop: "10px",
+    width: "100%",
+    marginTop: "15px",
     marginBottom: "15px",
-    marginLeft: "15px",
-
-    // backgroundColor:"#f45"
+    // backgroundColor:'blue'
   },
 
-  noticeUl: {
-    fontFamily: "8px",
-    margin: 0,
-    padding: 0,
-    color: "#01996D",
-    wordWrap: "wrap",
-    // listStyle: "none",
-    // marginTop: "3px",
-    // marginBottom: "5px",
+  dialogoFooter: {
+    marginBottom:20,
+justifyContent:'space-around',
+
   },
 }));
 
@@ -133,6 +129,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 const InitialExam = {
   examName: "",
+  examCode: "",
   duration: 0,
   questions: [],
 };
@@ -143,11 +140,13 @@ function UploadExam() {
   const docRef = useRef(null);
   const { details } = useSelector((state) => state.users);
 
-  const { data: ExamList, isLoading:isLoadingExams } = useExams({ params: { type: "full" } });
-  const { mutateAsync:uploadMutation, isLoading:isUploadingExams } = useUploadExam();
+  const { data: ExamList, isLoading: isLoadingExams } = useExams({
+    params: { type: "full" },
+  });
+  const { mutateAsync: uploadMutation, isLoading: isUploadingExams } =
+    useUploadExam();
 
   const [Exam, setExam] = useState(() => InitialExam);
-
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -198,7 +197,7 @@ function UploadExam() {
 
           if (!question) {
             toast.error(`Qst ${qstNumber} is not filled`, {
-              position: "top-center",
+              position: "bottom-center",
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -213,7 +212,7 @@ function UploadExam() {
 
           if (!answer) {
             toast.error(`Qst ${qstNumber} has no answer`, {
-              position: "top-center",
+              position: "bottom-center",
               autoClose: 5000,
               hideProgressBar: false,
               closeOnClick: true,
@@ -254,7 +253,7 @@ function UploadExam() {
   const handleUpload = async () => {
     if (Exam.examName === "") {
       toast.error(`Exam title can not be empty`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -268,7 +267,7 @@ function UploadExam() {
     }
     if (Exam.duration === "") {
       toast.error(`Exam duration can not be empty`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -283,7 +282,7 @@ function UploadExam() {
 
     if (Exam.questions?.length === 0) {
       toast.error(`Questions not uploaded`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -302,10 +301,8 @@ function UploadExam() {
       uploadedBy: details?._id,
     };
 
-
     try {
-      const postExam = await uploadMutation({payload})
-    
+      const postExam = await uploadMutation({ payload });
 
       if (postExam.status === 201) {
         setExam({ ...InitialExam });
@@ -313,7 +310,7 @@ function UploadExam() {
       }
     } catch (error) {
       toast.error(`${typeof error === "string" ? error : error?.message}`, {
-        position: "top-center",
+        position: "bottom-center",
         autoClose: 5000,
         hideProgressBar: false,
         closeOnClick: true,
@@ -323,30 +320,15 @@ function UploadExam() {
         theme: "light",
       });
     }
-
   };
-
-
-
-
 
   return (
     <div>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
-
-        <Box my={4}>
-          <Typography
-            variant="h6"
-            component="h4"
-            mt={4}
-            align="center"
-            color="primary"
-          >
-            Exam Upload
-          </Typography>
-        </Box>
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          EXAM UPLOAD
+        </Typography>
 
         <Paper elevation={2} p={2} className={classes.headerCard}>
           <Box
@@ -382,17 +364,23 @@ function UploadExam() {
             Please take note of the following steps before uploading an exam
           </Typography>
 
-          <ul className={classes.noticeUl}>
-            <li>
-              Click on the download button on the right to download an excel
-              template.
-            </li>
-            <li>
-              fill the space ment for answer and questions, without modifing the
-              excel sheet in any way.
-            </li>
-            <li>When your done and has verified it, upload the form </li>
-          </ul>
+          <List className={classes.noticeUl}>
+            <ListItem>
+              <ListItemText
+                primary="Click on the download button on the right to download an excel
+              template."
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText
+                primary="fill the space ment for answer and questions, without modifing the
+              excel sheet in any way."
+              />
+            </ListItem>
+            <ListItem>
+              <ListItemText primary="When your done and has verified it, upload the form" />
+            </ListItem>
+          </List>
         </Paper>
 
         <div>
@@ -457,57 +445,63 @@ function UploadExam() {
                     </TableCell>
                   </TableRow>
                 </TableHead>
-               {isLoadingExams ? <TableLoader rows={5} colums={6} /> : <TableBody>
-                  {ExamList?.length < 1 ? (
-                    <TableRow>
-                      <TableCell>No Result Found</TableCell>
-                    </TableRow>
-                  ) : (
-                    ExamList?.map((item) => {
-                      const {
-                        exam_uuid,
-                        name,
-                        duration,
-                        uploadedBy,
-                        questions,
-                        createdAt,
-                      } = item;
-                      return (
-                        <TableRow
-                          hover
-                          role="checkbox"
-                          tabIndex={-1}
-                          key={exam_uuid}
-                          // component={Link}
-                          // to={`/students/${_id}`}
-                          style={{ textDecoration: "none" }}
-                        >
-                          <TableCell align="center">{name}</TableCell>
-                          <TableCell align="center">{duration} Min</TableCell>
-                          <TableCell align="center">
-                            {questions?.length}
-                          </TableCell>
-                          <TableCell align="center">{uploadedBy?.username}</TableCell>
+                {isLoadingExams ? (
+                  <TableLoader rows={5} colums={6} />
+                ) : (
+                  <TableBody>
+                    {ExamList?.length < 1 ? (
+                      <TableRow>
+                        <TableCell>No Result Found</TableCell>
+                      </TableRow>
+                    ) : (
+                      ExamList?.map((item) => {
+                        const {
+                          exam_uuid,
+                          name,
+                          duration,
+                          uploadedBy,
+                          questions,
+                          createdAt,
+                        } = item;
+                        return (
+                          <TableRow
+                            hover
+                            role="checkbox"
+                            tabIndex={-1}
+                            key={exam_uuid}
+                            // component={Link}
+                            // to={`/students/${_id}`}
+                            style={{ textDecoration: "none" }}
+                          >
+                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">{duration} Min</TableCell>
+                            <TableCell align="center">
+                              {questions?.length}
+                            </TableCell>
+                            <TableCell align="center">
+                              {uploadedBy?.username}
+                            </TableCell>
 
-                          <TableCell align="center">
-                            {new Date(createdAt).toLocaleDateString()}
-                          </TableCell>
-                          <TableCell align="center">
-                            <Button
-                              variant="contained"
-                              color="primary"
-                              size="small"
-                              className={classes.button}
-                              // endIcon={<VisibilityIcon />}
-                            >
-                              View
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })
-                  )}
-                </TableBody>}
+                            <TableCell align="center">
+                              {new Date(createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell align="center">
+                              <Button
+                                variant="contained"
+                                color="primary"
+                                size="small"
+                                className={classes.button}
+                                // endIcon={<VisibilityIcon />}
+                              >
+                                View
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
+                  </TableBody>
+                )}
               </Table>
             </TableContainer>
 
@@ -530,14 +524,28 @@ function UploadExam() {
         keepMounted
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        style={{ height: "70%" }}
+        style={{ height: "75%",alignSelf:'center' }}
       >
-        <DialogTitle id="alert-dialog-title" align="center">
-          Upload
+        <DialogTitle color="primary" id="alert-dialog-title" align="center">
+         UPLOAD
         </DialogTitle>
         <DialogContent>
           <form className={classes.form} noValidate autoComplete="off">
-            <div className={classes.formItem}>
+            <Box className={classes.formItem}>
+              <TextField
+                id="outlined-basic"
+                size="small"
+                style={{ width: "100%" }}
+                required
+                label="Exam Code"
+                variant="outlined"
+                value={Exam.examName}
+                onChange={(e) =>
+                  setExam((prev) => ({ ...prev, examCode: e.target.value }))
+                }
+              />
+            </Box>
+            <Box className={classes.formItem}>
               <TextField
                 id="outlined-basic"
                 size="small"
@@ -550,17 +558,18 @@ function UploadExam() {
                   setExam((prev) => ({ ...prev, examName: e.target.value }))
                 }
               />
-            </div>
-            <div className={classes.formItem}>
+            </Box>
+            <Box className={classes.formItem}>
               <TextField
                 id="outlined-basic"
                 size="small"
                 style={{ width: "100%" }}
-                InputProps={{ inputProps: { min: 0, max: 10 } }}
+                InputProps={{ inputProps: { min: 30, max: 120 } }}
                 required
                 min="1"
                 max="5"
                 type="number"
+                helperText="The duration field is based on minutes e.g 30mins"
                 label="Exam duration"
                 variant="outlined"
                 value={Exam.duration}
@@ -571,8 +580,8 @@ function UploadExam() {
                   }))
                 }
               />
-            </div>
-            <div className={classes.formItem}>
+            </Box>
+            <Box className={classes.formItem}>
               <input
                 type="file"
                 accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
@@ -585,20 +594,20 @@ function UploadExam() {
                 onClick={OpenFilePicker}
                 style={{ width: "100%" }}
                 variant="contained"
-                color="default"
+                color="primary"
                 className={classes.button}
                 startIcon={<CloudUploadIcon />}
               >
                 Upload xlx sheet
               </Button>
-            </div>
+            </Box>
           </form>
         </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="primary">
+        <DialogActions className={classes.dialogoFooter}>
+          <Button onClick={handleClose} variant="outlined" color="primary">
             Cancle
           </Button>
-          <Button onClick={handleUpload} color="primary" autoFocus>
+          <Button onClick={handleUpload} color="primary" variant="contained" autoFocus>
             Upload
           </Button>
         </DialogActions>

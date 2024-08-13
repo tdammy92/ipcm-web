@@ -13,7 +13,7 @@ import Project from "../Pages/Project";
 import Career from "../Pages/Career";
 import Consult from "../Pages/Consult";
 import License from "../Pages/License";
-import Admin from "../Pages/admin/Admin";
+
 import SignUp from "../Pages/auth/SIgnUp";
 import SignIn from "../Pages/auth/SignIn";
 import SerialNumber from "../Pages/admin/SerialNumber";
@@ -39,6 +39,7 @@ import OnlineExam from "../Pages/exam/OnlineExam";
 import StartExam from "../Pages/exam/StartExam";
 import SelectExam from "../Pages/exam/SelectExam";
 import Certificate from "../Pages/exam/Certificate";
+import MainSection from "../Pages/admin";
 
 function Root() {
   return (
@@ -117,14 +118,37 @@ function Root() {
           <PrintForm />
         </Route> */}
 
-          <Route exact path="/signup">
-            <SignUp />
-          </Route>
-          <Route exact path="/signin">
-            <SignIn />
-          </Route>
+          <ProtectedRoute
+            // exact
+            path="/admin"
+            Component={MainSection}
+          />
 
-          <ProtectedRoute exact path="/admin" Component={Admin} />
+          {/* <ProtectedRoute
+          exact
+          path="/students"
+          Component={Students}
+        />
+        <ProtectedRoute
+          exact
+          path="/exam-board"
+          Component={ExamBoard}
+        />
+        <ProtectedRoute
+          exact
+          path="/exam-upload"
+          Component={UploadExam}
+        />
+        <ProtectedRoute
+          exact
+          path="/student-result"
+          Component={StudentResults}
+        />
+        <ProtectedRoute
+          exact
+          path="/gallery-settings"
+          Component={GallerySettings}
+        />
 
           <ProtectedRoute exact path="/students" Component={Students} />
           <ProtectedRoute exact path="/exam-board" Component={ExamBoard} />
@@ -140,7 +164,11 @@ function Root() {
             Component={GallerySettings}
           />
 
-          <ProtectedRoute exact path="/students/:id" Component={Student} />
+        <ProtectedRoute
+          exact
+          path="/serial-number"
+          Component={SerialNumber}
+        /> */}
 
           <ProtectedRoute
             exact

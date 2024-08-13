@@ -1,7 +1,7 @@
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import React, { forwardRef, useEffect, useRef, useState } from "react";
 
-import { Button, Container, Paper } from "@material-ui/core";
+import { Box, Button, Container, Paper } from "@material-ui/core";
 import InputLabel from "@material-ui/core/InputLabel";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
@@ -80,6 +80,10 @@ const fontControlStyles = {
   marginLeft: "15px",
 };
 const useStyles = makeStyles((theme) => ({
+  root: {
+    marginLeft: "15px",
+    marginRight: "15px",
+  },
   backdrop: {
     zIndex: theme.zIndex.drawer + 1,
     color: "#fff",
@@ -103,9 +107,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   serialContainer: {
-    width: `50%`,
-
-    // maxHeight:'30px'
+    width: `70%`,
   },
   passport: {
     width: theme.spacing(8),
@@ -464,7 +466,7 @@ function Register() {
                           onClick={UploadPassport}
                           alt="passport Image"
                           src={passport ?? avatar}
-                          // src="/static/images/avatar/1.jpg"
+           
                           className={classes.passport}
                         />
 
@@ -1178,28 +1180,30 @@ function Register() {
                         your application .
                       </p>
                       <Divider variant="middle" />
-                      <Card className={classes.root}>
-                        <CardContent>
+                      <Box className={classes.root}>
+                        <Box>
                           <Typography
                             className={classes.title}
-                            color="textSecondary"
+                            color="primary"
+                            align="center"
                             gutterBottom
                             variant="h5"
                           >
                             Bank Details
                           </Typography>
-                          <Typography variant="h6" component="h4">
+                          <Typography  align="center" variant="h6" component="h4">
                             Account Name : Institute of Global Peace and
                             Conflict Management
                           </Typography>
-                          <Typography variant="h6" component="h4">
+                          <Typography  align="center" variant="h6" component="h4">
                             Bank : Guaranty Trust Bank
                           </Typography>
-                          <Typography variant="h6" component="h4">
+                          <Typography  align="center" variant="h6" component="h4">
                             Account Number : 0645754697
                           </Typography>
-                        </CardContent>
-                        <CardActions
+                        </Box>
+                        <Box
+                        mt={5}
                           style={{
                             marginBottom: 10,
                             display: "flex",
@@ -1217,35 +1221,27 @@ function Register() {
                             </InputLabel>
                             <FilledInput
                               id="serial-number"
-                              // style={{height:'40px'}}
-                              // size='small'
                               value={serialNumber}
                               onChange={(e) => setserialNumber(e.target.value)}
                               // startAdornment={<InputAdornment position="start">$</InputAdornment>}
                               placeholder="XXXX-XXXX-XXXX-XXXX-XXXX"
                               labelwidth={60}
                             />
-                            <div style={{ textAlign: "center", padding: 0 }}>
-                              <p
-                                style={{
-                                  color: "#01996D",
-                                  fontSize: "18px",
-                                  padding: 0,
-                                }}
-                              >
+                            <Box style={{ textAlign: "center", padding: 0 }}>
+                              <Typography variant="p" style={{}}>
                                 Please contact admin for Serial Number:
-                              </p>
-                              <span style={{ fontSize: "20px", padding: 0 }}>
+                              </Typography>
+                              <Typography style={{}}>
                                 08074090417, 07038286393, 07033458730
-                              </span>
-                            </div>
+                              </Typography>
+                            </Box>
                           </FormControl>
-                        </CardActions>
-                      </Card>
+                        </Box>
+                      </Box>
                     </div>
                   </div>
 
-                  <div className="form__Btn">
+                  <Box mb={5} className="form__Btn">
                     <Button
                       variant="contained"
                       disabled={
@@ -1262,7 +1258,7 @@ function Register() {
                     >
                       Register
                     </Button>
-                  </div>
+                  </Box>
                 </form>
               </Paper>
 
