@@ -24,6 +24,8 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     justifyContent: "space-around",
     color: "white",
+    position: "absolute",
+    top: 0,
   },
   container: {
     display: "flex",
@@ -121,11 +123,16 @@ const OnlineExam = () => {
           style={{
             width: "90%",
             height: "80, 90%",
+            position: "relative",
           }}
           className="paper__container"
         >
           <Box className={classes.header}>
-            <Box>EXAMINATION COURSE</Box>
+            <Box>
+              <Typography variant="h4" component="h4">
+                EXAMINATION COURSE
+              </Typography>
+            </Box>
 
             <Box>
               <Box>

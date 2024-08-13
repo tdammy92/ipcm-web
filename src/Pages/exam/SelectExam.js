@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
-import { Box, Container } from "@material-ui/core";
+import { Box, Container, Typography } from "@material-ui/core";
 import { Link } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import List from "@material-ui/core/List";
@@ -12,8 +12,7 @@ import Avatar from "@material-ui/core/Avatar";
 import ListAltIcon from "@material-ui/icons/ListAlt";
 import ListItemSecondaryAction from "@material-ui/core/ListItemSecondaryAction";
 import IconButton from "@material-ui/core/IconButton";
-import Checkbox from '@material-ui/core/Checkbox';
-
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +20,17 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 360,
     maxWidth: 560,
     backgroundColor: theme.palette.background.paper,
+  },
+  header: {
+    backgroundColor: theme.palette.primary.main,
+    height: 70,
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+    position: "absolute",
+    top: 0,
   },
 }));
 
@@ -42,11 +52,18 @@ const SelectExam = () => {
           elevation={3}
           style={{
             width: "90%",
-            // height: "80%, 90%",
+            position: "relative",
           }}
           className="paper__container"
         >
-             <h4  style={{color:'primary'}} className="">Select Exam</h4>
+          <Box className={classes.header}>
+            <Box>
+              <Typography variant="h4" component="h4">
+                SELECT EXAM
+              </Typography>
+            </Box>
+          </Box>
+
           <Box>
             <List className={classes.root}>
               <ListItem>
