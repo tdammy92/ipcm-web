@@ -2,20 +2,17 @@ import React from "react";
 import { Redirect, useHistory, useLocation } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import { Container } from "@material-ui/core";
+import { Container, Box, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import SendIcon from "@material-ui/icons/Send";
 import { useMediaQuery } from "react-responsive";
 import { useSelector, useDispatch } from "react-redux";
-import { iSLoading, saveUser, LogOutUser } from "../../Store/feature";
 import { ScreenSize } from "../../Config";
 import axios from "axios";
 import Paper from "@material-ui/core/Paper";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, Field } from "formik";
-import { AppBar, Toolbar } from "@material-ui/core";
-
 import "../auth/style.css";
 import { BaseUrl } from "../../Services/api/BaseUrl";
 
@@ -43,6 +40,17 @@ const useStyles = makeStyles((theme) => ({
   paper: {
     padding: 10,
     margin: 20,
+  },
+  header: {
+    backgroundColor: theme.palette.primary.main,
+    height: 70,
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    color: "white",
+    position: "absolute",
+    top: 0,
   },
 
   button: {},
@@ -99,11 +107,16 @@ function StartExam() {
           style={{
             width: isMobile ? "100%" : "75%",
             height: isMobile ? "100%" : "90%",
+            position: "relative",
           }}
           className="paper__container"
         >
+          <Box className={classes.header}>
+            <Typography variant="h4" component="h4">
+              IGPCM EXAM PORTAL
+            </Typography>
+          </Box>
           <div className="login__container">
-            <h3 className="form__header">IGPCM EXAM PORTAL</h3>
             <Formik
               validationSchema={startExamValidation}
               initialValues={{ email: "", SerialNumber: "" }}
