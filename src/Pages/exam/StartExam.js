@@ -14,6 +14,7 @@ import Paper from "@material-ui/core/Paper";
 import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, Field } from "formik";
+import { AppBar, Toolbar } from "@material-ui/core";
 
 import "../auth/style.css";
 import { BaseUrl } from "../../Services/api/BaseUrl";
@@ -141,7 +142,7 @@ function StartExam() {
                       autoComplete="current-password"
                       variant="outlined"
                       name="SerialNumber"
-                        placeholder="Enter Serial number"
+                      placeholder="Enter Serial number"
                       onChange={handleChange}
                       style={{
                         width: "100%",

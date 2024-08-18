@@ -25,7 +25,6 @@ import TermsC from "../Pages/TermsC";
 import GallerySettings from "../Pages/admin/GallerySettings";
 import Footer from "../components/partials/Footer/Footer";
 
-
 import NotFound from "../Pages/NotFound";
 
 import ProtectedRoute from "../Pages/auth/ProtectedRoute";
@@ -39,20 +38,14 @@ import ExamResult from "../Pages/exam/ExamResult";
 import OnlineExam from "../Pages/exam/OnlineExam";
 import StartExam from "../Pages/exam/StartExam";
 import SelectExam from "../Pages/exam/SelectExam";
-import MainSection from '../Pages/admin';
-
-
-
-
-
+import Certificate from "../Pages/exam/Certificate";
+import MainSection from "../Pages/admin";
 
 function Root() {
-
-
   return (
     <div className="index">
-    <Router>
-     <NavBar />
+      <Router>
+        <NavBar />
 
         <Switch>
           <Route exact path="/">
@@ -69,6 +62,9 @@ function Root() {
           </Route>
           <Route exact path="/nysc">
             <Nysc />
+          </Route>
+          <Route exact path="/certificate">
+            <Certificate />
           </Route>
           <Route exact path="/exam-info">
             <ExamInfo />
@@ -107,7 +103,7 @@ function Root() {
             <StartExam />
           </Route>
           <Route exact path="/select-exam">
-            <SelectExam/>
+            <SelectExam />
           </Route>
           <Route exact path="/online-exam">
             <OnlineExam />
@@ -122,13 +118,13 @@ function Root() {
           <PrintForm />
         </Route> */}
 
-        <ProtectedRoute
-          // exact
-          path="/admin"
-          Component={MainSection}
-        />
+          <ProtectedRoute
+            // exact
+            path="/admin"
+            Component={MainSection}
+          />
 
-        {/* <ProtectedRoute
+          {/* <ProtectedRoute
           exact
           path="/students"
           Component={Students}

@@ -30,7 +30,7 @@ function ExamResult() {
           <Button
             mt={15}
             component={Link}
-            to="/exam-info"
+            to="/certificate"
             variant="contained"
             color="primary"
             size="small"
