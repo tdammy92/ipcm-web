@@ -539,7 +539,7 @@ function UploadExam() {
                 required
                 label="Exam Code"
                 variant="outlined"
-                value={Exam.examName}
+                value={Exam.examCode}
                 onChange={(e) =>
                   setExam((prev) => ({ ...prev, examCode: e.target.value }))
                 }
