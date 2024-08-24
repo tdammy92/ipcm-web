@@ -111,71 +111,12 @@ function Root() {
           <Route exact path="/exam-result">
             <ExamResult />
           </Route>
-          {/* <Route
-          exact
-          path="/form"
-        >
-          <PrintForm />
-        </Route> */}
 
           <ProtectedRoute
             // exact
             path="/admin"
             Component={MainSection}
           />
-
-          {/* <ProtectedRoute
-          exact
-          path="/students"
-          Component={Students}
-        />
-        <ProtectedRoute
-          exact
-          path="/exam-board"
-          Component={ExamBoard}
-        />
-        <ProtectedRoute
-          exact
-          path="/exam-upload"
-          Component={UploadExam}
-        />
-        <ProtectedRoute
-          exact
-          path="/student-result"
-          Component={StudentResults}
-        />
-        <ProtectedRoute
-          exact
-          path="/gallery-settings"
-          Component={GallerySettings}
-        />
-
-          <ProtectedRoute exact path="/students" Component={Students} />
-          <ProtectedRoute exact path="/exam-board" Component={ExamBoard} />
-          <ProtectedRoute exact path="/exam-upload" Component={UploadExam} />
-          <ProtectedRoute
-            exact
-            path="/student-result"
-            Component={StudentResults}
-          />
-          <ProtectedRoute
-            exact
-            path="/gallery-settings"
-            Component={GallerySettings}
-          />
-
-        <ProtectedRoute
-          exact
-          path="/serial-number"
-          Component={SerialNumber}
-        /> */}
-
-          <ProtectedRoute
-            exact
-            path="/serial-number"
-            Component={SerialNumber}
-          />
-
           <Route exact path="*">
             <NotFound />
           </Route>

@@ -26,7 +26,7 @@ export const ROLES = {
   };
   
 
-  export const drawerWidth = 185;
+  export const drawerWidth = 220;
   export const drawerHeight = "90%";
   export const primaryColor = "#01996d";
   

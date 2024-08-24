@@ -22,7 +22,7 @@ const UseStyles = makeStyles((theme) => {
       // backgroundColor: "yellow",
       // backgroundColor: "transparent",
       boxShadow: "none",
-      height:"3rem"
+      height: "3rem",
     },
     drawer: {
       [theme.breakpoints.up("sm")]: {
@@ -93,6 +93,13 @@ const UseStyles = makeStyles((theme) => {
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+    },
+    actionWrapper: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems:'center',
+      gap:10,
+      marginTop:10
     },
     navBarFooter: {
       //   height: `calc(90% - ${logoHeight}px)`,

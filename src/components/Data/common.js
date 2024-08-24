@@ -7,6 +7,20 @@ export const unProtectedRoute = [
   "/nysc",
   "/exam-info",
   "/certification",
+  "/career",
+  "/consultancy",
+  "/license",
+  "/policy",
+  "/t&c",
+  "/money-laundry"
+];
+export const examRoute = [
+  "/start-exam",
+  "/select-exam",
+  "/online-exam",
+  "/exam-result",
+  "/certificate",
+
 ];
 export const protectedRoute = [
   "/admin",

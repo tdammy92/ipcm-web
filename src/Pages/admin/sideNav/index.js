@@ -5,7 +5,8 @@ import ListItem from "@material-ui/core/ListItem";
 import { FaRegUserCircle } from "react-icons/fa";
 import List from "@material-ui/core/List";
 import UseStyles from "./Styling";
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import HomeIcon from '@material-ui/icons/Home';
 import { useRouteMatch, useHistory, Link } from "react-router-dom";
 import {
   Container,
@@ -21,14 +22,13 @@ import { useCounts } from "../../../Services/queries/user-query";
 import { LogOutUser } from "../../../Store/feature";
 import { ROLES } from "../../../constants";
 
-const SideNav = ({mobileOpen,handleDrawerToggle}) => {
+const SideNav = ({ mobileOpen, handleDrawerToggle }) => {
   let { url } = useRouteMatch();
   let history = useHistory();
   const { data: Counts } = useCounts();
   const classes = UseStyles();
   const data = NavBarData();
 
-  ;
   const defaultState = -1;
   const [itemId, setActiveItemId] = React.useState(defaultState);
   const user = useSelector((state) => state.users);
@@ -40,8 +40,9 @@ const SideNav = ({mobileOpen,handleDrawerToggle}) => {
     dispatch(LogOutUser());
     history.replace("/");
   };
-
-
+  const handleGotoHome = () => {
+    history.replace("/");
+  };
 
   const accessNav = useMemo(() => {
     let newNav;
@@ -49,11 +50,15 @@ const SideNav = ({mobileOpen,handleDrawerToggle}) => {
     if (role === ROLES.SUPER_ADMIN) {
       newNav = data?.menuItems;
     } else if (role === ROLES.ADMIN) {
-      newNav = data?.menuItems?.filter((nav) =>{
-        return nav.title !=='Exams' && nav?.title !== 'Exam Upload' && nav?.title !== 'Students Result'
+      newNav = data?.menuItems?.filter((nav) => {
+        return (
+          nav.title !== "Exams" &&
+          nav?.title !== "Exam Upload" &&
+          nav?.title !== "Students Result"
+        );
       });
-    }else{
-      newNav = []
+    } else {
+      newNav = [];
     }
 
     return newNav;
@@ -122,34 +127,47 @@ const SideNav = ({mobileOpen,handleDrawerToggle}) => {
           {user?.details?.role}
         </Typography>
 
-
-        <Button  size="small" variant="contained" color="primary"  onClick={handleLogout} startIcon={<ExitToAppIcon />}>
-          LogOut
-        </Button>
+        <Box className={`${classes.actionWrapper}`}>
+          <Button
+            size="small"
+          variant="outlined"
+            color="primary"
+            onClick={handleGotoHome}
+            startIcon={<HomeIcon />}
+          >
+          Go to home
+          </Button>
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={handleLogout}
+            startIcon={<ExitToAppIcon />}
+          >
+            LogOut
+          </Button>
+        </Box>
       </Box>
     </Drawer>
   );
 
   return (
     <div>
-
-
       <nav className={classes.drawer}>
-
-          <Drawer
-            variant="temporary"
-            anchor="left"
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true,
-            }}
-          >
-            {DrawerData}
-          </Drawer>
+        <Drawer
+          variant="temporary"
+          anchor="left"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+          ModalProps={{
+            keepMounted: true,
+          }}
+        >
+          {DrawerData}
+        </Drawer>
       </nav>
     </div>
   );
