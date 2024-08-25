@@ -14,6 +14,8 @@ import {
   useHistory,
 } from "react-router-dom";
 import { useExam } from "../../Services/queries/exam-query";
+import { ScreenSize } from "../../Config";
+import { useMediaQuery } from "react-responsive";
 
 const useStyles = makeStyles({
   root: {
@@ -33,6 +35,7 @@ const useStyles = makeStyles({
 const Exam = () => {
   const { id } = useParams();
   const history = useHistory();
+  const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
 
   const [Edit, setEdit] = useState(false);
 
@@ -60,34 +63,34 @@ const Exam = () => {
           </Box>
           <Box>
             <Box className={classes.examdetails}>
-              <Typography variant="h5" component="h2">
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2">
                 Name :
               </Typography>
-              <Typography variant="h5" component="h2" contenteditable={Edit ? "true" : "false"}>
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2" contenteditable={Edit ? "true" : "false"}>
                 {Exam?.examName}
               </Typography>
             </Box>
             <Box className={classes.examdetails}>
-              <Typography variant="h5" component="h2">
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2">
                 code :
               </Typography>
-              <Typography variant="h5" component="h2" contenteditable={Edit ? "true" : "false"}>
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2" contenteditable={Edit ? "true" : "false"}>
                 {Exam?.examCode}
               </Typography>
             </Box>
             <Box className={classes.examdetails}>
-              <Typography variant="h5" component="h2">
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2">
                 Duration :
               </Typography>
-              <Typography variant="h5" component="h2" contenteditable={Edit ? "true" : "false"}>
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2" contenteditable={Edit ? "true" : "false"}>
                 {Exam?.duration} Mins
               </Typography>
             </Box>
             <Box className={classes.examdetails}>
-              <Typography variant="h5" component="h2">
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2">
                 Total Questions :
               </Typography>
-              <Typography variant="h5" component="h2" >
+              <Typography variant={isMobile ? "h6" :"h5"} component="h2" >
                 {Exam?.totalQuestions}
               </Typography>
             </Box>

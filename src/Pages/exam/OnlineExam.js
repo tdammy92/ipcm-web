@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
@@ -6,10 +6,14 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
 import { Box, Container, makeStyles, Typography } from "@material-ui/core";
-import { Link } from "react-router-dom";
+import { Link,useLocation } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { AccessTime, AccessTimeRounded } from "@material-ui/icons";
+
+import { ScreenSize } from "../../Config";
+import { useMediaQuery } from "react-responsive";
+import { useExam } from "../../Services/queries/exam-query";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -58,8 +62,8 @@ const useStyles = makeStyles((theme) => ({
       maxWidth: 280,
       justifySelf: "center",
     },
-    width: "90%",
-    height: 40,
+    width: "95%",
+    // height: 40,
     color: theme.palette.primary.main,
     backgroundColor: "#f6f6f6",
     marginTop: 8,
@@ -96,15 +100,52 @@ const useStyles = makeStyles((theme) => ({
 
 const OnlineExam = () => {
   const classes = useStyles();
-  const [value, setValue] = React.useState("");
+  const [value, setValue] = useState("");
+  const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
+  const location = useLocation();
+
+  const selectedExam = location?.state;
+
+
+  const { data: Exam, isLoading: isLoadingExam } = useExam({
+    params: { id :selectedExam?._id},
+  });
+
+
+
+
+  const [currentQuestion, setCurrentQuestion] = useState(0)
+
+  // console.log("selected exammmmm ===>",JSON.stringify(selectedExam,null,3))
 
   const handleChange = (event) => {
+
+    // console.log(event?.target?.value)
     setValue(event.target.value);
   };
 
-  function valuetext(value) {
-    return `${value}°C`;
+
+// console.log(JSON.stringify(Exam,null,3))
+
+  const handlePrev = ()=>{
+    let prev = currentQuestion > 0 
+    if (prev) {
+      setCurrentQuestion(currentQuestion-1)
+      
+    }
+    
   }
+
+
+  const handleNext = useCallback(()=>{
+
+    let next = currentQuestion < Exam?.questions?.length-1;
+
+    if (next) {
+      setCurrentQuestion(currentQuestion+1)
+      
+    }
+  },[currentQuestion,Exam])
 
   return (
     <div className="startExam">
@@ -122,34 +163,34 @@ const OnlineExam = () => {
           elevation={4}
           style={{
             width: "90%",
-            height: "80, 90%",
+            height: "100%",
             position: "relative",
           }}
           className="paper__container"
         >
           <Box className={classes.header}>
             <Box>
-              <Typography variant="h4" component="h4">
-                EXAMINATION COURSE
+              <Typography variant={isMobile ? "body1": "h6"} component="h4">
+                {selectedExam?.examName}
               </Typography>
             </Box>
 
             <Box>
-              <Box>
-                <Typography>3/20</Typography>
-              </Box>
+     
+                <Typography variant={isMobile ? "body1": "h6"}>{currentQuestion+1}/{Exam?.questions?.length}</Typography>
+        
             </Box>
             <Box>
               <Box className={classes.timerContainer}>
                 <AccessTimeRounded />
-                <Typography>5:30</Typography>
+                <Typography variant={isMobile ? "body1": "h6"}>5:30</Typography>
               </Box>
             </Box>
           </Box>
 
-          <Box pt={10}>
+          <Box pt={10} px={1}>
             <Typography variant="subtitle1" component="h5">
-              What is the gender of Isaac newton ?
+            { Exam?.questions?.[currentQuestion]?.question }
             </Typography>
           </Box>
 
@@ -159,41 +200,24 @@ const OnlineExam = () => {
               onChange={handleChange}
               className={classes.optionWrapper}
             >
-              <FormControlLabel
-                value="female"
-                color="primary"
-                className={classes.radioBtn}
-                control={<Radio color="primary" className={classes.radio} />}
-                label="Female"
-              />
 
-              <FormControlLabel
-                value="male"
-                className={classes.radioBtn}
-                control={<Radio color="primary" className={classes.radio} />}
-                label="Male"
-              />
-
-              <FormControlLabel
-                value="other"
-                className={classes.radioBtn}
-                control={<Radio color="primary" className={classes.radio} />}
-                label="Other"
-              />
-              <FormControlLabel
-                value="disabled"
-                className={classes.radioBtn}
-                control={<Radio color="primary" className={classes.radio} />}
-                label="Amaphrodite"
-              />
+              {
+                Exam?.questions?.[currentQuestion]?.options?.map((option,index)=>(
+                  <FormControlLabel
+                  key={index}
+                  value={option}
+                  className={classes.radioBtn}
+                  control={<Radio color="primary" className={classes.radio} />}
+                  label={option}
+                />
+                ))
+              }
             </RadioGroup>
           </Box>
 
-          <Box mb={8} className={classes.buttonContainer}>
+          <Box  my={5} className={classes.buttonContainer}>
             <Button
-              mt={15}
-              component={Link}
-              to="/exam-result"
+            onClick={handlePrev}
               variant="contained"
               color="primary"
               size="small"
@@ -201,14 +225,24 @@ const OnlineExam = () => {
               Previous
             </Button>
             <Button
-              mt={15}
-              component={Link}
-              to="/exam-result"
+            onClick={handleNext}
               variant="contained"
               color="primary"
               size="small"
             >
               Next
+            </Button>
+          </Box>
+
+          <Box mb={5}>
+          <Button
+              component={Link}
+              to="/exam-info"
+              variant="outlined"
+              color="primary"
+              size="small"
+            >
+              Quit
             </Button>
           </Box>
         </Paper>
