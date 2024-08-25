@@ -16,7 +16,6 @@ import React, { useRef, useState } from "react";
 import { ImUpload } from "react-icons/im";
 import { MdDownloadForOffline } from "react-icons/md";
 import { toast } from "react-toastify";
-import StarIcon from "@material-ui/icons/Star";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -33,7 +32,7 @@ import QUESTION_TEMPLATE from "../../assets/document/QUESTION_TEMPLATE.xlsx";
 import TableLoader from "../../components/Loaders/TableLoader";
 import { useUploadExam } from "../../Services/mutations/exam-mutation";
 import { useExams } from "../../Services/queries/exam-query";
-import { List, ListItem, ListItemIcon, ListItemText } from "@material-ui/core";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,10 +116,14 @@ const useStyles = makeStyles((theme) => ({
   },
 
   dialogoFooter: {
-    marginBottom:20,
-justifyContent:'space-around',
-
+    marginBottom: 20,
+    justifyContent: "space-around",
   },
+
+  dialogueContainer:{
+    width: "100%",
+    // backgroundColor:'red',
+  }
 }));
 
 const Transition = React.forwardRef(function Transition(props, ref) {
@@ -322,6 +325,9 @@ function UploadExam() {
     }
   };
 
+
+  // console.log(JSON.stringify(ExamList,null,3))
+
   return (
     <div>
       <CssBaseline />
@@ -356,7 +362,7 @@ function UploadExam() {
             </Link>
           </Box>
           <Typography
-            variant="body2"
+            variant="h6"
             component="h3"
             align="center"
             color="primary"
@@ -364,23 +370,25 @@ function UploadExam() {
             Please take note of the following steps before uploading an exam
           </Typography>
 
-          <List className={classes.noticeUl}>
-            <ListItem>
-              <ListItemText
-                primary="Click on the download button on the right to download an excel
-              template."
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText
-                primary="fill the space ment for answer and questions, without modifing the
-              excel sheet in any way."
-              />
-            </ListItem>
-            <ListItem>
-              <ListItemText primary="When your done and has verified it, upload the form" />
-            </ListItem>
-          </List>
+          <ol className={classes.noticeUl}>
+            <li>
+              <Typography>
+                Click on the download button on the right to download an excel
+                template.
+              </Typography>
+            </li>
+            <li>
+              <Typography>
+                fill the space ment for answer and questions, without modifing
+                the excel sheet in any way.
+              </Typography>
+            </li>
+            <li>
+              <Typography>
+                When your done and has verified it, upload the form
+              </Typography>
+            </li>
+          </ol>
         </Paper>
 
         <div>
@@ -398,7 +406,7 @@ function UploadExam() {
                         minWidth: 120,
                       }}
                     >
-                      Exam Title
+                      Exam Code
                     </TableCell>
                     <TableCell
                       align="center"
@@ -434,15 +442,6 @@ function UploadExam() {
                     >
                       Uploaded On
                     </TableCell>
-
-                    <TableCell
-                      align="center"
-                      style={{
-                        minWidth: 70,
-                      }}
-                    >
-                      ACTION
-                    </TableCell>
                   </TableRow>
                 </TableHead>
                 {isLoadingExams ? (
@@ -456,27 +455,26 @@ function UploadExam() {
                     ) : (
                       ExamList?.map((item) => {
                         const {
-                          exam_uuid,
-                          name,
+                          _id,
+                          examCode,
                           duration,
+                          totalQuestions,
                           uploadedBy,
-                          questions,
                           createdAt,
                         } = item;
                         return (
                           <TableRow
-                            hover
-                            role="checkbox"
+                            hover                  
                             tabIndex={-1}
-                            key={exam_uuid}
-                            // component={Link}
-                            // to={`/students/${_id}`}
+                            key={_id}
+                            component={Link}
+                            to={`exams/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
-                            <TableCell align="center">{name}</TableCell>
+                            <TableCell align="center">{examCode}</TableCell>
                             <TableCell align="center">{duration} Min</TableCell>
                             <TableCell align="center">
-                              {questions?.length}
+                              {totalQuestions}
                             </TableCell>
                             <TableCell align="center">
                               {uploadedBy?.username}
@@ -484,17 +482,6 @@ function UploadExam() {
 
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
-                            </TableCell>
-                            <TableCell align="center">
-                              <Button
-                                variant="contained"
-                                color="primary"
-                                size="small"
-                                className={classes.button}
-                                // endIcon={<VisibilityIcon />}
-                              >
-                                View
-                              </Button>
                             </TableCell>
                           </TableRow>
                         );
@@ -520,14 +507,14 @@ function UploadExam() {
       <Dialog
         open={open}
         onClose={handleClose}
+        className={classes.dialogueContainer}
         TransitionComponent={Transition}
         keepMounted
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
-        style={{ height: "75%",alignSelf:'center' }}
       >
         <DialogTitle color="primary" id="alert-dialog-title" align="center">
-         UPLOAD
+          UPLOAD
         </DialogTitle>
         <DialogContent>
           <form className={classes.form} noValidate autoComplete="off">
@@ -607,8 +594,14 @@ function UploadExam() {
           <Button onClick={handleClose} variant="outlined" color="primary">
             Cancle
           </Button>
-          <Button onClick={handleUpload} color="primary" variant="contained" autoFocus>
-            Upload
+          <Button
+          disabled={isUploadingExams}
+            onClick={handleUpload}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            {isUploadingExams ? "Uploading.." : "Upload" }
           </Button>
         </DialogActions>
       </Dialog>

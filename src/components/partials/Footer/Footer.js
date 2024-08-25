@@ -12,12 +12,6 @@ function Footer() {
 
   const location = useLocation().pathname;
 
-
-  console.log("current locations",location)
-
-
-  const exclude = location?.includes('admin');
-
   const only = unProtectedRoute.includes(location);
   
   return (

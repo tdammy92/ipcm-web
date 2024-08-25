@@ -36,7 +36,7 @@ const menuItems = [
   {
     title: "Exams",
     icon: "FaBookReader",
-    link: "/exam-board"
+    link: "/exams"
   },
   {
     title: "Exam Upload",

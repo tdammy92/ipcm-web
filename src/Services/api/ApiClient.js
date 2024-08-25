@@ -4,7 +4,7 @@ import { BaseUrl } from "./BaseUrl";
 
 export const ApiClient = async (
   url,
-  { data, method = "GET", ...customConfig }
+  { data={}, method = "GET", ...customConfig }
 ) => {
   let storage = JSON.parse(localStorage.getItem("persist:root"))?.users;
 

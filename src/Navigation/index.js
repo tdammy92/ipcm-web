@@ -14,15 +14,9 @@ import Career from "../Pages/Career";
 import Consult from "../Pages/Consult";
 import License from "../Pages/License";
 
-import SignUp from "../Pages/auth/SIgnUp";
-import SignIn from "../Pages/auth/SignIn";
-import SerialNumber from "../Pages/admin/SerialNumber";
-import Students from "../Pages/admin/Students";
-import Student from "../Pages/admin/Student";
 import Gallery from "../Pages/Gallery";
 import Policy from "../Pages/Policy";
 import TermsC from "../Pages/TermsC";
-import GallerySettings from "../Pages/admin/GallerySettings";
 import Footer from "../components/partials/Footer/Footer";
 
 import NotFound from "../Pages/NotFound";
@@ -30,9 +24,6 @@ import NotFound from "../Pages/NotFound";
 import ProtectedRoute from "../Pages/auth/ProtectedRoute";
 
 import ExamInfo from "../Pages/exam/ExamInfo";
-import ExamBoard from "../Pages/admin/ExamBoard";
-import UploadExam from "../Pages/admin/UploadExam";
-import StudentResults from "../Pages/admin/StudentResults";
 import MoneyLaundry from "../Pages/MoneyLaundry";
 import ExamResult from "../Pages/exam/ExamResult";
 import OnlineExam from "../Pages/exam/OnlineExam";

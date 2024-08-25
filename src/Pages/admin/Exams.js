@@ -2,9 +2,8 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Paper from "@material-ui/core/Paper";
 import Typography from "@material-ui/core/Typography";
 import React from "react";
-
+import { Link, useRouteMatch } from "react-router-dom";
 import Container from "@material-ui/core/Container";
-import Grid from "@material-ui/core/Grid";
 import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -13,15 +12,10 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
-import { FaCloudUploadAlt } from "react-icons/fa";
-import { GrScorecard } from "react-icons/gr";
-import DashItem from "../../components/partials/dashcardItem";
-import Skeleton from "react-loading-skeleton";
-import Button from "@material-ui/core/Button";
 
 import { useExams } from "../../Services/queries/exam-query";
 import TableLoader from "../../components/Loaders/TableLoader";
-import { useRouteMatch } from "react-router-dom";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -49,7 +43,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function ExamBoard() {
+function Exams() {
   const classes = useStyles();
   let { url } = useRouteMatch();
   const { data: ExamList, isLoading } = useExams({ params: { type: "full" } });
@@ -147,29 +141,29 @@ function ExamBoard() {
                           page * rowsPerPage + rowsPerPage
                         ).map((item) => {
                           const {
-                            exam_uuid,
-                            name,
+                            _id,
+                            examCode,
                             duration,
+                            totalQuestions,
                             uploadedBy: { username },
-                            questions,
                             createdAt,
                           } = item;
                           return (
                             <TableRow
                               hover
-                              role="checkbox"
+                              // role="checkbox"
                               tabIndex={-1}
-                              key={exam_uuid}
-                              // component={Link}
-                              // to={`/students/${_id}`}
+                              key={_id}
+                              component={Link}
+                              to={`${url}/${_id}`}
                               style={{ textDecoration: "none" }}
                             >
-                              <TableCell align="center">{name}</TableCell>
+                              <TableCell align="center">{examCode}</TableCell>
                               <TableCell align="center">
                                 {duration} Min
                               </TableCell>
                               <TableCell align="center">
-                                {questions?.length}
+                                {totalQuestions}
                               </TableCell>
                               <TableCell align="center">{username}</TableCell>
 
@@ -203,4 +197,4 @@ function ExamBoard() {
   );
 }
 
-export default ExamBoard;
+export default Exams;
