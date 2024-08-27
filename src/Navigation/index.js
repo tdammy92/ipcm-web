@@ -31,6 +31,8 @@ import StartExam from "../Pages/exam/StartExam";
 import SelectExam from "../Pages/exam/SelectExam";
 import Certificate from "../Pages/exam/Certificate";
 import MainSection from "../Pages/admin";
+import SignIn from "../Pages/auth/SignIn";
+import SignUp from "../Pages/auth/SIgnUp";
 
 function Root() {
   return (
@@ -102,6 +104,12 @@ function Root() {
           <Route exact path="/exam-result">
             <ExamResult />
           </Route>
+          <Route exact path="/signup">
+              <SignUp />
+            </Route>
+            <Route exact path="/signin">
+              <SignIn />
+            </Route>
 
           <ProtectedRoute
             // exact
