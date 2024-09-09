@@ -13,6 +13,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Root from "./Navigation";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import 'react-loading-skeleton/dist/skeleton.css'
+import { isDev } from "./utils";
 
 
 const defualtTheme = createMuiTheme({
@@ -62,7 +63,7 @@ function App() {
       <Root />
     </ThemeProvider>
     </PersistGate>
-    <ReactQueryDevtools initialIsOpen={true} />
+    <ReactQueryDevtools initialIsOpen={isDev} />
   </QueryClientProvider>
 </Provider>
   );

@@ -13,3 +13,8 @@ export const modifyUrl = (url) => {
     ? url
     : url.replace("http://", "https://");
 };
+
+
+
+export const isDev =
+  process.env.NODE_ENV === "development"

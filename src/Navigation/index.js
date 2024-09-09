@@ -13,6 +13,7 @@ import Project from "../Pages/Project";
 import Career from "../Pages/Career";
 import Consult from "../Pages/Consult";
 import License from "../Pages/License";
+import PrintCertificate from "../Pages/PrintCertificate";
 
 import Gallery from "../Pages/Gallery";
 import Policy from "../Pages/Policy";
@@ -33,6 +34,7 @@ import Certificate from "../Pages/exam/Certificate";
 import MainSection from "../Pages/admin";
 import SignIn from "../Pages/auth/SignIn";
 import SignUp from "../Pages/auth/SIgnUp";
+import CertificateForm from "../Pages/CertificateForm";
 
 function Root() {
   return (
@@ -105,11 +107,21 @@ function Root() {
             <ExamResult />
           </Route>
           <Route exact path="/signup">
-              <SignUp />
-            </Route>
-            <Route exact path="/signin">
-              <SignIn />
-            </Route>
+            <SignUp />
+          </Route>
+          <Route exact path="/signin">
+            <SignIn />
+          </Route>
+
+          <Route exact path="/auth-certificate">
+            <SignIn />
+          </Route>
+          <Route exact path="/certificate-form">
+            <CertificateForm/>
+          </Route>
+          <Route exact path="/print-certificate">
+            <PrintCertificate/>
+          </Route>
 
           <ProtectedRoute
             // exact

@@ -5,7 +5,8 @@ import { LiaBarcodeSolid } from "react-icons/lia";
 import { MdDashboard } from "react-icons/md";
 import { IoImagesSharp } from "react-icons/io5";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import { GrScorecard } from "react-icons/gr";
+import { GrScorecard,GrCertificate } from "react-icons/gr";
+import { FaBook } from "react-icons/fa6";
 
 const components = {
     MdDashboard: MdDashboard,
@@ -15,6 +16,8 @@ const components = {
     IoImagesSharp: IoImagesSharp,
     FaCloudUploadAlt: FaCloudUploadAlt,
     GrScorecard: GrScorecard,
+    GrCertificate:GrCertificate,
+    FaBook:FaBook
 };
 
 const menuItems = [
@@ -27,6 +30,11 @@ const menuItems = [
     title: "Students",
     icon: "HiUserGroup",
     link: "/students"
+  },
+  {
+    title: "Courses",
+    icon: "FaBook",
+    link: "/courses"
   },
   {
     title: "Serial Number",
@@ -48,6 +56,12 @@ const menuItems = [
     icon: "GrScorecard",
     link: "/student-result"
   },
+  {
+    title: "Student Certificate",
+    icon: "GrCertificate",
+    link: "/student-certificates"
+  },
+
 
   {
     title: "Gallery",
