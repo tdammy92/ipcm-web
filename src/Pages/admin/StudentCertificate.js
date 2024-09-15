@@ -304,7 +304,7 @@ const StudentCertificate = () => {
                   <TableBody>
                     {CertificateList?.length < 1 ? (
                       <TableRow>
-                        <TableCell>No Result Found</TableCell>
+                        <TableCell colSpan={4} align="center">No Result Found</TableCell>
                       </TableRow>
                     ) : (
                       CertificateList?.map((item,index) => {
