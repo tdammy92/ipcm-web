@@ -82,7 +82,7 @@ const SideNav = ({ mobileOpen, handleDrawerToggle }) => {
         </Container>
       </Box>
       <Box component="div" className={classes.navBarItems}>
-        <List>
+        <List  style={{height:'100%',}}>
           {accessNav?.map((listItem, index) => {
             const IconTag = data.components[listItem.icon];
             return (
@@ -147,7 +147,7 @@ const SideNav = ({ mobileOpen, handleDrawerToggle }) => {
             LogOut
           </Button>
         </Box>
-      </Box>
+      </Box> 
     </Drawer>
   );
 

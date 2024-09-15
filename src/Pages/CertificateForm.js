@@ -17,13 +17,25 @@ import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
+  root:{
+    display:'flex',
+    flexDirection:'column',
+    alignItems:'center',
+    justifyContent:'center',
+    // backgroundColor:'blue',
+    paddingBottom:40,
+  },
   form: {
     [theme.breakpoints.down("sm")]: {
-      minWidth: 750,
+      // minWidth: 350,
+      maxWidth:350,
+      // backgroundColor:'red'
     },
     display: "flex",
+    maxWidth:600,
     flexDirection: "column",
     alignItems: "center",
+    justifyContent:'center',
     width: "100%",
     marginBottom: 12,
 
@@ -31,8 +43,14 @@ const useStyles = makeStyles((theme) => ({
   },
 
   formItem: {
-    maxWidth: 600,
-    minWidth: 500,
+    [theme.breakpoints.down("sm")]: {
+      // minWidth: 150,
+      // maxWidth:250,
+      // backgroundColor:'yellow'
+    },
+    // maxWidth: 600,
+    // minWidth: 500,
+    width:'100%',
     height: 60,
     marginTop: "15px",
     marginBottom: "15px",
@@ -107,13 +125,13 @@ const CertificateForm = () => {
   // console.log(JSON.stringify(studentDetail,null,3));
 
   return (
-    <Container mx="auto">
+    <Container mx="auto"   className={classes.root}>
       <Box my={5}>
         <Typography variant="h5" color="primary" align="center">
           Certificate Details
         </Typography>
         <Typography variant="subtitle1" color="primary" align="center">
-          Ensure all details are corect before clicking on proceed
+          Ensure all details are correct before clicking on proceed
         </Typography>
       </Box>
       <form className={classes.form} noValidate autoComplete="off">
@@ -227,7 +245,7 @@ const CertificateForm = () => {
           color="primary"
           size="large"
         >
-          Cancle
+          Cancel
         </Button>
         <Button
           disabled={validatingSerial}

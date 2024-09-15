@@ -3,6 +3,12 @@ import { drawerWidth, logoHeight, drawerHeight } from "../../../constants";
 
 const UseStyles = makeStyles((theme) => {
   let primaryColor = theme?.palette?.primary?.main;
+  let deviceHeight = window?.screen?.height;
+
+
+  console.log("device height",deviceHeight)
+  console.log("1/3",deviceHeight*0.6)
+
   return createStyles({
     hide: {
       display: "none",
@@ -30,7 +36,7 @@ const UseStyles = makeStyles((theme) => {
         // backgroundColor: "pink",
       },
 
-      // backgroundColor:'pink',
+      backgroundColor:'pink',
     },
     drawerPaper: {
       // marginTop:`${60}px`,
@@ -38,6 +44,8 @@ const UseStyles = makeStyles((theme) => {
       // borderTop:`${1}px`,
       width: drawerWidth,
       //   borderColor:'red'
+
+      // backgroundColor:'red',
     },
     listItem: {
       padding: 0,
@@ -80,6 +88,7 @@ const UseStyles = makeStyles((theme) => {
       flexDirection: "row",
       alignItems: "center",
       justifyContent: "center",
+      // backgroundColor:'blue'
     },
     logo: {
       height: logoHeight,
@@ -89,10 +98,21 @@ const UseStyles = makeStyles((theme) => {
     },
 
     navBarItems: {
-      height: `calc(65% - ${logoHeight}px)`,
+
+      [theme.breakpoints.down("sm")]: {
+        // width: drawerWidth,
+        // backgroundColor: "pink",
+        // height: `calc(65% - ${logoHeight}px)`,
+        // maxHeight: deviceHeight*0.5,
+        height: deviceHeight*0.50,
+        overflow: 'auto',
+        // backgroundColor:'yellow'
+      },
+      marginTop:35,
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
+      // backgroundColor:'pink'
     },
     actionWrapper: {
       display: "flex",
@@ -103,6 +123,13 @@ const UseStyles = makeStyles((theme) => {
     },
     navBarFooter: {
       //   height: `calc(90% - ${logoHeight}px)`,
+      [theme.breakpoints.down("sm")]: {
+        // width: drawerWidth,
+        // backgroundColor: "pink",
+        // height: `calc(65% - ${logoHeight}px)`,
+ 
+        bottom: 20,
+      },
       position: "absolute",
       bottom: 50,
       right: 0,

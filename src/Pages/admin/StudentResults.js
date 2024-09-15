@@ -206,7 +206,7 @@ function StudentResults() {
                   <TableBody>
                     {studentResults?.length < 1 ? (
                       <TableRow>
-                        <TableCell>No Result Found</TableCell>
+                        <TableCell colSpan={6} align="center">No Result Found</TableCell>
                       </TableRow>
                     ) : (
                       studentResults
