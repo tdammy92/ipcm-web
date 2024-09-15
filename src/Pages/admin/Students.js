@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useRef, useMemo } from "react";
 
-import { Link, Redirect, useHistory } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
@@ -8,10 +8,10 @@ import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
 // import { DownloadTableExcel } from "react-export-table-to-excel";
-import { useDownloadExcel, downloadExcel } from "react-export-table-to-excel";
-
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import BlurLinearIcon from "@material-ui/icons/BlurLinear";
+import {
+  //  useDownloadExcel,
+  downloadExcel,
+} from "react-export-table-to-excel";
 
 import GridOnIcon from "@material-ui/icons/GridOn";
 import PrintIcon from "@material-ui/icons/Print";
@@ -19,23 +19,12 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import SearchIcon from "@material-ui/icons/Search";
 import VisibilityIcon from "@material-ui/icons/Visibility";
 
-import axios from "axios";
-import { BaseUrl } from "../../Services/api/BaseUrl";
-
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 
 import Button from "@material-ui/core/Button";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
 
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
+import InputAdornment from "@material-ui/core/InputAdornment";
 
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -46,10 +35,12 @@ import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 
 import { useReactToPrint } from "react-to-print";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
 
 import Pdf from "react-to-pdf";
+import { useStudents } from "../../Services/queries/student-query";
+import TableLoader from "../../components/Loaders/TableLoader";
+import { useSelector } from "react-redux";
+import { Box } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -59,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
       // margin: theme.spacing(2),
       width: theme.spacing(16),
-      height: theme.spacing(7),
+      height: theme.spacing(12),
     },
   },
   root2: {
@@ -73,11 +64,24 @@ const useStyles = makeStyles((theme) => ({
   cards: {
     width: "100%",
     display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
   },
   button: {
     margin: theme.spacing(1),
+  },
+  searchInput: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: 10,
+      minWidth: 250,
+    },
+
+    minWidth: 350,
+  },
+  actionBtns: {
+    display: "flex",
   },
 
   searchBar: {
@@ -89,16 +93,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Students() {
+  let { url } = useRouteMatch();
   const date = Date.now();
   const fileName = new Date(date).toLocaleDateString().toString();
 
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { details } = useSelector((state) => state.users);
+
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [Search, setSearch] = useState("");
-  const [Students, setStudents] = useState([]);
+
+  const { data: studentsDat, isLoading: isLoadingStudents } = useStudents({
+    currentPage: 1,
+  });
+
+  // console.log("details===>",JSON.stringify(details,null,3))
+  // console.log("studentsData===>",JSON.stringify(studentsDat,null,3))
+
+  const studentsData = useMemo(
+    () => studentsDat?.pages?.flatMap((students) => students?.page) || [],
+    [studentsDat]
+  );
 
   const componentRef = useRef();
   // const ExcelRef = useRef(null);
@@ -124,7 +140,7 @@ function Students() {
       tablePayload: {
         header,
         // accept two different data structures
-        body: Students?.map((item, index) => {
+        body: studentsData?.map((item, index) => {
           return {
             index: `${index + 1}`,
             Title: `${item?.title}`,
@@ -164,38 +180,18 @@ function Students() {
     setSearch(serachValue);
   }
 
-  async function getAllStudents() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}student`, {
-        headers: {
-          "Content-Type": "apllication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-
-      setStudents(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
-
-  useEffect(() => {
-    getAllStudents();
-  }, []);
-
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md">
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          ALL STUDENTS
+        </Typography>
         <div className={classes.root}>
           <Paper elevation={3} className={classes.cards}>
             <TextField
-              className={classes.margin}
+              className={classes.searchInput}
               id="input-with-icon-textfield"
-              // label="Search"
               placeholder="Search"
               value={Search}
               onChange={handleSearch}
@@ -208,7 +204,7 @@ function Students() {
               }}
             />
 
-            <div>
+            <Box className={classes.actionBtns}>
               <Button
                 onClick={handlePrint}
                 variant="contained"
@@ -255,14 +251,11 @@ function Students() {
                 Excel
               </Button>
               {/* </DownloadTableExcel> */}
-            </div>
+            </Box>
           </Paper>
         </div>
 
         <div ref={componentRef}>
-          <Typography variant="h6" color="primary">
-            All student
-          </Typography>
           <div>
             <Paper className={classes.root2}>
               <TableContainer
@@ -345,83 +338,88 @@ function Students() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-                    {Students?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      Students?.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      )
-                        .filter(
-                          (stu) =>
-                            stu.firstName.toLowerCase().includes(Search) ||
-                            stu.surname.toLowerCase().includes(Search) ||
-                            stu.state.toLowerCase().includes(Search) ||
-                            stu.country.toLowerCase().includes(Search) ||
-                            stu.email.toLowerCase().includes(Search) ||
-                            stu.phoneNumber.toLowerCase().includes(Search)
-                        )
-                        ?.map((item, i) => {
-                          const {
-                            _id,
-                            surname,
-                            firstName,
+                  {isLoadingStudents ? (
+                    <TableLoader rows={5} colums={8} />
+                  ) : (
+                    <TableBody>
+                      {studentsData?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        studentsData
+                          ?.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )
+                          .filter(
+                            (stu) =>
+                              stu.firstName.toLowerCase().includes(Search) ||
+                              stu.surname.toLowerCase().includes(Search) ||
+                              stu.state.toLowerCase().includes(Search) ||
+                              stu.country.toLowerCase().includes(Search) ||
+                              stu.email.toLowerCase().includes(Search) ||
+                              stu.phoneNumber.toLowerCase().includes(Search)
+                          )
+                          ?.map((item, i) => {
+                            const {
+                              _id,
+                              surname,
+                              firstName,
 
-                            state,
-                            phoneNumber,
-                            email,
-                            country,
-                            createdAt,
-                          } = item;
-                          return (
-                            <TableRow
-                              hover
-                              role="checkbox"
-                              tabIndex={-1}
-                              key={_id}
-                              component={Link}
-                              to={`/students/${_id}`}
-                              style={{ textDecoration: "none" }}
-                            >
-                              <TableCell align="center">{i + 1}</TableCell>
-                              <TableCell align="center">
-                                {surname} {firstName}
-                              </TableCell>
-                              <TableCell align="center">
-                                {phoneNumber}
-                              </TableCell>
-                              <TableCell align="center">{email}</TableCell>
-                              <TableCell align="center">{country}</TableCell>
-                              <TableCell align="center">{state}</TableCell>
-                              <TableCell align="center">
-                                {new Date(createdAt).toLocaleDateString()}
-                              </TableCell>
-                              <TableCell align="center">
-                                <Button
-                                  variant="contained"
-                                  color="primary"
-                                  size="small"
-                                  className={classes.button}
-                                  endIcon={<VisibilityIcon />}
-                                >
-                                  View
-                                </Button>
-                              </TableCell>
-                            </TableRow>
-                          );
-                        })
-                    )}
-                  </TableBody>
+                              state,
+                              phoneNumber,
+                              email,
+                              country,
+                              createdAt,
+                            } = item;
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={_id}
+                                component={Link}
+                                to={`${url}/${_id}`}
+                                style={{ textDecoration: "none" }}
+                              >
+                                <TableCell align="center">{i + 1}</TableCell>
+                                <TableCell align="center">
+                                  {surname} {firstName}
+                                </TableCell>
+                                <TableCell align="center">
+                                  {phoneNumber}
+                                </TableCell>
+                                <TableCell align="center">{email}</TableCell>
+                                <TableCell align="center">{country}</TableCell>
+                                <TableCell align="center">{state}</TableCell>
+                                <TableCell align="center">
+                                  {new Date(createdAt)?.toLocaleDateString()}
+                                </TableCell>
+                                <TableCell align="center">
+                                  <Button
+                                    variant="contained"
+                                    color="primary"
+                                    size="small"
+                                    className={classes.button}
+                                    endIcon={<VisibilityIcon />}
+                                  >
+                                    View
+                                  </Button>
+                                </TableCell>
+                              </TableRow>
+                            );
+                          })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={Students?.length}
+                count={studentsData?.length || 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}

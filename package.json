@@ -9,18 +9,23 @@
     "@material-ui/pickers": "^3.3.10",
     "@react-pdf/renderer": "^3.1.12",
     "@reduxjs/toolkit": "^1.8.5",
+    "@tanstack/react-query": "^4.36.1",
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "aos": "^2.3.4",
     "axios": "^0.27.2",
+    "date-fns": "^4.0.0-beta.1",
     "formik": "^2.2.9",
     "framer-motion": "^4.1.17",
+    "loader-utils":"3.2.1",
     "patch-package": "^7.0.0",
     "react": "^17.0.2",
+    "react-circular-progressbar": "^2.1.0",
     "react-dom": "^17.0.2",
     "react-export-table-to-excel": "^1.0.6",
     "react-icons": "^4.12.0",
+    "react-loading-skeleton": "^3.4.0",
     "react-redux": "^8.0.2",
     "react-responsive": "^8.2.0",
     "react-responsive-carousel": "^3.2.18",
@@ -28,7 +33,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
     "react-spinners": "^0.13.4",
-    "react-to-pdf": "^0.0.14",
+    "react-to-pdf": "0.0.14",
     "react-to-print": "^2.14.7",
     "react-toastify": "^9.0.3",
     "redux": "^4.2.0",
@@ -67,5 +72,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@tanstack/react-query-devtools": "^4.36.1"
   }
 }

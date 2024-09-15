@@ -1,11 +1,9 @@
-import React, { useState, forwardRef } from "react";
-import { Grid } from "@material-ui/core";
-import { Container, Paper } from "@material-ui/core";
+import { Container, Grid } from "@material-ui/core";
+import React, { forwardRef, useState } from "react";
 import { useHistory } from "react-router-dom";
 import BannerImage2 from "../assets/images/banner2.jpg";
 
-import { Button, TextField } from "@material-ui/core";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import { Button } from "@material-ui/core";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";

@@ -10,7 +10,6 @@ font-family: 'Roboto', sans-serif; */
 	padding: 0;
 	box-sizing: border-box;
 	border: 1px solid red;
-	width: 100%;
 } */
 
 html {
@@ -57,11 +56,11 @@ body {
 .navWrapper {
   width: 100%;
   height: 60px;
-
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
-  padding: 0 1.5em;
+  justify-content: space-between;
+  /* padding: 0 1.5em; */
+
 }
 
 .LogoContainer {
@@ -172,7 +171,7 @@ body {
   flex: 1;
   height: 100%;
   align-items: center;
-  justify-content: center;
+justify-content: end;
 }
 
 .MobileNavListWrapper {
@@ -1248,4 +1247,20 @@ body {
   align-items: center;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.05);
+}
+
+
+
+@media print {
+  .certificate {
+    /* margin-top: 1rem;
+    display: block;
+    page-break-before: auto; */
+    /* 2480 x 3508 */
+    /* height: 2480;
+    width: 3508; */
+    /* background-color: #01996d; */
+  }
+
+  /* @page { size: landscape;margin-left: 24%;} */
 }

@@ -14,7 +14,7 @@ const PrintForm = ({ studentDetails }) => {
   const LogoUrl =
     "https://res.cloudinary.com/bilektechnologies/image/upload/v1687889327/igpcm-document/o0zbfrdl7ovferixsaoj.png";
 
-  if (Object.keys(studentDetails).length === 0) {
+  if (Object.keys(studentDetails)?.length === 0) {
     return (
       <Document>
         <Page size="A4" style={styles.page}>

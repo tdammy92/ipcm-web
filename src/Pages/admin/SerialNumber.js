@@ -1,23 +1,14 @@
-import React, { useState, useEffect } from "react";
-import { Link, Redirect, useHistory } from "react-router-dom";
-import axios from "axios";
+import React, { useMemo, useState } from "react";
 import Paper from "@material-ui/core/Paper";
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 
-import GroupAddIcon from "@material-ui/icons/GroupAdd";
-import BlurLinearIcon from "@material-ui/icons/BlurLinear";
-
-import GridOnIcon from "@material-ui/icons/GridOn";
-import PrintIcon from "@material-ui/icons/Print";
-import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
-import SearchIcon from "@material-ui/icons/Search";
 import LockOpenIcon from "@material-ui/icons/LockOpen";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -25,27 +16,18 @@ import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
-
 import Tooltip from "@material-ui/core/Tooltip";
 import ClickAwayListener from "@material-ui/core/ClickAwayListener";
 
 import Button from "@material-ui/core/Button";
 import Box from "@material-ui/core/Box";
-import ButtonGroup from "@material-ui/core/ButtonGroup";
-
-import IconButton from "@material-ui/core/IconButton";
-import Input from "@material-ui/core/Input";
-import FilledInput from "@material-ui/core/FilledInput";
-import OutlinedInput from "@material-ui/core/OutlinedInput";
-import InputLabel from "@material-ui/core/InputLabel";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 
-import { BaseUrl } from "../../Services/api/BaseUrl";
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+import { useSerialNumber } from "../../Services/queries/serialNumber-query";
+import { useGenerateSerial } from "../../Services/mutations/serialNumber-mutation";
+import TableLoader from "../../components/Loaders/TableLoader";
+import { Bounce, toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
       marginTop: theme.spacing(3),
       // margin: theme.spacing(2),
       width: theme.spacing(16),
-      height: theme.spacing(7),
+      height: theme.spacing(12),
     },
   },
   root2: {
@@ -69,8 +51,19 @@ const useStyles = makeStyles((theme) => ({
   cards: {
     width: "100%",
     display: "flex",
+    flexWrap: "wrap",
+    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-evenly",
+    justifyContent: "center",
+  },
+
+  serialInput: {
+    [theme.breakpoints.down("sm")]: {
+      marginTop: 10,
+      minWidth: 250,
+    },
+
+    minWidth: 350,
   },
   button: {
     margin: theme.spacing(1),
@@ -82,20 +75,29 @@ const useStyles = makeStyles((theme) => ({
     height: "30px",
     fontSize: "12px",
   },
+  actionBtns: {
+    display: "flex",
+  },
 }));
 
 function SerialNumber() {
   const classes = useStyles();
 
-  const dispatch = useDispatch();
-  const { details } = useSelector((state) => state.users);
+  const { data: serialData, isLoading: isLoadingAllSerial } = useSerialNumber({
+    currentPage: 1,
+  });
+  const { mutateAsync, isLoading: isGeneratingSerial } = useGenerateSerial();
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const [Serial, setSerial] = useState("XXXX-XXXX-XXXX-XXXX");
-  const [AllSerial, setAllSerial] = useState([]);
 
   const [openToolTip, setOpenToolTip] = useState(false);
+
+  const AllSerial = useMemo(
+    () => serialData?.pages?.flatMap((serial) => serial?.page) || [],
+    [serialData]
+  );
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -109,68 +111,43 @@ function SerialNumber() {
   //generate serial number
 
   async function generateSerial() {
-    dispatch(iSLoading(true));
     try {
-      const res = await axios.post(
-        `${BaseUrl}serial/generate`,
-        {},
-        {
-          headers: {
-            "Content-Type": "aplication/json",
-            Authorization: `Bearer ${details?.token}`,
-          },
-        }
-      );
+      const response = await mutateAsync();
 
-      // console.log(res?.data?.data?.serial);
-
-      setSerial(res?.data?.data?.serial);
-      dispatch(iSLoading(false));
+      if (response.status === 201) {
+        setSerial(response?.data?.serial);
+      }
     } catch (error) {
       console.log(error);
-      dispatch(iSLoading(false));
-    }
-  }
-
-  //get all serial number
-  async function getAllSerial() {
-    dispatch(iSLoading(true));
-    try {
-      const res = await axios.get(`${BaseUrl}serial`, {
-        headers: {
-          "Content-Type": "aplication/json",
-          Authorization: `Bearer ${details?.token}`,
-        },
-      });
-      // console.log(res?.data);
-      setAllSerial(res?.data);
-      dispatch(iSLoading(false));
-    } catch (error) {
-      console.log(error);
-      dispatch(iSLoading(false));
     }
   }
 
   function copySerial(serial) {
     navigator.clipboard.writeText(serial);
+    toast(`Copied serial number`, {
+      position: "bottom-center",
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: false,
+      draggable: true,
+      progress: undefined,
+      theme: "light",
+      transition: Bounce,
+    });
   }
-
-  useEffect(() => {
-    getAllSerial();
-
-    return () => {
-      //  setSerial('')
-    };
-  }, [Serial]);
 
   return (
     <>
       <CssBaseline />
       <Container maxWidth="md">
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          SERIAL NUMBERS
+        </Typography>
         <div className={classes.root}>
           <Paper elevation={3} className={classes.cards}>
             <TextField
-              className={classes.margin}
+              className={classes.serialInput}
               id="input-with-icon-textfield"
               // label="Search"
               // placeholder="Search"
@@ -186,8 +163,9 @@ function SerialNumber() {
               }}
             />
 
-            <div>
+            <Box>
               <Button
+                disabled={isGeneratingSerial}
                 onClick={generateSerial}
                 variant="contained"
                 color="primary"
@@ -195,7 +173,7 @@ function SerialNumber() {
                 className={classes.button}
                 startIcon={<PlaylistAddIcon />}
               >
-                Generate Serial
+                {isGeneratingSerial ? "Generating..." : "Generate Serial"}
               </Button>
               <Button
                 variant="outlined"
@@ -206,16 +184,11 @@ function SerialNumber() {
               >
                 copy
               </Button>
-            </div>
+            </Box>
           </Paper>
         </div>
 
         <div>
-          <Box mt={3}>
-            <Typography variant="h6" color="primary" gutterBottom>
-              Serial Number
-            </Typography>
-          </Box>
           <div>
             <Paper sx={{ width: "100%", overflow: "hidden" }}>
               <TableContainer
@@ -276,52 +249,60 @@ function SerialNumber() {
                       </TableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-                    {AllSerial?.length < 1 ? (
-                      <TableRow>
-                        <TableCell>No Result Found</TableCell>
-                      </TableRow>
-                    ) : (
-                      AllSerial?.slice(
-                        page * rowsPerPage,
-                        page * rowsPerPage + rowsPerPage
-                      ).map((item, i) => {
-                        const { id, serial, dateGenerated, isValid, dateUsed } =
-                          item;
-                        return (
-                          <TableRow
-                            hover
-                            role="checkbox"
-                            tabIndex={-1}
-                            key={serial}
-                            // component={Link}
-                            // to={`/portal/${id}`}
-                            style={{ textDecoration: "none" }}
-                          >
-                            <TableCell align="center">{i + 1}</TableCell>
-                            <TableCell
-                              align="center"
-                              style={{ color: isValid ? "#01996D" : "red" }}
+                  {isLoadingAllSerial ? (
+                    <TableLoader rows={5} colums={6} />
+                  ) : (
+                    <TableBody>
+                      {AllSerial?.length < 1 ? (
+                        <TableRow>
+                          <TableCell>No Result Found</TableCell>
+                        </TableRow>
+                      ) : (
+                        AllSerial?.slice(
+                          page * rowsPerPage,
+                          page * rowsPerPage + rowsPerPage
+                        )?.map((item, i) => {
+                          const {
+                            id,
+                            serial,
+                            dateGenerated,
+                            isValid,
+                            dateUsed,
+                          } = item;
+                          return (
+                            <TableRow
+                              hover
+                              role="checkbox"
+                              tabIndex={-1}
+                              key={serial}
+                              // component={Link}
+                              // to={`/portal/${id}`}
+                              style={{ textDecoration: "none" }}
                             >
-                              {serial}
-                            </TableCell>
-                            <TableCell align="center">
-                              {isValid ? "yes" : "No"}
-                            </TableCell>
-                            {/* <TableCell align='center'>{country}</TableCell>
+                              <TableCell align="center">{i + 1}</TableCell>
+                              <TableCell
+                                align="center"
+                                style={{ color: isValid ? "#01996D" : "red" }}
+                              >
+                                {serial}
+                              </TableCell>
+                              <TableCell align="center">
+                                {isValid ? "yes" : "No"}
+                              </TableCell>
+                              {/* <TableCell align='center'>{country}</TableCell>
 															<TableCell align='center'>{state}</TableCell> */}
-                            <TableCell align="center">
-                              {dateGenerated !== null
-                                ? new Date(dateGenerated).toLocaleDateString()
-                                : "NIl"}
-                            </TableCell>
-                            <TableCell align="center">
-                              {dateUsed !== null
-                                ? new Date(dateUsed).toLocaleDateString()
-                                : "Not Used"}
-                            </TableCell>
-                            <TableCell align="center">
-                              {/* <Button
+                              <TableCell align="center">
+                                {dateGenerated !== null
+                                  ? new Date(dateGenerated).toLocaleDateString()
+                                  : "NIl"}
+                              </TableCell>
+                              <TableCell align="center">
+                                {dateUsed !== null
+                                  ? new Date(dateUsed).toLocaleDateString()
+                                  : "Not Used"}
+                              </TableCell>
+                              <TableCell align="center">
+                                {/* <Button
 																	variant='outlined'
 																	color='primary'
 																	size='small'
@@ -332,51 +313,52 @@ function SerialNumber() {
 																	copy
 																</Button> */}
 
-                              <ClickAwayListener
-                                onClickAway={() => setOpenToolTip(false)}
-                              >
-                                <div>
-                                  <Tooltip
-                                    PopperProps={{
-                                      disablePortal: true,
-                                    }}
-                                    onClose={() => setOpenToolTip(false)}
-                                    open={openToolTip}
-                                    disableFocusListener
-                                    disableHoverListener
-                                    disableTouchListener
-                                    title="Copied"
-                                  >
-                                    <Button
-                                      variant="outlined"
-                                      color="primary"
-                                      size="small"
-                                      disabled={!isValid}
-                                      className={classes.button}
-                                      endIcon={<FileCopyIcon />}
-                                      onClick={() => {
-                                        copySerial(serial);
-                                        setOpenToolTip(true);
+                                <ClickAwayListener
+                                  onClickAway={() => setOpenToolTip(false)}
+                                >
+                                  <div>
+                                    <Tooltip
+                                      PopperProps={{
+                                        disablePortal: true,
                                       }}
+                                      onClose={() => setOpenToolTip(false)}
+                                      open={openToolTip}
+                                      disableFocusListener
+                                      disableHoverListener
+                                      disableTouchListener
+                                      title="Copied"
                                     >
-                                      Copy
-                                    </Button>
-                                  </Tooltip>
-                                </div>
-                              </ClickAwayListener>
-                            </TableCell>
-                          </TableRow>
-                        );
-                      })
-                    )}
-                  </TableBody>
+                                      <Button
+                                        variant="outlined"
+                                        color="primary"
+                                        size="small"
+                                        disabled={!isValid}
+                                        className={classes.button}
+                                        endIcon={<FileCopyIcon />}
+                                        onClick={() => {
+                                          copySerial(serial);
+                                          setOpenToolTip(true);
+                                        }}
+                                      >
+                                        Copy
+                                      </Button>
+                                    </Tooltip>
+                                  </div>
+                                </ClickAwayListener>
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })
+                      )}
+                    </TableBody>
+                  )}
                 </Table>
               </TableContainer>
 
               <TablePagination
                 rowsPerPageOptions={[10, 25, 100]}
                 component="div"
-                count={AllSerial?.length}
+                count={AllSerial?.length || 0}
                 rowsPerPage={rowsPerPage}
                 page={page}
                 onChangePage={handleChangePage}

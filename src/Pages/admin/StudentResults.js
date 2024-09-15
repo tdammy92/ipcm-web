@@ -1,29 +1,24 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import Paper from "@material-ui/core/Paper";
-import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
-import Box from "@material-ui/core/Box";
 import Container from "@material-ui/core/Container";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Paper from "@material-ui/core/Paper";
+import Typography from "@material-ui/core/Typography";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { GrScorecard } from "react-icons/gr";
-import { FaCloudUploadAlt } from "react-icons/fa";
+import { BaseUrl } from "../../Services/api/BaseUrl";
 
-import { withStyles, makeStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableContainer from "@material-ui/core/TableContainer";
 import TableHead from "@material-ui/core/TableHead";
-import TableRow from "@material-ui/core/TableRow";
 import TablePagination from "@material-ui/core/TablePagination";
+import TableRow from "@material-ui/core/TableRow";
 
 import Button from "@material-ui/core/Button";
-import { Link, Redirect, useHistory } from "react-router-dom";
 
-import { useSelector, useDispatch } from "react-redux";
-import { iSLoading } from "../../Store/feature";
+import { useSelector } from "react-redux";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -137,34 +132,15 @@ function StudentResults() {
     return () => {};
   }, []);
 
-  // console.log(JSON.stringify(studentResults, null, 3));
-
   return (
     <div>
       <CssBaseline />
       <Container maxWidth="md" mx="auto">
-        {/* <Paper elevation={2} className={classes.headerCard}> */}
-
-        {/* <Typography
-          variant="h5"
-          component="h4"
-          mt={20}
-          align="center"
-          color="primary"
-          style={{ marginTop: 20 }}
-        >
-          Student Results
-        </Typography> */}
+        <Typography variant="h5" component="h3" align="center" color="primary">
+          STUDENTS RESULTS
+        </Typography>
 
         <div>
-          <Typography
-            variant="h6"
-            component="h3"
-            align="center"
-            style={{ color: "#01996D", marginTop: 20 }}
-          >
-            List of students result
-          </Typography>
           <div>
             <Paper className={classes.root2}>
               <TableContainer

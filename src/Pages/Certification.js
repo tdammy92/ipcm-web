@@ -1,6 +1,6 @@
 import React from "react";
-import { Container, Paper } from "@material-ui/core";
-
+import { Box, Button, Container, Paper } from "@material-ui/core";
+import { useRouteMatch, useHistory, Link } from "react-router-dom";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -12,6 +12,16 @@ function Certification() {
   return (
     <div className="base__page">
       <Container mx="auto">
+          <Box my={5} style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+            <Button 
+                 to={`/certificate-form`}
+       
+                 component={Link}
+            
+            variant="contained" color="primary" >
+              Proceed to print certificate
+            </Button>
+          </Box>
         <div className="About__container">
           <h3 className="page__title">
             CERTIFICATE TRAINING AND DIPLOMA COURSES
