@@ -29,3 +29,17 @@ const queryClient = useQueryClient();
     },
   });
 };
+
+
+const validateSerial = async (serial) => {
+  const response = await ApiClient(`serial/validate`, {
+    params:{serial:serial}
+  });
+return response;
+};
+
+export const useValidateSerial = () => {
+    return useMutation({
+      mutationFn:({serial})=>validateSerial(serial),    
+    });
+  };

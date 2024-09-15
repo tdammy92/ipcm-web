@@ -29,3 +29,17 @@ export const useExam = ({params}) => {
     enabled:!!params?.id
   });
 };
+
+
+const getAllCourses = async () => {
+  const response = await ApiClient(`course`,{});
+  return response?.data;
+};
+
+
+export const useCourses = () => {
+  return useQuery({
+    queryKey: ["courses"],
+    queryFn:() =>getAllCourses(),
+  });
+};

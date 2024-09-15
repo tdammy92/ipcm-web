@@ -173,12 +173,13 @@ function StartExam() {
                     <Button
                       variant="contained"
                       component={Link}
+                      disabled={true}
                       to="/select-exam"
                       type="submit"
                       color="primary"
                       className={classes.button}
                       endIcon={<SendIcon />}
-                      disabled={isSubmitting}
+                      // disabled={isSubmitting}
                     >
                       Proceed
                     </Button>
@@ -192,7 +193,7 @@ function StartExam() {
                       color="primary"
                       size="small"
                     >
-                      Back To Examination !
+                      Back
                     </Button>
                   </div>
                 </form>

@@ -25,3 +25,18 @@ export const useStudent = ({ id, enabled }) => {
     enabled,
   });
 };
+
+
+
+const getAllCertificate = async (id) => {
+  const response = await ApiClient(`certificate`, {});
+  return response?.data;
+};
+
+
+export const useAllCertificate = () => {
+  return useQuery({
+    queryKey: ["certificate"],
+    queryFn: getAllCertificate,
+  });
+};

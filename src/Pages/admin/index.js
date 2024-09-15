@@ -14,6 +14,7 @@ import UseStyles from "./Style";
 import Exams from "./Exams";
 import Exam from "./Exam";
 import StudentCertificate from "./StudentCertificate";
+import Courses from "./Courses";
 
 const MainSection = () => {
   let { path } = useRouteMatch();
@@ -48,7 +49,7 @@ const MainSection = () => {
 
       <Switch>
         <Route path={`${path}/`} exact component={DashBoard} />
-        <Route path={`${path}/courses`} exact component={DashBoard} />
+        <Route path={`${path}/courses`} exact component={Courses} />
         <Route path={`${path}/students`} exact component={Students} />
         <Route path={`${path}/serial-number`} exact component={SerialNumber} />
         <Route path={`${path}/exams`} exact component={Exams} />

@@ -1248,3 +1248,19 @@ justify-content: end;
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.05);
 }
+
+
+
+@media print {
+  .certificate {
+    /* margin-top: 1rem;
+    display: block;
+    page-break-before: auto; */
+    /* 2480 x 3508 */
+    /* height: 2480;
+    width: 3508; */
+    /* background-color: #01996d; */
+  }
+
+  /* @page { size: landscape;margin-left: 24%;} */
+}

@@ -24,6 +24,7 @@ import TableLoader from "../../components/Loaders/TableLoader";
 import { useUploadExam } from "../../Services/mutations/exam-mutation";
 import { useExams } from "../../Services/queries/exam-query";
 import certificate from "../../assets/images/IGPCM_Certificate.jpeg";
+import { useAllCertificate } from "../../Services/queries/student-query";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -186,7 +187,7 @@ const StudentCertificate = () => {
 
   const { details } = useSelector((state) => state.users);
 
-  const { data: ExamList, isLoading: isLoadingExams } = useExams({
+  const { data: CertificateList, isLoading: isLoadingExams } = useAllCertificate({
     params: { type: "full" },
   });
   const { mutateAsync: uploadMutation, isLoading: isUploadingExams } =
@@ -216,6 +217,9 @@ const StudentCertificate = () => {
   const handleClose = () => {
     setOpen(false);
   };
+
+
+  // console.log(JSON.stringify(CertificateList,null,3))
 
   return (
     <div>
@@ -298,18 +302,16 @@ const StudentCertificate = () => {
                   <TableLoader rows={5} colums={6} />
                 ) : (
                   <TableBody>
-                    {ExamList?.length < 1 ? (
+                    {CertificateList?.length < 1 ? (
                       <TableRow>
                         <TableCell>No Result Found</TableCell>
                       </TableRow>
                     ) : (
-                      ExamList?.map((item) => {
+                      CertificateList?.map((item,index) => {
                         const {
                           _id,
-                          examCode,
-                          duration,
-                          totalQuestions,
-                          uploadedBy,
+                          studentName,
+                          selectedCourse,
                           createdAt,
                         } = item;
                         return (
@@ -317,19 +319,13 @@ const StudentCertificate = () => {
                             hover
                             tabIndex={-1}
                             key={_id}
-                            component={Link}
-                            to={`exams/${_id}`}
+                            // component={Link}
+                            // to={`exams/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
-                            <TableCell align="center">{examCode}</TableCell>
-                            <TableCell align="center">{duration} Min</TableCell>
-                            <TableCell align="center">
-                              {totalQuestions}
-                            </TableCell>
-                            <TableCell align="center">
-                              {uploadedBy?.username}
-                            </TableCell>
-
+                            <TableCell align="center">{index+1}</TableCell>
+                            <TableCell align="center">{studentName}</TableCell>
+                            <TableCell align="center">{selectedCourse?.courseTitle}</TableCell>                       
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
                             </TableCell>
@@ -345,7 +341,7 @@ const StudentCertificate = () => {
             <TablePagination
               rowsPerPageOptions={[10, 25, 100]}
               component="div"
-              count={ExamList?.length}
+              count={CertificateList?.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
