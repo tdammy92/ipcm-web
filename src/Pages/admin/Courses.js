@@ -14,6 +14,7 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useState } from "react";
 import { toast } from "react-toastify";
+import DialogContentText from "@material-ui/core/DialogContentText";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -22,11 +23,22 @@ import Slide from "@material-ui/core/Slide";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { FaBook } from "react-icons/fa6";
+import DeleteIcon from "@material-ui/icons/Delete";
 import { useSelector } from "react-redux";
 import TableLoader from "../../components/Loaders/TableLoader";
-import { useCreateCourse } from "../../Services/mutations/exam-mutation";
-import { useCourses, useExams } from "../../Services/queries/exam-query";
-import { FormControl, InputLabel, MenuItem, Select } from "@material-ui/core";
+
+
+import EditIcon from "@material-ui/icons/Edit";
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
+import { useCourses } from "../../Services/queries/course-query";
+import { useCreateCourse, useDeleteCourse, useUpdateCourse } from "../../Services/mutations/course-mutation";
+import { useExams } from "../../Services/queries/exam-query";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -127,18 +139,32 @@ function Courses() {
   const classes = useStyles();
   const { details } = useSelector((state) => state.users);
 
+  const [courseToDelete, setCourseToDelete] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false)
+
+
   const { data: ExamList, isLoading: isLoadingExams } = useExams({});
+
   const { data: CoursesList, isLoading: isLoadingCourses } = useCourses({});
+  const [openDeleteBox, setOpenDeleteBox] = useState(false);
 
   const { mutateAsync: createCourseMutation, isLoading: isCreatingCourse } =
     useCreateCourse();
 
+
+  const { mutateAsync: updateCourseMutation, isLoading: isUpdatingCourse } =
+    useUpdateCourse();
+
+
+  const { mutateAsync: deleteCourseMutation, isLoading: isDeletingCourse } =
+    useDeleteCourse();
+
   const [courseDetails, setCourseDetails] = useState(() => InitialCourse);
 
-  const [page, setPage] = React.useState(0);
-  const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
   };
@@ -155,8 +181,44 @@ function Courses() {
   };
 
   const handleClose = () => {
+    if(isUpdating){
+      setIsUpdating(false);
+      setCourseDetails(InitialCourse)
+
+    }
     setOpen(false);
   };
+
+  const OpenUpdateBox = (updateItem)  =>{
+    setCourseDetails({...updateItem})
+    setIsUpdating(true)
+    setOpen(true);
+  }
+  const OpenDeleteBox = (deleteItem)  =>{
+    setCourseToDelete(deleteItem);
+    setOpenDeleteBox(true)
+  }
+
+  const closeDeleteBox = ()  =>{
+
+
+    setCourseToDelete(null);
+    setOpenDeleteBox(false)
+  }
+
+
+  const handleDeleteCourse = async() =>{
+
+    console.log("before api call +++"  ,courseToDelete)
+    let payload = {
+      ...courseToDelete
+    }
+   const res = await deleteCourseMutation({payload});
+   if (res) {
+    closeDeleteBox();
+   }
+
+  }
 
   const handleUpload = async () => {
     if (courseDetails.courseTitle === "") {
@@ -176,11 +238,9 @@ function Courses() {
 
     const payload = {
       ...courseDetails,
-      exam:courseDetails?.exam?.id,
+      exams: [courseDetails?.exam?.id],
       createdBy: details?._id,
     };
-
-
 
     try {
       const postExam = await createCourseMutation({ payload });
@@ -202,8 +262,45 @@ function Courses() {
       });
     }
   };
+  const handleUpdate = async () => {
+    if (courseDetails.courseTitle === "") {
+      toast.error(`Course title can not be empty`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
 
+      return;
+    }
 
+    const payload = {
+      ...courseDetails,
+    };
+
+    try {
+      const postExam = await updateCourseMutation({ payload });
+
+      if (postExam.status === 201) {
+        setCourseDetails(InitialCourse);
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
 
   return (
     <div>
@@ -272,14 +369,14 @@ function Courses() {
                       Exam
                     </TableCell>
 
-                    <TableCell
+                    {/* <TableCell
                       align="center"
                       style={{
                         minWidth: 70,
                       }}
                     >
                       Created by
-                    </TableCell>
+                    </TableCell> */}
                     <TableCell
                       align="center"
                       style={{
@@ -287,6 +384,14 @@ function Courses() {
                       }}
                     >
                       Created On
+                    </TableCell>
+                    <TableCell
+                      align="center"
+                      style={{
+                        minWidth: 70,
+                      }}
+                    >
+                      Actions
                     </TableCell>
                   </TableRow>
                 </TableHead>
@@ -304,7 +409,7 @@ function Courses() {
                           _id,
                           courseTitle,
                           courseDescription,
-                          exam,
+                          exams,
                           createdBy,
                           createdAt,
                         } = item;
@@ -318,15 +423,30 @@ function Courses() {
                             style={{ textDecoration: "none" }}
                           >
                             <TableCell align="center">{courseTitle}</TableCell>
-                            <TableCell align="center">{courseDescription}</TableCell>
-                            <TableCell align="center">{exam?.examCode}</TableCell>
-
+                            <TableCell align="center">
+                              {courseDescription}
+                            </TableCell>
+                            <TableCell align="center">
+                              {exams?.[0]?.examCode}
+                            </TableCell>
+                            {/* 
                             <TableCell align="center">
                               {createdBy?.username}
-                            </TableCell>
+                            </TableCell> */}
 
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
+                            </TableCell>
+                            <TableCell align="center">
+                              <IconButton aria-label="edit"  onClick={() => OpenUpdateBox(item)}>
+                                <EditIcon color="primary" />
+                              </IconButton>
+                              <IconButton
+                                aria-label="delete"
+                                onClick={() => OpenDeleteBox({id:_id,courseTitle})}
+                              >
+                                <DeleteIcon color="error" />
+                              </IconButton>
                             </TableCell>
                           </TableRow>
                         );
@@ -359,7 +479,7 @@ function Courses() {
         aria-describedby="alert-dialog-description"
       >
         <DialogTitle color="primary" id="alert-dialog-title" align="center">
-          Create Course
+         {isUpdating ? 'Edit' : 'Create' } Course
         </DialogTitle>
         <DialogContent>
           <form className={classes.form} noValidate autoComplete="off">
@@ -398,18 +518,23 @@ function Courses() {
               />
             </Box>
             <FormControl variant="outlined" style={{ width: "100%" }}>
-              <InputLabel id="demo-simple-select-outlined-label">Exam</InputLabel>
+              <InputLabel id="demo-simple-select-outlined-label">
+                Exam
+              </InputLabel>
               <Select
+              disabled={isUpdating}
                 labelId="demo-simple-select-outlined-label"
-              id="demo-simple-select-outlined"
+                id="demo-simple-select-outlined"
                 value={courseDetails?.exam?.examName}
                 onChange={(e) => {
-                  const index = ExamList?.findIndex(x=>x?.examName===e?.target?.value)
-                  const {examName,_id} = ExamList?.[index];
+                  const index = ExamList?.findIndex(
+                    (x) => x?.examName === e?.target?.value
+                  );
+                  const { examName, _id } = ExamList?.[index];
                   setCourseDetails((prev) => ({
                     ...prev,
-                    exam: {examName,id:_id},
-                  }))
+                    exam: { examName, id: _id },
+                  }));
                 }}
                 label="Exam"
                 inputProps={{
@@ -417,16 +542,13 @@ function Courses() {
                   id: "outlined-age-native-simple",
                 }}
               >
-               <MenuItem value="">
-                <em>None</em>
-              </MenuItem>
+                <MenuItem value="">
+                  <em>None</em>
+                </MenuItem>
 
                 {ExamList?.map((exam) => {
                   return (
-                    <MenuItem
-                     key={exam?._id} 
-                    value={exam?.examName}
-                    >
+                    <MenuItem key={exam?._id} value={exam?.examName}>
                       {exam?.examName}
                     </MenuItem>
                   );
@@ -439,6 +561,15 @@ function Courses() {
           <Button onClick={handleClose} variant="outlined" color="primary">
             Cancle
           </Button>
+         {isUpdating ? <Button
+            disabled={isUpdatingCourse}
+            onClick={handleUpdate}
+            color="primary"
+            variant="contained"
+            autoFocus
+          >
+            {isUpdatingCourse ? "Updating.." : "Update"}
+          </Button>  :
           <Button
             disabled={isCreatingCourse}
             onClick={handleUpload}
@@ -446,7 +577,35 @@ function Courses() {
             variant="contained"
             autoFocus
           >
-            {isCreatingCourse ? "Uploading.." : "Create"}
+            {isCreatingCourse ? "Creating.." : "Create"}
+          </Button>}
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteBox}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={closeDeleteBox}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          {"Delete Course ?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            You are about to delete <b>{courseToDelete?.courseTitle}</b> there might be student registerd for this
+            course already, deleteing it may lead to missing exams and score, do
+            you want to proceed ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteBox} color="primary">
+            No
+          </Button>
+          <Button onClick={handleDeleteCourse} color="primary">
+            Yes
           </Button>
         </DialogActions>
       </Dialog>

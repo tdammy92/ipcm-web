@@ -11,10 +11,10 @@ import {
   Typography,
 } from "@material-ui/core";
 import React, { useState } from "react";
-import { useCourses } from "../Services/queries/exam-query";
 import { useValidateSerial } from "../Services/mutations/serialNumber-mutation";
 import { useHistory } from "react-router-dom";
 import { toast } from "react-toastify";
+import { useCourses } from "../Services/queries/course-query";
 
 const useStyles = makeStyles((theme) => ({
   root:{
