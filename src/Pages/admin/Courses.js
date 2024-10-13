@@ -200,8 +200,6 @@ function Courses() {
   }
 
   const closeDeleteBox = ()  =>{
-
-
     setCourseToDelete(null);
     setOpenDeleteBox(false)
   }
@@ -209,7 +207,7 @@ function Courses() {
 
   const handleDeleteCourse = async() =>{
 
-    console.log("before api call +++"  ,courseToDelete)
+    // console.log("before api call +++"  ,courseToDelete)
     let payload = {
       ...courseToDelete
     }

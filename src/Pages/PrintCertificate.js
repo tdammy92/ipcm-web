@@ -189,7 +189,7 @@ const PrintCertificate = () => {
           Go Back
         </Button>
         <Button
-          // disabled={isUploadingExams}
+          disabled={isCreating}
           onClick={handlePrint}
           color="primary"
           variant="contained"

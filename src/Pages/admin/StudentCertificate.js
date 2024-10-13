@@ -14,7 +14,6 @@ import TextField from "@material-ui/core/TextField";
 import Typography from "@material-ui/core/Typography";
 import React, { useRef, useState } from "react";
 import { toast } from "react-toastify";
-import Dialog from "@material-ui/core/Dialog";
 import Slide from "@material-ui/core/Slide";
 import CreateIcon from "@material-ui/icons/Create";
 import Button from "@material-ui/core/Button";
@@ -25,6 +24,14 @@ import { useUploadExam } from "../../Services/mutations/exam-mutation";
 import { useExams } from "../../Services/queries/exam-query";
 import certificate from "../../assets/images/IGPCM_Certificate.jpeg";
 import { useAllCertificate } from "../../Services/queries/student-query";
+import { IconButton } from "@material-ui/core";
+import DeleteIcon from "@material-ui/icons/Delete";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import { useDeleteCertificate } from "../../Services/mutations/student-mutation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -50,13 +57,13 @@ const useStyles = makeStyles((theme) => ({
   //   },
   form: {
     [theme.breakpoints.down("sm")]: {
-        // backgroundColor:'red'
-        minWidth:750
-      },
-    display:'flex',
-    flexDirection:'column',
-    alignItems:'center',
-    width:'100%',
+      // backgroundColor:'red'
+      minWidth: 750,
+    },
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    width: "100%",
 
     // backgroundColor: "red",
   },
@@ -66,10 +73,9 @@ const useStyles = makeStyles((theme) => ({
     minWidth: 500,
     marginTop: "15px",
     marginBottom: "15px",
-    justifySelf:'center'
+    justifySelf: "center",
     // backgroundColor:'blue'
   },
-
 
   tableContainer: {
     maxHeight: 550,
@@ -120,16 +126,13 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: "10px",
   },
 
-
-
   dialogueContainer: {
     // width: "100%",
     // height: "100%",
     [theme.breakpoints.down("sm")]: {
-        // backgroundColor:'red'
-        minWidth:750
-      },
-
+      // backgroundColor:'red'
+      minWidth: 750,
+    },
   },
   button: {
     margin: theme.spacing(1),
@@ -187,11 +190,16 @@ const StudentCertificate = () => {
 
   const { details } = useSelector((state) => state.users);
 
-  const { data: CertificateList, isLoading: isLoadingExams } = useAllCertificate({
-    params: { type: "full" },
-  });
-  const { mutateAsync: uploadMutation, isLoading: isUploadingExams } =
-    useUploadExam();
+  const [openDeleteBox, setOpenDeleteBox] = useState(false);
+  const [certificateToDelete, setCertificateToDelete] = useState(null);
+
+  const { data: CertificateList, isLoading: isLoadingExams } =
+    useAllCertificate({
+      params: { type: "full" },
+    });
+
+  const { mutateAsync: deleteCertificate, isLoading: deletingCertficate } =
+    useDeleteCertificate();
 
   const [studentDetail, setStudentDetails] = useState(() => studentDetails);
 
@@ -208,6 +216,16 @@ const StudentCertificate = () => {
     setPage(0);
   };
 
+  const OpenDeleteBox = (deleteItem) => {
+    setCertificateToDelete(deleteItem);
+    setOpenDeleteBox(true);
+  };
+
+  const closeDeleteBox = () => {
+    setCertificateToDelete(null);
+    setOpenDeleteBox(false);
+  };
+
   //handle Uploads
 
   const handleClickOpen = () => {
@@ -218,8 +236,19 @@ const StudentCertificate = () => {
     setOpen(false);
   };
 
-
-  // console.log(JSON.stringify(CertificateList,null,3))
+  const handleDeleteCertificate = async () => {
+    // console.log("before api call +++"  ,courseToDelete)
+    let payload = {
+      profileId: details?._id,
+    };
+    const res = await deleteCertificate({
+      id: certificateToDelete?._id,
+      payload,
+    });
+    if (res) {
+      closeDeleteBox();
+    }
+  };
 
   return (
     <div>
@@ -228,7 +257,7 @@ const StudentCertificate = () => {
         <Typography variant="h5" component="h3" align="center" color="primary">
           STUDENT CERTIFICATE
         </Typography>
-{/* 
+        {/* 
         <Paper elevation={2} p={2} className={classes.headerCard}>
           <Box
             m={3}
@@ -263,7 +292,7 @@ const StudentCertificate = () => {
                     <TableCell
                       align="left"
                       style={{
-                        maxWidth:30
+                        maxWidth: 30,
                       }}
                     >
                       S/N
@@ -276,7 +305,6 @@ const StudentCertificate = () => {
                     >
                       Name
                     </TableCell>
-              
 
                     <TableCell
                       align="center"
@@ -284,7 +312,7 @@ const StudentCertificate = () => {
                         minWidth: 70,
                       }}
                     >
-                     Course
+                      Course
                     </TableCell>
 
                     <TableCell
@@ -293,27 +321,38 @@ const StudentCertificate = () => {
                         minWidth: 70,
                       }}
                     >
-                     Date
+                      Date
                     </TableCell>
-                   
+
+                    {details?.role === "SUPER_ADMIN" && (
+                      <TableCell
+                        align="center"
+                        style={{
+                          minWidth: 70,
+                        }}
+                      >
+                        Action
+                      </TableCell>
+                    )}
                   </TableRow>
                 </TableHead>
                 {isLoadingExams ? (
-                  <TableLoader rows={5} colums={6} />
+                  <TableLoader
+                    rows={ 5}
+                    colums={details?.role === "SUPER_ADMIN" ? 5 : 6}
+                  />
                 ) : (
                   <TableBody>
                     {CertificateList?.length < 1 ? (
                       <TableRow>
-                        <TableCell colSpan={4} align="center">No Result Found</TableCell>
+                        <TableCell colSpan={4} align="center">
+                          No Result Found
+                        </TableCell>
                       </TableRow>
                     ) : (
-                      CertificateList?.map((item,index) => {
-                        const {
-                          _id,
-                          studentName,
-                          selectedCourse,
-                          createdAt,
-                        } = item;
+                      CertificateList?.map((item, index) => {
+                        const { _id, studentName, selectedCourse, createdAt } =
+                          item;
                         return (
                           <TableRow
                             hover
@@ -323,12 +362,25 @@ const StudentCertificate = () => {
                             // to={`exams/${_id}`}
                             style={{ textDecoration: "none" }}
                           >
-                            <TableCell align="center">{index+1}</TableCell>
+                            <TableCell align="center">{index + 1}</TableCell>
                             <TableCell align="center">{studentName}</TableCell>
-                            <TableCell align="center">{selectedCourse?.courseTitle}</TableCell>                       
+                            <TableCell align="center">
+                              {selectedCourse?.courseTitle}
+                            </TableCell>
                             <TableCell align="center">
                               {new Date(createdAt).toLocaleDateString()}
                             </TableCell>
+                            {details?.role === "SUPER_ADMIN" && (
+                              <TableCell align="center">
+                                <IconButton
+                                  aria-label="delete"
+                                  onClick={() => OpenDeleteBox(item)}
+                                  color="primary"
+                                >
+                                  <DeleteIcon color="error" />
+                                </IconButton>
+                              </TableCell>
+                            )}
                           </TableRow>
                         );
                       })
@@ -350,7 +402,36 @@ const StudentCertificate = () => {
           </Paper>
         </div>
       </Container>
-      
+
+      <Dialog
+        open={openDeleteBox}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={closeDeleteBox}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          Delete Certificate
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            You are about to delete a certificate ment for{" "}
+            <b>{certificateToDelete?.studentName}</b>, this can not be undone,
+            do you want to proceed ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteBox}>No</Button>
+          <Button
+            disabled={deletingCertficate}
+            onClick={handleDeleteCertificate}
+            color="primary"
+          >
+            {deletingCertficate ? "Deleting..." : "Yes"}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </div>
   );
 };
