@@ -173,7 +173,7 @@ function StartExam() {
                     <Button
                       variant="contained"
                       component={Link}
-                      disabled={true}
+                      // disabled={true}
                       to="/select-exam"
                       type="submit"
                       color="primary"

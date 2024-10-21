@@ -52,3 +52,11 @@ export const pdfOptions = {
     },
   },
 };
+
+
+
+export const  getOneMonthFromNow  = () =>{
+  const currentDate = new Date();
+  const oneMonthFromNow = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+  return oneMonthFromNow;
+}

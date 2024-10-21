@@ -14,7 +14,7 @@ const PrintForm = ({ studentDetails }) => {
   const LogoUrl =
     "https://res.cloudinary.com/bilektechnologies/image/upload/v1687889327/igpcm-document/o0zbfrdl7ovferixsaoj.png";
 
-  if (Object.keys(studentDetails)?.length === 0) {
+  if (Object?.keys(studentDetails)?.length === 0) {
     return (
       <Document>
         <Page size="A4" style={styles.page}>
@@ -89,15 +89,15 @@ const PrintForm = ({ studentDetails }) => {
             <View style={styles.basicDetailsLeft}>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Title: </Text>
-                <Text style={styles.valueText}>{studentDetails.title}</Text>
+                <Text style={styles.valueText}>{studentDetails?.title}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Surname: </Text>
-                <Text style={styles.valueText}>{studentDetails.surname}</Text>
+                <Text style={styles.valueText}>{studentDetails?.surname}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>First Name: </Text>
-                <Text style={styles.valueText}>{studentDetails.firstName}</Text>
+                <Text style={styles.valueText}>{studentDetails?.firstName}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Other Names: </Text>
@@ -107,27 +107,27 @@ const PrintForm = ({ studentDetails }) => {
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Gender: </Text>
-                <Text style={styles.valueText}>{studentDetails.gender}</Text>
+                <Text style={styles.valueText}>{studentDetails?.gender}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Date of Birth: </Text>
                 <Text style={styles.valueText}>
-                  {new Date(studentDetails.dob).toLocaleDateString()}
+                  {new Date(studentDetails.dob)?.toLocaleDateString()}
                 </Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Phone: </Text>
                 <Text style={styles.valueText}>
-                  {studentDetails.phoneNumber}
+                  {studentDetails?.phoneNumber}
                 </Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Email: </Text>
-                <Text style={styles.valueText}>{studentDetails.email}</Text>
+                <Text style={styles.valueText}>{studentDetails?.email}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>State: </Text>
-                <Text style={styles.valueText}>{studentDetails.state}</Text>
+                <Text style={styles.valueText}>{studentDetails?.state}</Text>
               </View>
               <View style={styles.itemWrapper}>
                 <Text style={styles.keyText}>Country: </Text>

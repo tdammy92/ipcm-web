@@ -13,7 +13,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Root from "./Navigation";
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import 'react-loading-skeleton/dist/skeleton.css'
+// import DateFnsUtils from '@date-io/date-fns';
 import { isDev } from "./utils";
+// import { MuiPickersUtilsProvider } from "@material-ui/pickers";
 
 
 const defualtTheme = createMuiTheme({
@@ -60,7 +62,10 @@ function App() {
         pauseOnHover
 
       />
+  
       <Root />
+
+
     </ThemeProvider>
     </PersistGate>
     <ReactQueryDevtools initialIsOpen={isDev} />

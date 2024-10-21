@@ -22,7 +22,20 @@ import PictureAsPdfIcon from "@material-ui/icons/PictureAsPdf";
 import DeleteForeverIcon from "@material-ui/icons/DeleteForever";
 import { FaUserCircle } from "react-icons/fa";
 import { useReactToPrint } from "react-to-print";
-
+import TextField from "@material-ui/core/TextField";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogTitle from "@material-ui/core/DialogTitle";
+import Slide from "@material-ui/core/Slide";
+import {
+  FormControl,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@material-ui/core";
 import Paper from "@material-ui/core/Paper";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -37,8 +50,22 @@ import { useStudent } from "../../Services/queries/student-query";
 import { userAvater } from "../../constants";
 import { useDeleteStudent } from "../../Services/mutations/student-mutation";
 import { Icon } from "@material-ui/core";
+import {
+  useCreateCourse,
+  useUpdateCourse,
+} from "../../Services/mutations/course-mutation";
+import { useExams } from "../../Services/queries/exam-query";
+import { toast } from "react-toastify";
+import { useSelector } from "react-redux";
+import {
+  KeyboardDatePicker,
+  MuiPickersUtilsProvider,
+} from "@material-ui/pickers";
+import { getOneMonthFromNow } from "../../utils";
+import moment from "moment";
+import { useAddExamToStudent } from "../../Services/mutations/exam-mutation";
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     minWidth: 275,
     marginTop: 30,
@@ -77,6 +104,48 @@ const useStyles = makeStyles({
     maxHeight: 400,
     minWidth: 800,
   },
+  form: {
+    [theme.breakpoints.down("sm")]: {
+      // backgroundColor:'red'
+      minWidth: 400,
+    },
+
+    maxWidth: 500,
+    minWidth: 400,
+  },
+  formItem: {
+    width: "100%",
+    marginTop: "15px",
+    marginBottom: "15px",
+    // backgroundColor:'blue'
+
+    [theme.breakpoints.down("sm")]: {
+      width: "70%",
+    },
+  },
+
+  dialogoFooter: {
+    marginBottom: 20,
+    justifyContent: "space-around",
+  },
+
+  dialogueContainer: {
+    width: "100%",
+    // backgroundColor:'red',
+  },
+
+  btnCustom: {
+    [theme.breakpoints.down("sm")]: {
+      // backgroundColor:'red'
+      minWidth: "120px",
+    },
+    margin: theme.spacing(1),
+    minWidth: "150px",
+  },
+}));
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const columns = [
@@ -104,13 +173,19 @@ const columns = [
     format: (value) => value.toFixed(2),
   },
   {
-    id: "Update",
-    label: "UPDATE",
+    id: "Action",
+    label: "ACTION",
     minWidth: 40,
     align: "right",
     format: (value) => value.toFixed(2),
   },
 ];
+
+const InitialExam = {
+  exam: {},
+  status: "pending",
+  dueDate: moment(getOneMonthFromNow()).format("YYYY-MM-DD"),
+};
 
 function Student() {
   const { id } = useParams();
@@ -118,17 +193,30 @@ function Student() {
   const history = useHistory();
 
   const classes = useStyles();
+  const { details } = useSelector((state) => state.users);
 
   const { data: studentDetails, isLoading: isLoadingStudent } = useStudent({
     id,
     enabled: !!id,
   });
+
+  console.log(JSON.stringify(studentDetails, null, 3));
+  const { data: ExamList, isLoading: isLoadingExams } = useExams({});
   const { mutateAsync, isLoading: isDeleteing } = useDeleteStudent();
 
-  const [studentExam, setStudentExam] = useState([]);
+  const [openExamBox, setOpenExamBox] = useState(false);
+
+  const [examDetails, setExamDetails] = useState(() => InitialExam);
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [isUpdating, setIsUpdating] = useState(false);
+
+  const { mutateAsync: addExamToStudentMutation, isLoading: isAddingCourse } =
+    useAddExamToStudent();
+
+  const { mutateAsync: updateCourseMutation, isLoading: isUpdatingCourse } =
+    useUpdateCourse();
 
   const handleChangePage = (event, newPage) => {
     setPage(newPage);
@@ -171,12 +259,106 @@ function Student() {
 
   const componentRef = useRef();
 
+  const handleClose = () => {
+    if (isUpdating) {
+      setIsUpdating(false);
+      setExamDetails(InitialExam);
+    }
+    setOpenExamBox(false);
+  };
+
   const handlePrint = useReactToPrint({
     content: () => componentRef.current,
     copyStyles: true,
   });
 
+  const handleAdd = async () => {
+    // console.log("exam detailssss ===>", JSON.stringify(examDetails, null, 3));
+    if (!examDetails?.exam?.examName) {
+      toast.error(`Please select an Exam`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+
+      return;
+    }
+    const { exam, dueDate, ...rest } = examDetails;
+
+    const payload = {
+      ...rest,
+      examId: examDetails?.exam?._id,
+      studentId: id,
+      dueDate: new Date(dueDate),
+      // dueDate:moment(dueDate).format("DD/MM/YYYY"),
+      AddedBy: details?._id,
+    };
+
+    console.log("exam payload ===>", JSON.stringify(payload, null, 3));
+
+    try {
+      const addExam = await addExamToStudentMutation({ payload });
+
+      if (addExam.status === 201) {
+        // setExamDetails(InitialExam);
+        // setOpenExamBox(false);
+      }
+    } catch (error) {
+      toast.error(`${typeof error === "string" ? error : error?.message}`, {
+        position: "bottom-center",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        // pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+    }
+  };
+  const handleUpdate = async () => {
+    // if (examDetails.courseTitle === "") {
+    //   toast.error(`Course title can not be empty`, {
+    //     position: "bottom-center",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "light",
+    //   });
+    //   return;
+    // }
+    // const payload = {
+    //   ...examDetails,
+    // };
+    // try {
+    //   const postExam = await updateCourseMutation({ payload });
+    //   if (postExam.status === 201) {
+    //     setExamDetails(InitialExam);
+    //     setOpenExamBox(false);
+    //   }
+    // } catch (error) {
+    //   toast.error(`${typeof error === "string" ? error : error?.message}`, {
+    //     position: "bottom-center",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     // pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "light",
+    //   });
+    // }
+  };
+
   // console.log(JSON.stringify(studentDetails, null, 2));
+
+  // console.log(examDetails);
 
   return (
     <>
@@ -225,7 +407,7 @@ function Student() {
                         color="primary"
                         className={classes.value}
                       >
-                        {studentDetails.title}
+                        {studentDetails?.title}
                       </Typography>
                     </Box>
                     <Box
@@ -241,8 +423,8 @@ function Student() {
                         color="primary"
                         className={classes.value}
                       >
-                        {studentDetails.surname} {studentDetails.firstName}{" "}
-                        {studentDetails.middleName}
+                        {studentDetails?.surname} {studentDetails?.firstName}{" "}
+                        {studentDetails?.middleName}
                       </Typography>
                     </Box>
                     <Box
@@ -715,13 +897,14 @@ function Student() {
                     my={1}
                     style={{
                       width: "100%",
-                      display:'flex',
+                      display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
                     }}
                   >
                     <Button
-                    disabled={true}
+                      // disabled={true}
+                      onClick={() => setOpenExamBox(true)}
                       variant="contained"
                       color="primary"
                       className={classes.button}
@@ -746,49 +929,41 @@ function Student() {
                         </TableRow>
                       </TableHead>
 
-                      
-                        {studentExam?.length < 1 ? (
-                          <TableRow>
-                            <TableCell align="center" colSpan={6}>No Exam Found</TableCell>
-                          </TableRow>)
-:
-                          <TableBody>
-                            {studentExam
-                              .slice(
-                                page * rowsPerPage,
-                                page * rowsPerPage + rowsPerPage
-                              )
-                              ?.map((row) => {
-                                return (
-                                  <TableRow
-                                    hover
-                                    role="checkbox"
-                                    tabIndex={-1}
-                                    key={row.code}
-                                  >
-                                    {studentExam.map((column) => {
-                                      // const value = row[column.id];
-                                      return (
-                                        <TableCell
-                                          key={column.id}
-                                          align={column.align}
-                                        >
-                                          ""
-                                        </TableCell>
-                                      );
-                                    })}
-                                  </TableRow>
-                                );
-                              })}
-                          </TableBody>
+                      {studentDetails?.Exams?.length < 1 ? (
+                        <TableRow>
+                          <TableCell align="center" colSpan={6}>
+                            No Exam Found
+                          </TableCell>
+                        </TableRow>
+                      ) : (
+                        <TableBody>
+                          {studentDetails?.Exams.slice(
+                            page * rowsPerPage,
+                            page * rowsPerPage + rowsPerPage
+                          )?.map((item, i) => {
 
-                      }
+                            const {}  = item
+                            return (
+                              <TableRow
+                                hover
+                                role="checkbox"
+                                tabIndex={-1}
+                                key={i}
+                              >
+                                <TableCell
+                             
+                                ></TableCell>
+                              </TableRow>
+                            );
+                          })}
+                        </TableBody>
+                      )}
                     </Table>
                   </TableContainer>
                   <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={studentExam?.length}
+                    count={studentDetails?.Exams?.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -800,6 +975,157 @@ function Student() {
           </Container>
         </div>
       )}
+
+      <Dialog
+        open={openExamBox}
+        onClose={handleClose}
+        className={classes.dialogueContainer}
+        TransitionComponent={Transition}
+        keepMounted
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle color="primary" id="alert-dialog-title" align="center">
+          {isUpdating ? "EDIT" : "ADD"} EXAM TO STUDENT PROFILE
+        </DialogTitle>
+        <DialogContent>
+          <form className={classes.form} noValidate autoComplete="off">
+            <Box className={classes.formItem}>
+              <FormControl variant="outlined" style={{ width: "100%" }}>
+                <InputLabel id="demo-simple-select-outlined-label">
+                  Select Exam
+                </InputLabel>
+                <Select
+                  disabled={isUpdating}
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={examDetails?.exam?.examName}
+                  onChange={(e) => {
+                    const index = ExamList?.findIndex(
+                      (x) => x?.examName === e?.target?.value
+                    );
+                    const examN = ExamList?.[index];
+                    setExamDetails((prev) => ({
+                      ...prev,
+                      exam: { ...examN },
+                    }));
+                  }}
+                  label="Exam"
+                  inputProps={{
+                    name: "Exam",
+                    id: "outlined-age-native-simple",
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+
+                  {ExamList?.map((exam) => {
+                    return (
+                      <MenuItem key={exam?._id} value={exam?.examName}>
+                        {exam?.examName}
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </FormControl>
+            </Box>
+
+            <Box className={classes.formItem}>
+              <TextField
+                id="date"
+                variant="outlined"
+                label="Due Taken"
+                type="date"
+                format="dd/mm/yyyy"
+                defaultValue={examDetails?.dueDate}
+                value={examDetails?.dueDate}
+                onChange={(e) =>
+                  setExamDetails((prev) => ({
+                    ...prev,
+                    dueDate: e.target.value,
+                  }))
+                }
+                style={{ width: "100%" }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+            </Box>
+            <Box className={classes.formItem}>
+              <FormControl variant="outlined" style={{ width: "100%" }}>
+                <InputLabel id="demo-simple-select-outlined-label">
+                  Exam Status
+                </InputLabel>
+                <Select
+                  disabled={!isUpdating}
+                  labelId="demo-simple-select-outlined-label"
+                  id="demo-simple-select-outlined"
+                  value={examDetails?.status}
+                  onChange={(e) => {
+                    console.log(e.target);
+                    setExamDetails((prev) => ({
+                      ...prev,
+                      status: e.target.value,
+                    }));
+                  }}
+                  label="Exam"
+                  inputProps={{
+                    name: "Exam",
+                    id: "outlined-age-native-simple",
+                  }}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value="pending">
+                    <em>Pending</em>
+                  </MenuItem>
+                  <MenuItem value="completed">
+                    <em>Completed</em>
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </form>
+        </DialogContent>
+        <DialogActions className={classes.dialogoFooter}>
+          <Button
+            onClick={handleClose}
+            variant="outlined"
+            className={classes.btnCustom}
+            size="medium"
+            color="primary"
+          >
+            Cancle
+          </Button>
+          {isUpdating ? (
+            <Button
+              disabled={isUpdatingCourse}
+              onClick={handleUpdate}
+              color="primary"
+              size="medium"
+              className={classes.btnCustom}
+              variant="contained"
+              autoFocus
+            >
+              {isUpdatingCourse ? "Updating.." : "Update"}
+            </Button>
+          ) : (
+            <Button
+              className={classes.btnCustom}
+              disabled={isAddingCourse}
+              onClick={handleAdd}
+              color="primary"
+              size="medium"
+              variant="contained"
+              autoFocus
+            >
+              {isAddingCourse ? "Adding.." : "Add"}
+            </Button>
+          )}
+        </DialogActions>
+      </Dialog>
     </>
   );
 }

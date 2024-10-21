@@ -9,6 +9,13 @@ const uploadExam = async (payload) => {
 };
 
 
+
+const addExamToStudent = async (payload) => {
+    const response = await ApiClient(`exams/addExamToStudent`, {method:'POST',data:payload});
+  return response;
+};
+
+
 const createCertificate = async (payload) => {
     const response = await ApiClient(`certificate/create`, {method:'POST',data:payload});
   return response;
@@ -32,6 +39,29 @@ export const useUploadExam = () => {
             theme: "light",
           });
       await queryClient.invalidateQueries({ queryKey: ["exams"] });
+    },
+    onError: (error, variables, context) => {},
+  });
+};
+
+
+export const useAddExamToStudent = () => {
+    const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn:({payload}) =>addExamToStudent(payload),
+    onMutate: () => {},
+    onSuccess: async(_,variables,ctx) => {
+        console.log({variables})
+        toast.success(`Exam Added Succesfully`, {
+            position: "top-center",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+          });
+      await queryClient.invalidateQueries({ queryKey: ["student", variables?.payload?.studentId] });
     },
     onError: (error, variables, context) => {},
   });
