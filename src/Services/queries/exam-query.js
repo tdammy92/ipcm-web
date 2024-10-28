@@ -30,4 +30,19 @@ export const useExam = ({params}) => {
   });
 };
 
+const geStudenttExamById = async (id) => {
+  const response = await ApiClient(`exams/studentExamByStudentId/${id}`,{});
+  return response?.data;
+};
+
+
+
+export const useStudentExams = ({id,enabled}) => {
+  return useQuery({
+    queryKey: ["student-exams",id],
+    queryFn:() =>geStudenttExamById(id),
+    enabled
+  });
+};
+
 

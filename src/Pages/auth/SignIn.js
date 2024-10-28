@@ -59,6 +59,9 @@ function SignIn() {
     try {
       const response = await mutateAsync(values);
 
+
+      console.log("login response ==>",JSON.stringify(response,null,3))
+
       if (response?.status === 200) {
         dispatch(saveUser(response?.data));
         history.replace(from?.pathname);

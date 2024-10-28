@@ -45,6 +45,8 @@ import TableHead from "@material-ui/core/TableHead";
 import TablePagination from "@material-ui/core/TablePagination";
 import TableRow from "@material-ui/core/TableRow";
 import PrintForm from "../printForm";
+import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 // import Pdf from "react-to-pdf";
 import { useStudent } from "../../Services/queries/student-query";
 import { userAvater } from "../../constants";
@@ -54,16 +56,16 @@ import {
   useCreateCourse,
   useUpdateCourse,
 } from "../../Services/mutations/course-mutation";
-import { useExams } from "../../Services/queries/exam-query";
+import { useExams, useStudentExams } from "../../Services/queries/exam-query";
 import { toast } from "react-toastify";
 import { useSelector } from "react-redux";
 import {
   KeyboardDatePicker,
   MuiPickersUtilsProvider,
 } from "@material-ui/pickers";
-import { getOneMonthFromNow } from "../../utils";
+import { formatDate, getOneMonthFromNow } from "../../utils";
 import moment from "moment";
-import { useAddExamToStudent } from "../../Services/mutations/exam-mutation";
+import { useAddExamToStudent, useRemoveExamfromStudent } from "../../Services/mutations/exam-mutation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -149,35 +151,31 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 });
 
 const columns = [
-  { id: "exam", label: "EXAM", minWidth: 100 },
-  { id: "Status", label: "STATUS", minWidth: 100 },
+  { id: "exam", label: "EXAM", minWidth: 80 },
+  { id: "Status", label: "STATUS", minWidth: 30 },
   {
     id: "score",
     label: "SCORE",
-    minWidth: 40,
+    minWidth: 20,
     align: "right",
-    format: (value) => value.toLocaleString("en-US"),
   },
   {
     id: "dateWritten",
     label: "DATE WRITTEN",
-    minWidth: 40,
+    minWidth: 30,
     align: "right",
-    format: (value) => value.toLocaleString("en-US"),
   },
   {
     id: "dueDate",
     label: "DUE DATE",
-    minWidth: 40,
+    minWidth: 30,
     align: "right",
-    format: (value) => value.toFixed(2),
   },
   {
     id: "Action",
     label: "ACTION",
     minWidth: 40,
     align: "right",
-    format: (value) => value.toFixed(2),
   },
 ];
 
@@ -200,11 +198,22 @@ function Student() {
     enabled: !!id,
   });
 
-  console.log(JSON.stringify(studentDetails, null, 3));
+
+
+  const { data: studentExams, isLoading: isLoadingStudentExam } =
+    useStudentExams({
+      id,
+      enabled: !!id,
+    });
+
   const { data: ExamList, isLoading: isLoadingExams } = useExams({});
   const { mutateAsync, isLoading: isDeleteing } = useDeleteStudent();
+  const { mutateAsync:RemoveStudentExamMutation, isLoading: isRemovingExam} = useRemoveExamfromStudent();
 
   const [openExamBox, setOpenExamBox] = useState(false);
+
+  const [openDeleteExamBox, setOpenDeleteExamBox] = useState(false);
+  const [examToDelete, setExamToDelete] = useState(null)
 
   const [examDetails, setExamDetails] = useState(() => InitialExam);
 
@@ -291,21 +300,21 @@ function Student() {
 
     const payload = {
       ...rest,
-      examId: examDetails?.exam?._id,
-      studentId: id,
+      exam: examDetails?.exam?._id,
+      student: id,
       dueDate: new Date(dueDate),
       // dueDate:moment(dueDate).format("DD/MM/YYYY"),
       AddedBy: details?._id,
     };
 
-    console.log("exam payload ===>", JSON.stringify(payload, null, 3));
+    // console.log("exam payload ===>", JSON.stringify(payload, null, 3));
 
     try {
       const addExam = await addExamToStudentMutation({ payload });
 
       if (addExam.status === 201) {
-        // setExamDetails(InitialExam);
-        // setOpenExamBox(false);
+        setExamDetails(InitialExam);
+        setOpenExamBox(false);
       }
     } catch (error) {
       toast.error(`${typeof error === "string" ? error : error?.message}`, {
@@ -320,6 +329,8 @@ function Student() {
       });
     }
   };
+
+
   const handleUpdate = async () => {
     // if (examDetails.courseTitle === "") {
     //   toast.error(`Course title can not be empty`, {
@@ -356,9 +367,32 @@ function Student() {
     // }
   };
 
+
+  const OpenDeleteBox = (deleteItem)  =>{
+    setExamToDelete(deleteItem);
+    setOpenDeleteExamBox(true)
+  }
+
+  const closeDeleteBox = ()  =>{
+    setExamToDelete(null);
+    setOpenDeleteExamBox(false)
+  }
+
+  const handleRemoveExam = async() =>{
+
+    let payload = {
+      ...examToDelete
+    }
+   const res = await RemoveStudentExamMutation({payload});
+   if (res) {
+    closeDeleteBox();
+   }
+
+  }
+
   // console.log(JSON.stringify(studentDetails, null, 2));
 
-  // console.log(examDetails);
+  // console.log(JSON.stringify(studentExams, null, 3));
 
   return (
     <>
@@ -835,7 +869,7 @@ function Student() {
                     Print
                   </Button>
 
-                  <PDFDownloadLink
+                  {/* <PDFDownloadLink
                     document={<PrintForm studentDetails={studentDetails} />}
                     fileName={`IGPCM_FORM_REPRINT_${studentDetails?.surname}`}
                   >
@@ -856,7 +890,7 @@ function Student() {
                         </Button>
                       )
                     }
-                  </PDFDownloadLink>
+                  </PDFDownloadLink> */}
 
                   {/* <Pdf
             targetRef={componentRef}
@@ -929,7 +963,7 @@ function Student() {
                         </TableRow>
                       </TableHead>
 
-                      {studentDetails?.Exams?.length < 1 ? (
+                      {studentExams?.length < 1 ? (
                         <TableRow>
                           <TableCell align="center" colSpan={6}>
                             No Exam Found
@@ -937,25 +971,53 @@ function Student() {
                         </TableRow>
                       ) : (
                         <TableBody>
-                          {studentDetails?.Exams.slice(
-                            page * rowsPerPage,
-                            page * rowsPerPage + rowsPerPage
-                          )?.map((item, i) => {
-
-                            const {}  = item
-                            return (
-                              <TableRow
-                                hover
-                                role="checkbox"
-                                tabIndex={-1}
-                                key={i}
-                              >
-                                <TableCell
-                             
-                                ></TableCell>
-                              </TableRow>
-                            );
-                          })}
+                          {studentExams
+                            ?.slice(
+                              page * rowsPerPage,
+                              page * rowsPerPage + rowsPerPage
+                            )
+                            ?.map((item, i) => {
+                              const {
+                                _id,
+                                exam,
+                                status,
+                                dueDate,
+                                score,
+                                dateWritten,
+                              } = item;
+                              return (
+                                <TableRow
+                                  hover
+                                  role="checkbox"
+                                  tabIndex={-1}
+                                  key={i}
+                                >
+                                  <TableCell align="center">{exam?.examName}</TableCell>
+                                  <TableCell align="center">{status}</TableCell>
+                                  <TableCell align="center">{score ? score : 0}</TableCell>
+                                  <TableCell align="center">
+                                    {dateWritten
+                                      ? formatDate(dateWritten)
+                                      : "Nil"}
+                                  </TableCell>
+                                  <TableCell align="center">{formatDate(dueDate)}</TableCell>
+                                  <TableCell align="center">
+                                    <IconButton
+                                      aria-label="edit"
+                                      //  onClick={() => OpenUpdateBox(item)}
+                                    >
+                                      <EditIcon color="primary" />
+                                    </IconButton>
+                                    <IconButton
+                                      aria-label="delete"
+                                      onClick={() => OpenDeleteBox({id:_id,...item})}
+                                    >
+                                      <DeleteIcon color="error" />
+                                    </IconButton>
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })}
                         </TableBody>
                       )}
                     </Table>
@@ -963,7 +1025,7 @@ function Student() {
                   <TablePagination
                     rowsPerPageOptions={[10, 25, 100]}
                     component="div"
-                    count={studentDetails?.Exams?.length}
+                    count={studentExams?.length}
                     rowsPerPage={rowsPerPage}
                     page={page}
                     onPageChange={handleChangePage}
@@ -1124,6 +1186,35 @@ function Student() {
               {isAddingCourse ? "Adding.." : "Add"}
             </Button>
           )}
+        </DialogActions>
+      </Dialog>
+
+      <Dialog
+        open={openDeleteExamBox}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={closeDeleteBox}
+        aria-labelledby="alert-dialog-slide-title"
+        aria-describedby="alert-dialog-slide-description"
+      >
+        <DialogTitle id="alert-dialog-slide-title">
+          {"Remove Exam ?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-slide-description">
+            You are about to remove <b>{examToDelete?.exam?.examName}</b> from  <b>{studentDetails?.surname} {studentDetails?.firstName}{" "}
+            {studentDetails?.middleName}</b>  account 
+            , this student will loose the exam and the score, do
+            you want to proceed ?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeDeleteBox} color="primary">
+            No
+          </Button>
+          <Button disabled={isRemovingExam} onClick={handleRemoveExam} color="primary">
+            Yes
+          </Button>
         </DialogActions>
       </Dialog>
     </>

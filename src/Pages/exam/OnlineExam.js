@@ -6,7 +6,7 @@ import FormControl from "@material-ui/core/FormControl";
 import FormLabel from "@material-ui/core/FormLabel";
 import Paper from "@material-ui/core/Paper";
 import { Box, Container, makeStyles, Typography } from "@material-ui/core";
-import { Link,useLocation } from "react-router-dom";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import { AccessTime, AccessTimeRounded } from "@material-ui/icons";
@@ -14,6 +14,10 @@ import { AccessTime, AccessTimeRounded } from "@material-ui/icons";
 import { ScreenSize } from "../../Config";
 import { useMediaQuery } from "react-responsive";
 import { useExam } from "../../Services/queries/exam-query";
+import { useDispatch, useSelector } from "react-redux";
+import { goToprevQuestion, goToNextQuestion, updateResult } from "../../Store/exam-feature";
+import ExamTimer from "./ExamTimer";
+import { useSubmitResult } from "../../Services/mutations/exam-mutation";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -96,6 +100,14 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: 10,
     marginRight: 10,
   },
+  btnCustom: {
+    [theme.breakpoints.down("sm")]: {
+      // backgroundColor:'red'
+      minWidth: "120px",
+    },
+    margin: theme.spacing(1),
+    minWidth: "200px",
+  },
 }));
 
 const OnlineExam = () => {
@@ -103,49 +115,78 @@ const OnlineExam = () => {
   const [value, setValue] = useState("");
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
   const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const [selectedAnswer, setSelectedAnswer] = useState(null);
 
-  const selectedExam = location?.state;
+  // const selectedExam = location?.state;
+
+  // const { data: Exam, isLoading: isLoadingExam } = useExam({
+  //   params: { id :selectedExam?._id},
+  // });
+
+  const { mutateAsync: submitExamMutation, isLoading } = useSubmitResult();
+
+  const { Exam, currentExamIndex,answers ,studentDetails} = useSelector((store) => store.exam);
 
 
-  const { data: Exam, isLoading: isLoadingExam } = useExam({
-    params: { id :selectedExam?._id},
-  });
-
-
-
-
-  const [currentQuestion, setCurrentQuestion] = useState(0)
-
-  // console.log("selected exammmmm ===>",JSON.stringify(selectedExam,null,3))
+  // console.log("selected exammmmm ===>",JSON.stringify(Exam,null,3))
 
   const handleChange = (event) => {
-
     // console.log(event?.target?.value)
     setValue(event.target.value);
   };
 
+  // console.log(JSON.stringify(Exam,null,3))
 
-// console.log(JSON.stringify(Exam,null,3))
-
-  const handlePrev = ()=>{
-    let prev = currentQuestion > 0 
-    if (prev) {
-      setCurrentQuestion(currentQuestion-1)
-      
+  const handlePrev = () => {
+    if (currentExamIndex > 0) {
+      dispatch(goToprevQuestion());
     }
-    
-  }
+  };
 
-
-  const handleNext = useCallback(()=>{
-
-    let next = currentQuestion < Exam?.questions?.length-1;
-
-    if (next) {
-      setCurrentQuestion(currentQuestion+1)
-      
+  const handleNext = () => {
+    if (currentExamIndex < Exam?.questions?.length - 1) {
+      dispatch(goToNextQuestion(selectedAnswer));
     }
-  },[currentQuestion,Exam])
+
+    if (currentExamIndex === Exam?.questions?.length - 1) {
+      handleSubmitExam();
+    }
+    setSelectedAnswer(null);
+  };
+
+  const closeExam = () => {
+    // history.push("/exam-result");
+
+    history.replace("/exam-result");  
+  };
+
+  const handleValue = (selectedOption, question) => {
+    setSelectedAnswer({
+      ...question,
+      selectedOption: !!selectedOption ? selectedOption : null,
+    });
+  };
+
+  const handleQuitExam = useCallback(() => {}, []);
+
+  const handleSubmitExam = async () => {
+
+    const {questions,...rest}  = Exam;
+    try {
+      const payload = {
+        studentDetails,
+        Exam:{...rest},
+        answers
+      };
+      const res = await submitExamMutation({ payload });
+      if (res.data) {
+dispatch(updateResult(res?.data))
+        closeExam();
+      }
+    } catch (error) {}
+  };
 
   return (
     <div className="startExam">
@@ -170,27 +211,27 @@ const OnlineExam = () => {
         >
           <Box className={classes.header}>
             <Box>
-              <Typography variant={isMobile ? "body1": "h6"} component="h4">
-                {selectedExam?.examName}
+              <Typography variant={isMobile ? "body1" : "h6"} component="h4">
+                {Exam?.examName}
               </Typography>
             </Box>
 
             <Box>
-     
-                <Typography variant={isMobile ? "body1": "h6"}>{currentQuestion+1}/{Exam?.questions?.length}</Typography>
-        
+              <Typography variant={isMobile ? "body1" : "h6"}>
+                {currentExamIndex + 1}/{Exam?.questions?.length}
+              </Typography>
             </Box>
             <Box>
               <Box className={classes.timerContainer}>
                 <AccessTimeRounded />
-                <Typography variant={isMobile ? "body1": "h6"}>5:30</Typography>
+                <ExamTimer examtime={Exam?.duration} closeExam={closeExam} />
               </Box>
             </Box>
           </Box>
 
           <Box pt={10} px={1}>
             <Typography variant="subtitle1" component="h5">
-            { Exam?.questions?.[currentQuestion]?.question }
+              {Exam?.questions?.[currentExamIndex]?.question}
             </Typography>
           </Box>
 
@@ -200,24 +241,32 @@ const OnlineExam = () => {
               onChange={handleChange}
               className={classes.optionWrapper}
             >
-
-              {
-                Exam?.questions?.[currentQuestion]?.options?.map((option,index)=>(
+              {Exam?.questions?.[currentExamIndex]?.options?.map(
+                (option, index) => (
                   <FormControlLabel
-                  key={index}
-                  value={option}
-                  className={classes.radioBtn}
-                  control={<Radio color="primary" className={classes.radio} />}
-                  label={option}
-                />
-                ))
-              }
+                    key={index}
+                    value={option}
+                    onChange={(e) =>
+                      handleValue(
+                        e.target.value,
+                        Exam?.questions?.[currentExamIndex]
+                      )
+                    }
+                    className={classes.radioBtn}
+                    control={
+                      <Radio color="primary" className={classes.radio} />
+                    }
+                    label={option}
+                  />
+                )
+              )}
             </RadioGroup>
           </Box>
 
-          <Box  my={5} className={classes.buttonContainer}>
+          <Box my={2} className={classes.buttonContainer}>
             <Button
-            onClick={handlePrev}
+              className={classes.btnCustom}
+              onClick={handlePrev}
               variant="contained"
               color="primary"
               size="small"
@@ -225,19 +274,24 @@ const OnlineExam = () => {
               Previous
             </Button>
             <Button
-            onClick={handleNext}
+              className={classes.btnCustom}
+              onClick={handleNext}
               variant="contained"
               color="primary"
               size="small"
             >
-              Next
+              {currentExamIndex === Exam?.questions?.length - 1
+                ? "Finish"
+                : "Next"}
             </Button>
           </Box>
 
           <Box mb={5}>
-          <Button
-              component={Link}
-              to="/exam-info"
+            <Button
+              onClick={handleQuitExam}
+              className={classes.btnCustom}
+              // component={Link}
+              // to="/exam-info"
               variant="outlined"
               color="primary"
               size="small"

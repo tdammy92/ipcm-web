@@ -1,10 +1,12 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useLocation, useHistory } from "react-router-dom";
 import Paper from "@material-ui/core/Paper";
 import { Container, makeStyles, Box, Typography } from "@material-ui/core";
 import Button from "@material-ui/core/Button";
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
+import { useDispatch, useSelector } from "react-redux";
+import { reset,clearExamDetails } from "../../Store/exam-feature";
 
 const useStyles = makeStyles((theme) => ({
   header: {
@@ -23,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
-    marginBottom:20
+    marginBottom: 20,
   },
   scoreContainer: {
     display: "flex",
@@ -40,7 +42,20 @@ const useStyles = makeStyles((theme) => ({
 
 function ExamResult() {
   const classes = useStyles();
-  const [progress, setProgress] = React.useState(10);
+  const location = useLocation();
+  const history = useHistory();
+  const dispatch = useDispatch();
+  const { Exam, currentExamIndex, answers, studentDetails, result } =
+    useSelector((store) => store.exam);
+  // const [progress, setProgress] = useState(10);
+
+  const closeExam = () => {
+    dispatch(reset()); //clear all store content
+    dispatch(clearExamDetails()); //clear only exam details
+
+    history.replace("/exam-info");
+  };
+
   return (
     <div className="startExam">
       <Container
@@ -73,8 +88,8 @@ function ExamResult() {
           <Box className={classes.mainContainer}>
             <Box className={classes.progressBox} mb={5}>
               <CircularProgressbar
-                value={progress}
-                text={`${progress}%`}
+                value={result?.percantage}
+                text={`${result?.percantage}%`}
                 // circleRatio={40}
                 styles={buildStyles({
                   // Rotation of path and trail, in number of turns (0-1)
@@ -93,9 +108,9 @@ function ExamResult() {
                   // pathTransition: 'none',
 
                   // Colors
-                  pathColor: "#01996D",
+                  pathColor: result?.percantage < 50 ? "#FF0000" : "#01996D",
                   // pathColor: `rgba(62, 152, 199, ${progress / 100})`,
-                  textColor: "#01996D",
+                  textColor: result?.percantage < 50 ? "#FF0000" : "#01996D",
                   trailColor: "#d6d6d6",
                   backgroundColor: "#01996D",
                 })}
@@ -103,10 +118,18 @@ function ExamResult() {
             </Box>
             <Box className={classes.scoreContainer}>
               <Typography variant="subtitle1" component="h5">
+                Exam :
+              </Typography>
+              <Typography vvariant="subtitle1" component="h5">
+                {Exam?.examName} ({Exam?.examCode} )
+              </Typography>
+            </Box>
+            <Box className={classes.scoreContainer}>
+              <Typography variant="subtitle1" component="h5">
                 Total Score :
               </Typography>
               <Typography vvariant="subtitle1" component="h5">
-                80
+                {result?.total_score}
               </Typography>
             </Box>
             <Box className={classes.scoreContainer}>
@@ -114,20 +137,37 @@ function ExamResult() {
                 Total Question Answer :
               </Typography>
               <Typography variant="subtitle2" component="h5">
-                40
+                {result?.total_answered}
+              </Typography>
+            </Box>
+            <Box className={classes.scoreContainer}>
+              <Typography variant="subtitle2" component="h5">
+                Total correct Answer :
+              </Typography>
+              <Typography variant="subtitle2" component="h5">
+                {result?.total_correct}
+              </Typography>
+            </Box>
+            <Box className={classes.scoreContainer}>
+              <Typography variant="subtitle2" component="h5">
+                Total wrong Answer :
+              </Typography>
+              <Typography variant="subtitle2" component="h5">
+                {result?.total_wrong}
               </Typography>
             </Box>
 
             <Box>
               <Typography variant="h5" component="h5">
-               {progress > 50 ? 'Passed' : 'Fail'}
+                {result?.pass ? "Passed" : "Fail"}
               </Typography>
             </Box>
           </Box>
 
           <Button
-            component={Link}
-            to="/certificate"
+            // component={Link}
+            // to="/exam-info"
+            onClick={closeExam}
             variant="contained"
             color="primary"
             size="small"

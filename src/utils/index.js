@@ -1,4 +1,5 @@
 //snippet to trim length of string
+import moment from "moment";
 import  { Resolution, Margin } from "react-to-pdf";
 export const trimText = (text, lenght) => {
   if (!text?.length) return "";
@@ -59,4 +60,10 @@ export const  getOneMonthFromNow  = () =>{
   const currentDate = new Date();
   const oneMonthFromNow = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
   return oneMonthFromNow;
+}
+
+
+
+export const formatDate = (date)=>{
+  return moment(new Date(date)).format('L');
 }

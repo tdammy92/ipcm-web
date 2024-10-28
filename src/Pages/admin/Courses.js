@@ -23,12 +23,10 @@ import Slide from "@material-ui/core/Slide";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { FaBook } from "react-icons/fa6";
-import DeleteIcon from "@material-ui/icons/Delete";
 import { useSelector } from "react-redux";
 import TableLoader from "../../components/Loaders/TableLoader";
-
-
 import EditIcon from "@material-ui/icons/Edit";
+import DeleteIcon from "@material-ui/icons/Delete";
 import {
   FormControl,
   IconButton,

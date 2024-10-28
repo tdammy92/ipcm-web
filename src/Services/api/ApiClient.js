@@ -10,9 +10,10 @@ export const ApiClient = async (
 
   let token = JSON.parse(storage)?.details?.token || "";
 
+
   const headers = {
     "content-type": "application/json",
-    Authorization: `Bearer ${token}`,
+    Authorization:!!token ? `Bearer ${token}` : '',
   };
 
   const config = {

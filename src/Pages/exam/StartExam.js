@@ -14,19 +14,19 @@ import { Link } from "react-router-dom";
 import * as yup from "yup";
 import { Formik, Field } from "formik";
 import "../auth/style.css";
-import { BaseUrl } from "../../Services/api/BaseUrl";
+import { useStartExam } from "../../Services/mutations/exam-mutation";
 
 const startExamValidation = yup.object().shape({
   email: yup
     .string()
     .email("Please enter a valid email")
-    .required("email is required"),
+    .required("Email is required"),
 
   SerialNumber: yup
     .string()
-    .required("SerialNumber is required")
-    .min(19, "SerialNumber must be 19 charaters")
-    .max(19, "SerialNumber must be 19 charaters"),
+    .required("Serial-Number is required")
+    .min(19, "Serial-Number must be 19 charaters")
+    .max(19, "Serial-Number must be 19 charaters"),
 });
 
 const useStyles = makeStyles((theme) => ({
@@ -60,36 +60,23 @@ function StartExam() {
   const classes = useStyles();
   const history = useHistory();
 
-  const location = useLocation();
-
   const isMobile = useMediaQuery({ maxWidth: ScreenSize.mobile });
-  const { from } = location.state || { from: { pathname: "/" } };
+  const { mutateAsync, isError, isLoading } = useStartExam();
 
-  const dispatch = useDispatch();
 
-  async function HandleExamLogin(values) {
-    console.log({ BaseUrl });
+  async function handleExamLogin(values) {
 
-    history.push("/online-exam");
-    // dispatch(iSLoading(true));
-    // axios
-    //   .post(`${BaseUrl}auth/login`, values, {
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //   })
-    //   .then((res) => {
-    //     const admin = { token: res?.data?.token, admin: res?.data?.data?._doc };
-
-    //     // dispatch(saveUser(admin));
-    //     // history.replace(from);
-    //   })
-    //   .catch((err) => {
-    //     console.log(err);
-
-    //     dispatch(iSLoading(false));
-    //   });
+    try {
+      const response = await mutateAsync({ payload: { ...values } });
+      if (response) {
+        history.push({ pathname: "/select-exam", state: response?.data });
+      }
+    } catch (error) {
+      // console.log("Error", JSON.stringify(error, null, 3));
+    }
   }
+
+
   return (
     <div className="login__page">
       <Container
@@ -120,7 +107,7 @@ function StartExam() {
             <Formik
               validationSchema={startExamValidation}
               initialValues={{ email: "", SerialNumber: "" }}
-              onSubmit={(values) => HandleExamLogin(values)}
+              onSubmit={(values) => handleExamLogin(values)}
             >
               {({
                 values,
@@ -130,7 +117,6 @@ function StartExam() {
                 handleBlur,
                 handleSubmit,
                 isSubmitting,
-                /* and other goodies */
               }) => (
                 <form onSubmit={handleSubmit}>
                   <div className="input__wrapper">
@@ -172,16 +158,16 @@ function StartExam() {
                   <div className="form__Btn">
                     <Button
                       variant="contained"
-                      component={Link}
+                      // component={Link}
                       // disabled={true}
-                      to="/select-exam"
+                      // to="/select-exam"
                       type="submit"
                       color="primary"
                       className={classes.button}
-                      endIcon={<SendIcon />}
-                      // disabled={isSubmitting}
+                      endIcon={isLoading ? <div /> : <SendIcon />}
+                      disabled={isSubmitting}
                     >
-                      Proceed
+                      {isLoading ? "Loading.." : "Proceed"}
                     </Button>
                   </div>
                   <div className="form__Btn">
